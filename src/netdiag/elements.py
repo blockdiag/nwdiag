@@ -13,4 +13,4 @@ class Diagram(blockdiag.elements.Diagram):
         super(Diagram, self).__init__()
 
         self.orientation = 'portrait'
-        self.span_height = 120;
+        self.span_height = 120
