@@ -80,13 +80,13 @@ class DiagramTreeBuilder:
 
             elif isinstance(stmt, diagparser.Edge):
                 nodes = stmt.nodes.pop(0)
-                edge_from = [DiagramNode.get(n) for n in nodes]
+                edge_from = [NodeGroup.get(n) for n in nodes]
                 for node in edge_from:
                     self.belong_to(node, group)
 
                 while len(stmt.nodes):
                     edge_type, edge_to = stmt.nodes.pop(0)
-                    edge_to = [DiagramNode.get(n) for n in edge_to]
+                    edge_to = [NodeGroup.get(n) for n in edge_to]
                     for node in edge_to:
                         self.belong_to(node, group)
 
