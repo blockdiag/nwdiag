@@ -37,6 +37,7 @@ setup(
         'setuptools',
         'PIL',
         'funcparserlib',
+        'blockdiag',
          # -*- Extra requirements: -*-
      ],
      extras_require=dict(
