@@ -10,6 +10,10 @@ from blockdiag.DiagramMetrix import DiagramMetrix
 
 
 class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
+    @property
+    def edges(self):
+        return []
+
     def _draw_background(self):
         metrix = self.metrix.originalMetrix()
 
@@ -32,10 +36,20 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
         for network in self.diagram.nodes:
             y = m.node(network.nodes[0]).top().y - m.spanHeight / 3
-            x0 = m.node(network.nodes[0]).left().x - m.spanWidth / 2
+            x0 = m.node(network.nodes[0]).left().x - m.spanWidth
             x1 = m.node(network.nodes[-1]).right().x + m.spanWidth / 2
 
             self.drawer.line([XY(x0, y), XY(x1, y)], fill=self.fill)
+
+        for link in self.diagram.edges:
+            node1 = m.node(link.node1.nodes[0])
+            node2 = m.node(link.node2.nodes[0])
+
+            x = node2.left().x - m.spanWidth / 2 + m.cellSize
+            y0 = node1.top().y - m.spanHeight / 3
+            y1 = node2.top().y - m.spanHeight / 3
+
+            self.drawer.line([XY(x, y0), XY(x, y1)], fill=self.fill)
 
     def node(self, node, **kwargs):
         m = self.metrix

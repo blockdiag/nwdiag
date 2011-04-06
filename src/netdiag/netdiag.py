@@ -117,10 +117,8 @@ class DiagramTreeBuilder:
 
     def bind_edges(self, group):
         for node in group.nodes:
-            if isinstance(node, DiagramNode):
-                group.edges += DiagramEdge.find(node)
-            else:
-                self.bind_edges(node)
+            edges = [e for e in DiagramEdge.find_all() if e.node1 == node]
+            group.edges += edges
 
 
 class DiagramLayoutManager:
