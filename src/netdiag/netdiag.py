@@ -7,7 +7,7 @@ import sys
 from ConfigParser import SafeConfigParser
 from optparse import OptionParser
 from elements import *
-from blockdiag import DiagramDraw
+import DiagramDraw
 import diagparser
 from blockdiag import noderenderer
 from blockdiag.utils.XY import XY
