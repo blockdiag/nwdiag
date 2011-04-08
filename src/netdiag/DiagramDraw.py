@@ -60,16 +60,17 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         super(DiagramDraw, self).node(node, **kwargs)
 
     def group_label(self, group):
-        m = self.metrix.cell(group)
+        m = self.metrix
 
-        if self.format == 'SVG' and group.href:
-            drawer = self.drawer.link(group.href)
+        if group.label:
+            label = group.label
         else:
-            drawer = self.drawer
+            label = group.id
 
-        if group.label and not group.separated:
-            drawer.textarea(m.groupLabelBox(), group.label, fill=self.fill,
-                            font=self.font, fontsize=self.metrix.fontSize)
-        elif group.label:
-            drawer.textarea(m.coreBox(), group.label, fill=self.fill,
-                            font=self.font, fontsize=self.metrix.fontSize)
+        box = m.cell(group.nodes[0]).box()
+        box = [box[0] - m.nodeWidth - m.spanWidth,
+               box[1] - m.nodeHeight / 2 - m.spanHeight / 3,
+               box[2] - m.nodeWidth - m.spanWidth,
+               box[3] - m.nodeHeight / 2 - m.spanHeight / 3]
+        self.drawer.textarea(box, label, fill=self.fill, halign="right",
+                             font=self.font, fontsize=self.metrix.fontSize)

@@ -168,6 +168,10 @@ class DiagramLayoutManager:
                 self.set_node_height(node, height)
                 height = max(xy.y for xy in self.coordinates) + 1
 
+        if isinstance(self.diagram, Diagram):
+            for node in self.diagram.nodes:
+                node.xy = XY(node.xy.x, node.xy.y + 1)
+
     def get_related_nodes(self, node, parent=False, child=False):
         uniq = {}
         for edge in self.edges:
