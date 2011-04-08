@@ -57,6 +57,12 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         pt1 = XY(pt0.x, pt0.y - m.spanHeight / 3)
         self.drawer.line([pt1, pt0], fill=self.fill)
 
+        if node.address:
+            label = node.address
+            textbox = [pt1.x, pt1.y, pt0.x + m.nodeWidth, pt0.y]
+            self.drawer.textarea(textbox, label, fill=self.fill, halign="left",
+                                 font=self.font, fontsize=self.metrix.fontSize)
+
         super(DiagramDraw, self).node(node, **kwargs)
 
     def group_label(self, group):
@@ -66,6 +72,12 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
             label = group.label
         else:
             label = group.id
+
+        if group.address:
+            if label:
+                label += "\n"
+
+            label += group.address
 
         box = m.cell(group.nodes[0]).box()
         box = [box[0] - m.nodeWidth - m.spanWidth,
