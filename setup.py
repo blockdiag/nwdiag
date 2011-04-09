@@ -28,7 +28,7 @@ setup(
      author_email='i.tkomiya at gmail.com',
      url='http://tk0miya.bitbucket.org/netdiag/build/html/index.html',
      license='PSL',
-     py_modules=['netdiag_sphinxhelper'],
+     py_modules=['sphinxcontrib_netdiag'],
      packages=find_packages('src'),
      package_dir={'': 'src'},
      package_data = {'': ['buildout.cfg']},
