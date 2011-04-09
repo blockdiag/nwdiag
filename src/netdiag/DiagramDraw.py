@@ -17,8 +17,6 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def _draw_background(self):
         metrix = self.metrix.originalMetrix()
 
-        self._draw_trunklines()
-
         # Drop node shadows.
         for node in self.nodes:
             r = noderenderer.get(node.shape)
@@ -30,6 +28,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         # Smoothing back-ground images.
         if self.format == 'PNG':
             self.drawer = self.drawer.smoothCanvas()
+
+        self._draw_trunklines()
 
     def _draw_trunklines(self):
         m = self.metrix.originalMetrix()
