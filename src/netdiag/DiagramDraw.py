@@ -54,7 +54,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         # FIXME: first network links to global network
         network = self.diagram.nodes[0]
         pt1 = m.node(network.nodes[0]).top()
-        pt2 = m.node(network.nodes[0-1]).top()
+        pt2 = m.node(network.nodes[-1]).top()
         x = pt1.x + (pt2.x - pt1.x) / 2
         y0 = pt1.y - m.spanHeight * 2 / 3
         y1 = pt1.y - m.spanHeight / 3
