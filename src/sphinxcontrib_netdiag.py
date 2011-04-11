@@ -148,12 +148,14 @@ def create_netdiag(self, code, format, filename, options, prefix='netdiag'):
     try:
         DiagramNode.clear()
         DiagramEdge.clear()
+        NodeGroup.clear()
+
         tree = parse(tokenize(code))
-        diagram = DiagramTreeBuilder().build(tree)
+        diagram = ScreenNodeBuilder().build(tree)
 
         antialias = self.builder.config.netdiag_antialias
-        draw = DiagramDraw.DiagramDraw(format, diagram, filename, font=fontpath,
-                                       antialias=antialias)
+        draw = DiagramDraw.DiagramDraw(format, diagram, filename,
+                                       font=fontpath, antialias=antialias)
     except Exception, e:
         raise NetdiagError('netdiag error:\n%s\n' % e)
 
