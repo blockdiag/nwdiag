@@ -2,7 +2,9 @@
 from setuptools import setup, find_packages
 import os, sys
 
-version = '0.1.1'
+sys.path.insert(0, 'src')
+import netdiag
+
 long_description = \
         open(os.path.join("src","README.txt")).read() + \
         open(os.path.join("src","TODO.txt")).read()
@@ -19,7 +21,7 @@ classifiers = [
 
 setup(
      name='netdiag',
-     version=version,
+     version=netdiag.__version__,
      description='netdiag generate network-diagram image file from spec-text file.',
      long_description=long_description,
      classifiers=classifiers,
