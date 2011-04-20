@@ -56,7 +56,7 @@ setup(
      tests_require=['Nose','minimock','pep8'],
      entry_points="""
         [console_scripts]
-        netdiag = netdiag.netdiag:main
+        netdiag = netdiag.command:main
      """,
 )
 
