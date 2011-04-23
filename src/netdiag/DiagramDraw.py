@@ -51,12 +51,13 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         for network in node.networks:
             if network.xy.y == node.xy.y:
                 x, y = m.cell(node).top()
-                textbox = [x, y - m.spanHeight / 2, x + m.nodeWidth / 2, y]
+                y0 = m.cell(network).top().y - m.spanHeight / 2
+                textbox = [x, y0, x + m.nodeWidth / 2, y]
             else:
                 x, y = m.cell(node).bottom()
-                textbox = [x, y, x + m.nodeWidth / 2, y + m.spanHeight / 2]
+                y0 = m.cell(network).top().y - m.spanHeight / 2
+                textbox = [x, y0 - m.spanHeight / 2, x + m.nodeWidth / 2, y0]
 
-            y0 = m.cell(network).top().y - m.spanHeight / 2
             self.drawer.line([XY(x, y0), XY(x, y)], fill=self.fill)
 
             if network in node.address:
