@@ -52,6 +52,7 @@ class DiagramLayoutManager:
 
     def run(self):
         self.do_layout()
+        self.diagram.fixiate()
 
     def do_layout(self):
         self.sort_networks()
