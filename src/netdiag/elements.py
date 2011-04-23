@@ -21,16 +21,15 @@ class DiagramNode(blockdiag.elements.DiagramNode):
     def __init__(self, id):
         super(DiagramNode, self).__init__(id)
 
-        self.address = []
+        self.address = {}
         self.networks = []
 
-    def set_attribute(self, attr):
-        if attr.name == 'address':
-            value = unquote(attr.value)
-            value = re.split('\s*,\s*', value.strip())
-            self.address += value
-        else:
-            super(NodeGroup, self).set_attribute(attr)
+    def set_attributes(self, network, attrs):
+        for attr in attrs:
+            if attr.name == 'address':
+                self.address[network] = unquote(attr.value)
+            else:
+                self.set_attribute(attr)
 
 
 class NodeGroup(blockdiag.elements.NodeGroup):

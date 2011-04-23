@@ -21,7 +21,7 @@ class DiagramTreeBuilder:
         for stmt in tree.stmts:
             if isinstance(stmt, diagparser.Node):
                 node = DiagramNode.get(stmt.id)
-                node.set_attributes(stmt.attrs)
+                node.set_attributes(network, stmt.attrs)
 
                 if network not in node.networks:
                     node.networks.append(network)
