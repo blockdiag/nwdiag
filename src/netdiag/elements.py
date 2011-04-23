@@ -14,13 +14,23 @@ class Diagram(blockdiag.elements.Diagram):
 
         self.orientation = 'portrait'
         self.span_height = 120
+        self.groups = []
 
 
 class DiagramNode(blockdiag.elements.DiagramNode):
     def __init__(self, id):
         super(DiagramNode, self).__init__(id)
 
-        self.address = None
+        self.address = []
+        self.groups = []
+
+    def set_attribute(self, attr):
+        if attr.name == 'address':
+            value = unquote(attr.value)
+            value = re.split('\s*,\s*', value.strip())
+            self.address += value
+        else:
+            super(NodeGroup, self).set_attribute(attr)
 
 
 class NodeGroup(blockdiag.elements.NodeGroup):
