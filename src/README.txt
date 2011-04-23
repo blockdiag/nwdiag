@@ -77,6 +77,11 @@ Python Software Foundation License.
 History
 =======
 
+0.1.2 (2011-04-23)
+------------------
+* Support multi-homed host
+* Drop network-bridge sytanx (cf. net_a -- net_b)
+
 0.1.1 (2011-04-10)
 ------------------
 * Fix bugs
