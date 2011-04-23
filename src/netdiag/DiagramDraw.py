@@ -10,64 +10,49 @@ from blockdiag.DiagramMetrix import DiagramMetrix
 
 
 class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
-    @property
-    def edges(self):
-        return []
-
     def _draw_background(self):
-        metrix = self.metrix.originalMetrix()
-
-        # Drop node shadows.
-        for node in self.nodes:
-            r = noderenderer.get(node.shape)
-
-            shape = r(node, metrix)
-            shape.render(self.drawer, self.format,
-                         fill=self.shadow, shadow=True)
-
-        # Smoothing back-ground images.
-        if self.format == 'PNG':
-            self.drawer = self.drawer.smoothCanvas()
+        super(DiagramDraw, self)._draw_background()
 
         self._draw_trunklines()
 
     def _draw_trunklines(self):
-        m = self.metrix.originalMetrix()
+        m = self.metrix
 
-        for network in self.diagram.nodes:
-            y = m.node(network.nodes[0]).top().y - m.spanHeight / 3
-            x0 = m.node(network.nodes[0]).left().x - m.spanWidth
-            x1 = m.node(network.nodes[-1]).right().x + m.spanWidth / 2
+        for network in self.diagram.groups:
+            nodes = [n for n in self.diagram.nodes  if network in n.groups]
+            nodes.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
+
+            print network
+            cell = m.cell(network)
+            y = cell.top().y - m.spanHeight / 2
+            x0 = cell.left().x - m.spanWidth / 2
+            x1 = cell.right().x + m.spanWidth / 2
 
             self.drawer.line([XY(x0, y), XY(x1, y)], fill=self.fill)
 
-        for link in self.diagram.edges:
-            node1 = m.node(link.node1.nodes[0])
-            node2 = m.node(link.node2.nodes[0])
+            # FIXME: first network links to global network
+            if network == self.diagram.groups[0]:
+                x = x0 + (x1 - x0) / 2
+                y0 = y - m.spanHeight * 2 / 3
 
-            x = node2.left().x - m.spanWidth / 2 + m.cellSize
-            y0 = node1.top().y - m.spanHeight / 3
-            y1 = node2.top().y - m.spanHeight / 3
-
-            self.drawer.line([XY(x, y0), XY(x, y1)], fill=self.fill)
-
-        # FIXME: first network links to global network
-        network = self.diagram.nodes[0]
-        pt1 = m.node(network.nodes[0]).top()
-        pt2 = m.node(network.nodes[-1]).top()
-        x = pt1.x + (pt2.x - pt1.x) / 2
-        y0 = pt1.y - m.spanHeight * 2 / 3
-        y1 = pt1.y - m.spanHeight / 3
-        self.drawer.line([XY(x, y0), XY(x, y1)], fill=self.fill)
+                self.drawer.line([XY(x, y0), XY(x, y)], fill=self.fill)
 
     def node(self, node, **kwargs):
         m = self.metrix
         pt0 = m.node(node).top()
         pt1 = XY(pt0.x, pt0.y - m.spanHeight / 3)
-        self.drawer.line([pt1, pt0], fill=self.fill)
+
+        for network in node.groups:
+            if network.xy.y == node.xy.y:
+                x, y = m.cell(node).top()
+            else:
+                x, y = m.cell(node).bottom()
+
+            y0 = m.cell(network).top().y - m.spanHeight / 2
+            self.drawer.line([XY(x, y0), XY(x, y)], fill=self.fill)
 
         if node.address:
-            label = node.address
+            label = node.address[0]
             textbox = [pt1.x, pt1.y, pt0.x + m.nodeWidth, pt0.y]
             self.drawer.textarea(textbox, label, fill=self.fill, halign="left",
                                  font=self.font, fontsize=self.metrix.fontSize)
