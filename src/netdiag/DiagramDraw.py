@@ -10,6 +10,11 @@ from blockdiag.DiagramMetrix import DiagramMetrix
 
 
 class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
+    def pagesize(self, scaled=False):
+        # FIXME: force int'ize
+        xy = super(DiagramDraw, self).pagesize(scaled)
+        return XY(int(xy.x), int(xy.y))
+
     def _draw_background(self):
         super(DiagramDraw, self)._draw_background()
 
