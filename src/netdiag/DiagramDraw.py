@@ -18,8 +18,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def _draw_trunklines(self):
         m = self.metrix
 
-        for network in self.diagram.groups:
-            nodes = [n for n in self.diagram.nodes  if network in n.groups]
+        for network in self.diagram.networks:
+            nodes = [n for n in self.diagram.nodes  if network in n.networks]
             nodes.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
 
             cell = m.cell(network)
@@ -29,10 +29,10 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
             self.drawer.line([XY(x0, y), XY(x1, y)], fill=self.fill)
 
-            self.group_label(network)
+            self.network_label(network)
 
             # FIXME: first network links to global network
-            if network == self.diagram.groups[0]:
+            if network == self.diagram.networks[0]:
                 x = x0 + (x1 - x0) / 2
                 y0 = y - m.spanHeight * 2 / 3
 
@@ -43,7 +43,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         pt0 = m.node(node).top()
         pt1 = XY(pt0.x, pt0.y - m.spanHeight / 3)
 
-        for network in node.groups:
+        for network in node.networks:
             if network.xy.y == node.xy.y:
                 x, y = m.cell(node).top()
             else:
@@ -60,21 +60,21 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
         super(DiagramDraw, self).node(node, **kwargs)
 
-    def group_label(self, group):
+    def network_label(self, network):
         m = self.metrix
 
-        if group.label:
-            label = group.label
+        if network.label:
+            label = network.label
         else:
-            label = group.id
+            label = network.id
 
-        if group.address:
+        if network.address:
             if label:
                 label += "\n"
 
-            label += group.address
+            label += network.address
 
-        cell = m.cell(group)
+        cell = m.cell(network)
         y = cell.top().y - m.spanHeight / 2
         x = cell.left().x - m.spanWidth / 2
 

@@ -10,38 +10,38 @@ class DiagramTreeBuilder:
     def build(self, tree):
         self.diagram = Diagram()
         self.instantiate(self.diagram, tree)
-        for subgroup in self.diagram.groups:
-            nodes = [n for n in self.diagram.nodes  if subgroup in n.groups]
+        for subnetwork in self.diagram.networks:
+            nodes = [n for n in self.diagram.nodes if subnetwork in n.networks]
             if len(nodes) == 0:
-                self.diagram.groups.remove(subgroup)
+                self.diagram.networks.remove(subnetwork)
 
         return self.diagram
 
-    def instantiate(self, group, tree):
+    def instantiate(self, network, tree):
         for stmt in tree.stmts:
             if isinstance(stmt, diagparser.Node):
                 node = DiagramNode.get(stmt.id)
                 node.set_attributes(stmt.attrs)
 
-                if group not in node.groups:
-                    node.groups.append(group)
+                if network not in node.networks:
+                    node.networks.append(network)
                 if node not in self.diagram.nodes:
                     self.diagram.nodes.append(node)
 
             elif isinstance(stmt, diagparser.SubGraph):
-                subgroup = NodeGroup.get(stmt.id)
-                subgroup.level = group.level + 1
+                subnetwork = NodeGroup.get(stmt.id)
+                subnetwork.level = network.level + 1
 
-                self.diagram.groups.append(subgroup)
-                self.instantiate(subgroup, stmt)
+                self.diagram.networks.append(subnetwork)
+                self.instantiate(subnetwork, stmt)
 
             elif isinstance(stmt, diagparser.DefAttrs):
-                group.set_attributes(stmt.attrs)
+                network.set_attributes(stmt.attrs)
 
             else:
                 raise AttributeError("Unknown sentense: " + str(type(stmt)))
 
-        return group
+        return network
 
 
 class DiagramLayoutManager:
@@ -61,35 +61,35 @@ class DiagramLayoutManager:
         # Slide nodes to bottom-side
         for node in self.diagram.nodes:
             node.xy = XY(node.xy.x + 0.75, node.xy.y + 1)
-        for network in self.diagram.groups:
+        for network in self.diagram.networks:
             network.xy = XY(network.xy.x + 0.75, network.xy.y + 1)
 
     def sort_networks(self):
         def compare(a, b):
-            n1 = [n for n in nodes  if a in n.groups]
-            n2 = [n for n in nodes  if b in n.groups]
+            n1 = [n for n in nodes  if a in n.networks]
+            n2 = [n for n in nodes  if b in n.networks]
 
             return cmp(len(n1), len(n2))
 
-        for i in range(len(self.diagram.groups) - 1):
-            parent = self.diagram.groups[i]
-            others = self.diagram.groups[i + 1:]
-            nodes = [n for n in self.diagram.nodes  if parent in n.groups]
+        for i in range(len(self.diagram.networks) - 1):
+            parent = self.diagram.networks[i]
+            others = self.diagram.networks[i + 1:]
+            nodes = [n for n in self.diagram.nodes  if parent in n.networks]
 
             others.sort(compare, reverse=True)
 
-            if self.diagram.groups[i + 1] != others[0]:
-                self.diagram.groups.remove(others[0])
-                self.diagram.groups.insert(i + 1, others[0])
+            if self.diagram.networks[i + 1] != others[0]:
+                self.diagram.networks.remove(others[0])
+                self.diagram.networks.insert(i + 1, others[0])
 
-        for i, network in enumerate(self.diagram.groups):
+        for i, network in enumerate(self.diagram.networks):
             network.xy = XY(0, i)
 
     def layout_nodes(self):
-        groups = self.diagram.groups
+        networks = self.diagram.networks
         for node in self.diagram.nodes:
-            y1 = min(groups.index(g) for g in node.groups)
-            y2 = max(groups.index(g) for g in node.groups)
+            y1 = min(networks.index(g) for g in node.networks)
+            y2 = max(networks.index(g) for g in node.networks)
 
             for x in range(len(self.diagram.nodes)):
                 points = [XY(x, y) for y in range(y1, y2 + 1)]
@@ -99,8 +99,8 @@ class DiagramLayoutManager:
                     break
 
     def set_network_size(self):
-        for network in self.diagram.groups:
-            nodes = [n for n in self.diagram.nodes  if network in n.groups]
+        for network in self.diagram.networks:
+            nodes = [n for n in self.diagram.nodes  if network in n.networks]
             nodes.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
 
             x0 = min(n.xy.x for n in nodes)
