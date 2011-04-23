@@ -14,7 +14,7 @@ class Diagram(blockdiag.elements.Diagram):
 
         self.orientation = 'portrait'
         self.span_height = 120
-        self.groups = []
+        self.networks = []
 
 
 class DiagramNode(blockdiag.elements.DiagramNode):
@@ -22,7 +22,7 @@ class DiagramNode(blockdiag.elements.DiagramNode):
         super(DiagramNode, self).__init__(id)
 
         self.address = []
-        self.groups = []
+        self.networks = []
 
     def set_attribute(self, attr):
         if attr.name == 'address':
