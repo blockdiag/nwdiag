@@ -22,13 +22,14 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
             nodes = [n for n in self.diagram.nodes  if network in n.groups]
             nodes.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
 
-            print network
             cell = m.cell(network)
             y = cell.top().y - m.spanHeight / 2
             x0 = cell.left().x - m.spanWidth / 2
             x1 = cell.right().x + m.spanWidth / 2
 
             self.drawer.line([XY(x0, y), XY(x1, y)], fill=self.fill)
+
+            self.group_label(network)
 
             # FIXME: first network links to global network
             if network == self.diagram.groups[0]:
@@ -73,10 +74,11 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
             label += group.address
 
-        box = m.cell(group.nodes[0]).box()
-        box = [box[0] - m.nodeWidth - m.spanWidth,
-               box[1] - m.nodeHeight / 2 - m.spanHeight / 3,
-               box[2] - m.nodeWidth - m.spanWidth,
-               box[3] - m.nodeHeight / 2 - m.spanHeight / 3]
+        cell = m.cell(group)
+        y = cell.top().y - m.spanHeight / 2
+        x = cell.left().x - m.spanWidth / 2
+
+        box = [x - m.nodeWidth * 3 / 2, y - m.nodeHeight / 2,
+               x, y + m.nodeHeight / 2]
         self.drawer.textarea(box, label, fill=self.fill, halign="right",
                              font=self.font, fontsize=self.metrix.fontSize)

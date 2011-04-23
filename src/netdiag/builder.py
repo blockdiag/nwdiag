@@ -60,9 +60,9 @@ class DiagramLayoutManager:
 
         # Slide nodes to bottom-side
         for node in self.diagram.nodes:
-            node.xy = XY(node.xy.x, node.xy.y + 1)
+            node.xy = XY(node.xy.x + 0.75, node.xy.y + 1)
         for network in self.diagram.groups:
-            network.xy = XY(network.xy.x, network.xy.y + 1)
+            network.xy = XY(network.xy.x + 0.75, network.xy.y + 1)
 
     def sort_networks(self):
         def compare(a, b):
