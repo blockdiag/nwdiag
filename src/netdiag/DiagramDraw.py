@@ -46,17 +46,19 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         for network in node.networks:
             if network.xy.y == node.xy.y:
                 x, y = m.cell(node).top()
+                textbox = [x, y - m.spanHeight / 2, x + m.nodeWidth / 2, y]
             else:
                 x, y = m.cell(node).bottom()
+                textbox = [x, y, x + m.nodeWidth / 2, y + m.spanHeight / 2]
 
             y0 = m.cell(network).top().y - m.spanHeight / 2
             self.drawer.line([XY(x, y0), XY(x, y)], fill=self.fill)
 
-        if node.address:
-            label = node.address[0]
-            textbox = [pt1.x, pt1.y, pt0.x + m.nodeWidth, pt0.y]
-            self.drawer.textarea(textbox, label, fill=self.fill, halign="left",
-                                 font=self.font, fontsize=self.metrix.fontSize)
+            if network in node.address:
+                label = node.address[network]
+                self.drawer.textarea(textbox, label, fill=self.fill,
+                                     halign="left", font=self.font,
+                                     fontsize=self.metrix.fontSize)
 
         super(DiagramDraw, self).node(node, **kwargs)
 
