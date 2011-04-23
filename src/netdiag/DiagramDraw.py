@@ -48,15 +48,21 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         pt0 = m.node(node).top()
         pt1 = XY(pt0.x, pt0.y - m.spanHeight / 3)
 
+        i = 0
         for network in node.networks:
             if network.xy.y == node.xy.y:
                 x, y = m.cell(node).top()
+
                 y0 = m.cell(network).top().y - m.spanHeight / 2
                 textbox = [x, y0, x + m.nodeWidth / 2, y]
             else:
                 x, y = m.cell(node).bottom()
+                x -= i * m.cellSize * 2
+
                 y0 = m.cell(network).top().y - m.spanHeight / 2
                 textbox = [x, y0 - m.spanHeight / 2, x + m.nodeWidth / 2, y0]
+
+                i += 1
 
             self.drawer.line([XY(x, y0), XY(x, y)], fill=self.fill)
 
