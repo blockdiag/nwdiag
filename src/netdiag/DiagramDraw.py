@@ -50,6 +50,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
         i = 0
         for network in node.networks:
+            jumps = []
             if network.xy.y == node.xy.y:
                 x, y = m.cell(node).top()
 
@@ -64,7 +65,30 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
                 i += 1
 
-            self.drawer.line([XY(x, y0), XY(x, y)], fill=self.fill)
+                for j in range(node.xy.y + 1, network.xy.y):
+                    network = (n for n in self.diagram.networks if n.xy.y == j)
+                    for nw in network:
+                        if nw.xy.x <= node.xy.x <= nw.xy.x + nw.width:
+                            jumps.append(nw)
+
+            if jumps:
+                lines = [XY(x, y)]
+                for network in jumps:
+                    pt = m.cell(network).top().y - m.spanHeight / 2
+                    r = m.cellSize / 2
+
+                    lines.append(XY(x, pt - r))
+                    lines.append(XY(x, pt + r))
+
+                    box = [x - r, pt - r, x + r, pt + r]
+                    self.drawer.arc(box, 270, 90, fill=self.fill)
+
+                lines.append(XY(x, y0))
+
+                for i, point in enumerate(lines[::2]):
+                    self.drawer.line([point, lines[i * 2 + 1]], fill=self.fill)
+            else:
+                self.drawer.line([XY(x, y0), XY(x, y)], fill=self.fill)
 
             if network in node.address:
                 label = node.address[network]
