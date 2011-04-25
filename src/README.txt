@@ -82,6 +82,10 @@ History
 * Implement jumped edge
 * Fix bugs
 
+0.1.3 (2011-04-23)
+------------------
+* Fix sphinxcontrib_netdiag was not worked
+
 0.1.2 (2011-04-23)
 ------------------
 * Support multi-homed host
