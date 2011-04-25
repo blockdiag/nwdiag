@@ -55,13 +55,13 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 x, y = m.cell(node).top()
 
                 y0 = m.cell(network).top().y - m.spanHeight / 2
-                textbox = [x, y0, x + m.nodeWidth / 2, y]
+                textbox = [x, y0, x + m.nodeWidth, y]
             else:
                 x, y = m.cell(node).bottom()
                 x -= i * m.cellSize * 2
 
                 y0 = m.cell(network).top().y - m.spanHeight / 2
-                textbox = [x, y0 - m.spanHeight / 2, x + m.nodeWidth / 2, y0]
+                textbox = [x, y0 - m.spanHeight / 2, x + m.nodeWidth, y0]
 
                 i += 1
 
