@@ -49,19 +49,20 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         pt1 = XY(pt0.x, pt0.y - m.spanHeight / 3)
 
         i = 0
+        textbox_width = m.nodeWidth + m.spanWidth
         for network in node.networks:
             jumps = []
             if network.xy.y == node.xy.y:
                 x, y = m.cell(node).top()
 
                 y0 = m.cell(network).top().y - m.spanHeight / 2
-                textbox = [x, y0, x + m.nodeWidth, y]
+                textbox = [x, y0, x + textbox_width, y]
             else:
                 x, y = m.cell(node).bottom()
                 x -= i * m.cellSize * 2
 
                 y0 = m.cell(network).top().y - m.spanHeight / 2
-                textbox = [x, y0 - m.spanHeight / 2, x + m.nodeWidth, y0]
+                textbox = [x, y0 - m.spanHeight / 2, x + textbox_width, y0]
 
                 i += 1
 
