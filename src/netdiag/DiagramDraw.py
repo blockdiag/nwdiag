@@ -105,7 +105,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         if network.label:
             label = network.label
         else:
-            label = network.id
+            label = ""
 
         if network.address:
             if label:

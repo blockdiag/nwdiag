@@ -30,6 +30,7 @@ class DiagramTreeBuilder:
 
             elif isinstance(stmt, diagparser.SubGraph):
                 subnetwork = NodeGroup.get(stmt.id)
+                subnetwork.label = stmt.id
                 subnetwork.level = network.level + 1
 
                 self.diagram.networks.append(subnetwork)
