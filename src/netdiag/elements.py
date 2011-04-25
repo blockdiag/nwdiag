@@ -16,6 +16,22 @@ class Diagram(blockdiag.elements.Diagram):
         self.span_height = 120
         self.networks = []
 
+    def set_attributes(self, attrs):
+        for attr in attrs:
+            value = unquote(attr.value)
+
+            if attr.name == 'default_shape':
+                try:
+                    noderenderer.get(value)
+                    DiagramNode.set_default_shape(value)
+                except:
+                    msg = "WARNING: unknown node shape: %s\n" % value
+                    raise RuntimeError(msg)
+            elif attr.name == 'shape_namespace':
+                noderenderer.set_default_namespace(value)
+            else:
+                self.set_attribute(attr)
+
     def fixiate(self):
         if len(self.nodes) + len(self.networks) > 0:
             nodes = self.nodes + self.networks
