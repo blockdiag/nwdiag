@@ -16,6 +16,12 @@ class Diagram(blockdiag.elements.Diagram):
         self.span_height = 120
         self.networks = []
 
+    def fixiate(self):
+        if len(self.nodes) + len(self.networks) > 0:
+            nodes = self.nodes + self.networks
+            self.width = max(x.xy.x + x.width for x in nodes)
+            self.height = max(x.xy.y + x.height for x in nodes)
+
 
 class DiagramNode(blockdiag.elements.DiagramNode):
     def __init__(self, id):

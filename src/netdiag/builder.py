@@ -121,6 +121,5 @@ class ScreenNodeBuilder:
 
         diagram = DiagramTreeBuilder().build(tree)
         DiagramLayoutManager(diagram).run()
-        diagram.fixiate(True)
 
         return diagram
