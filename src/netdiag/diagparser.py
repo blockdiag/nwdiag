@@ -112,7 +112,7 @@ def parse(seq):
     network_stmt_list = many(network_stmt + skip(maybe(op(';'))))
     network = (
         skip(n('network')) +
-        id +
+        maybe(id) +
         op_('{') +
         network_stmt_list +
         op_('}')
