@@ -77,6 +77,11 @@ Python Software Foundation License.
 History
 =======
 
+0.1.3 (2011-04-25)
+------------------
+* Implement jumped edge
+* Fix bugs
+
 0.1.2 (2011-04-23)
 ------------------
 * Support multi-homed host
@@ -89,4 +94,3 @@ History
 0.1.0 (2011-04-09)
 ------------------
 * First release
-
