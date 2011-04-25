@@ -50,6 +50,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
         i = 0
         textbox_width = m.nodeWidth + m.spanWidth
+        node.networks.sort(lambda a, b: cmp(a.xy.y, b.xy.y))
         for network in node.networks:
             jumps = []
             if network.xy.y == node.xy.y:
@@ -86,8 +87,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
                 lines.append(XY(x, y0))
 
-                for i, point in enumerate(lines[::2]):
-                    self.drawer.line([point, lines[i * 2 + 1]], fill=self.fill)
+                for j, point in enumerate(lines[::2]):
+                    self.drawer.line([point, lines[j * 2 + 1]], fill=self.fill)
             else:
                 self.drawer.line([XY(x, y0), XY(x, y)], fill=self.fill)
 
