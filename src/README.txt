@@ -77,6 +77,10 @@ Python Software Foundation License.
 History
 =======
 
+0.1.5 (2011-04-26)
+------------------
+* Fix bugs
+
 0.1.4 (2011-04-25)
 ------------------
 * Implement jumped edge
