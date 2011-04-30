@@ -33,7 +33,8 @@ class DiagramTreeBuilder:
                 subnetwork.label = stmt.id
                 subnetwork.level = network.level + 1
 
-                self.diagram.networks.append(subnetwork)
+                if subnetwork not in self.diagram.networks:
+                    self.diagram.networks.append(subnetwork)
                 self.instantiate(subnetwork, stmt)
 
             elif isinstance(stmt, diagparser.DefAttrs):
