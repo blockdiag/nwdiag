@@ -63,7 +63,6 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 num = len(node.networks) - 2
                 x_shift = int(math.floor(num / 2.0 - i)) * m.cellSize * 2
                 x += x_shift
-                print num, x_shift
 
                 y0 = m.cell(network).top().y - m.spanHeight / 2
                 textbox = [x, y0 - m.spanHeight / 2,
