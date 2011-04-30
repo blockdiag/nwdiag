@@ -60,10 +60,14 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 textbox = [x, y0, x + textbox_width, y]
             else:
                 x, y = m.cell(node).bottom()
-                x -= i * m.cellSize * 2
+                num = len(node.networks) - 2
+                x_shift = int(math.floor(num / 2.0 - i)) * m.cellSize * 2
+                x += x_shift
+                print num, x_shift
 
                 y0 = m.cell(network).top().y - m.spanHeight / 2
-                textbox = [x, y0 - m.spanHeight / 2, x + textbox_width, y0]
+                textbox = [x, y0 - m.spanHeight / 2,
+                           x + textbox_width - x_shift, y0]
 
                 i += 1
 
