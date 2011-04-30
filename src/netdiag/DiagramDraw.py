@@ -68,15 +68,15 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 i += 1
 
                 for j in range(node.xy.y + 1, network.xy.y):
-                    network = (n for n in self.diagram.networks if n.xy.y == j)
-                    for nw in network:
+                    crosses = (n for n in self.diagram.networks if n.xy.y == j)
+                    for nw in crosses:
                         if nw.xy.x <= node.xy.x <= nw.xy.x + nw.width:
                             jumps.append(nw)
 
             if jumps:
                 lines = [XY(x, y)]
-                for network in jumps:
-                    pt = m.cell(network).top().y - m.spanHeight / 2
+                for nw in jumps:
+                    pt = m.cell(nw).top().y - m.spanHeight / 2
                     r = m.cellSize / 2
 
                     lines.append(XY(x, pt - r))
