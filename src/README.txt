@@ -2,7 +2,6 @@
 
 Features
 ========
-
 * Generate network-diagram from dot like text (basic feature).
 * Multilingualization for node-label (utf-8 only).
 
@@ -62,7 +61,6 @@ Execute netdiag command::
 
 Requirements
 ============
-
 * Python 2.4 or later (not support 3.x)
 * Python Imaging Library 1.1.5 or later.
 * funcparserlib 0.3.4 or later.
@@ -76,6 +74,10 @@ Python Software Foundation License.
 
 History
 =======
+
+0.1.6 (2011-04-30)
+------------------
+* Fix bugs
 
 0.1.5 (2011-04-26)
 ------------------
