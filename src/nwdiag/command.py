@@ -52,13 +52,13 @@ def parse_option():
         sys.stderr.write(msg)
         sys.exit(0)
 
-    configpath = options.config or "%s/.netdiagrc" % os.environ.get('HOME')
+    configpath = options.config or "%s/.nwdiagrc" % os.environ.get('HOME')
     if os.path.isfile(configpath):
         config = SafeConfigParser()
         config.read(configpath)
 
-        if config.has_option('netdiag', 'fontpath'):
-            fontpath = config.get('netdiag', 'fontpath')
+        if config.has_option('nwdiag', 'fontpath'):
+            fontpath = config.get('nwdiag', 'fontpath')
             options.font.append(fontpath)
 
     return options, args

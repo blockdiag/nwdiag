@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 import os, sys
 
 sys.path.insert(0, 'src')
-import netdiag
+import nwdiag
 
 long_description = \
         open(os.path.join("src","README.txt")).read() + \
@@ -20,17 +20,17 @@ classifiers = [
 ]
 
 setup(
-     name='netdiag',
-     version=netdiag.__version__,
-     description='netdiag generate network-diagram image file from spec-text file.',
+     name='nwdiag',
+     version=nwdiag.__version__,
+     description='nwdiag generate network-diagram image file from spec-text file.',
      long_description=long_description,
      classifiers=classifiers,
      keywords=['diagram','generator'],
      author='Takeshi Komiya',
      author_email='i.tkomiya at gmail.com',
-     url='http://tk0miya.bitbucket.org/netdiag/build/html/index.html',
+     url='http://tk0miya.bitbucket.org/nwdiag/build/html/index.html',
      license='PSF',
-     py_modules=['sphinxcontrib_netdiag'],
+     py_modules=['sphinxcontrib_nwdiag'],
      packages=find_packages('src'),
      package_dir={'': 'src'},
      package_data = {'': ['buildout.cfg']},
@@ -56,7 +56,7 @@ setup(
      tests_require=['Nose','minimock','pep8'],
      entry_points="""
         [console_scripts]
-        netdiag = netdiag.command:main
+        nwdiag = nwdiag.command:main
      """,
 )
 
