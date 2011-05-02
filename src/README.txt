@@ -1,4 +1,4 @@
-`netdiag` generate network-diagram image file from spec-text file.
+`nwdiag` generate network-diagram image file from spec-text file.
 
 Features
 ========
@@ -6,7 +6,7 @@ Features
 * Multilingualization for node-label (utf-8 only).
 
 You can get some examples and generated images on 
-`tk0miya.bitbucket.org <http://tk0miya.bitbucket.org/netdiag/build/html/index.html>`_ .
+`tk0miya.bitbucket.org <http://tk0miya.bitbucket.org/nwdiag/build/html/index.html>`_ .
 
 Setup
 =====
@@ -15,14 +15,14 @@ by easy_install
 ----------------
 Make environment::
 
-   $ easy_install netdiag
+   $ easy_install nwdiag
 
 by buildout
 ------------
 Make environment::
 
-   $ hg clone http://bitbucket.org/tk0miya/netdiag
-   $ cd netdiag
+   $ hg clone http://bitbucket.org/tk0miya/nwdiag
+   $ cd nwdiag
    $ python bootstrap.py
    $ bin/buildout
 
@@ -31,7 +31,7 @@ spec-text setting sample
 
 Few examples are available.
 You can get more examples at
-`tk0miya.bitbucket.org <http://tk0miya.bitbucket.org/netdiag/build/html/index.html>`_ .
+`tk0miya.bitbucket.org <http://tk0miya.bitbucket.org/nwdiag/build/html/index.html>`_ .
 
 simple.diag
 ------------
@@ -52,9 +52,9 @@ simple.diag is simply define nodes and transitions by dot-like text format::
 Usage
 =====
 
-Execute netdiag command::
+Execute nwdiag command::
 
-   $ netdiag simple.diag
+   $ nwdiag simple.diag
    $ ls simple.png
    simple.png
 

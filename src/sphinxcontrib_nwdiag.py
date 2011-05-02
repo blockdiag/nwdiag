@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-This 'sphinxcontrib_netdiag' module is EXPERIMENTAL yet.
+This 'sphinxcontrib_nwdiag' module is EXPERIMENTAL yet.
 """
 import posixpath
 import os
@@ -17,17 +17,17 @@ from sphinx.errors import SphinxError
 from sphinx.util.osutil import ensuredir, ENOENT, EPIPE
 from sphinx.util.compat import Directive
 
-from netdiag import DiagramDraw, builder, diagparser
+from nwdiag import DiagramDraw, builder, diagparser
 
-class NetdiagError(SphinxError):
-    category = 'Netdiag error'
+class NwdiagError(SphinxError):
+    category = 'Nwdiag error'
 
 
-class netdiag(nodes.General, nodes.Element):
+class nwdiag(nodes.General, nodes.Element):
     pass
 
 
-class Netdiag(Directive):
+class Nwdiag(Directive):
     """
     Directive to insert arbitrary dot markup.
     """
@@ -46,7 +46,7 @@ class Netdiag(Directive):
             document = self.state.document
             if self.content:
                 return [document.reporter.warning(
-                    'netdiag directive cannot have both content and '
+                    'nwdiag directive cannot have both content and '
                     'a filename argument', line=self.lineno)]
             env = self.state.document.settings.env
             rel_filename, filename = relfn2path(env, self.arguments[0])
@@ -59,16 +59,16 @@ class Netdiag(Directive):
                     fp.close()
             except (IOError, OSError):
                 return [document.reporter.warning(
-                    'External netdiag file %r not found or reading '
+                    'External nwdiag file %r not found or reading '
                     'it failed' % filename, line=self.lineno)]
         else:
             dotcode = '\n'.join(self.content)
             if not dotcode.strip():
                 return [self.state_machine.reporter.warning(
-                    'Ignoring "netdiag" directive without content.',
+                    'Ignoring "nwdiag" directive without content.',
                     line=self.lineno)]
 
-        node = netdiag()
+        node = nwdiag()
         node['code'] = dotcode
         node['options'] = {}
         if 'alt' in self.options:
@@ -97,20 +97,20 @@ def relfn2path(env, filename, docname=None):
         return rel_fn, os.path.join(env.srcdir, enc_rel_fn)
 
 
-def get_image_filename(self, code, format, options, prefix='netdiag'):
+def get_image_filename(self, code, format, options, prefix='nwdiag'):
     """
     Get path of output file.
     """
     if format not in ('PNG', 'PDF'):
-        raise NetdiagError('netdiag error:\nunknown format: %s\n' % format)
+        raise NwdiagError('nwdiag error:\nunknown format: %s\n' % format)
 
     if format == 'PDF':
         try:
             import reportlab
         except ImportError:
-            msg = 'netdiag error:\n' + \
+            msg = 'nwdiag error:\n' + \
                   'colud not output PDF format; Install reportlab\n'
-            raise NetdiagError(msg)
+            raise NwdiagError(msg)
 
     hashkey = code.encode('utf-8') + str(options)
     fname = '%s-%s.%s' % (prefix, sha(hashkey).hexdigest(), format.lower())
@@ -131,39 +131,39 @@ def get_image_filename(self, code, format, options, prefix='netdiag'):
     return relfn, outfn
 
 
-def create_netdiag(self, code, format, filename, options, prefix='netdiag'):
+def create_nwdiag(self, code, format, filename, options, prefix='nwdiag'):
     """
-    Render netdiag code into a PNG output file.
+    Render nwdiag code into a PNG output file.
     """
-    fontpath = self.builder.config.netdiag_fontpath
-    if fontpath and not hasattr(self.builder, '_netdiag_fontpath_warned'):
+    fontpath = self.builder.config.nwdiag_fontpath
+    if fontpath and not hasattr(self.builder, '_nwdiag_fontpath_warned'):
         if not os.path.isfile(fontpath):
-            self.builder.warn('netdiag cannot load "%s" as truetype font, '
-                              'check the netdiag_path setting' % fontpath)
-            self.builder._netdiag_fontpath_warned = True
+            self.builder.warn('nwdiag cannot load "%s" as truetype font, '
+                              'check the nwdiag_path setting' % fontpath)
+            self.builder._nwdiag_fontpath_warned = True
 
     draw = None
     try:
         tree = diagparser.parse(diagparser.tokenize(code))
         diagram = builder.ScreenNodeBuilder.build(tree)
 
-        antialias = self.builder.config.netdiag_antialias
+        antialias = self.builder.config.nwdiag_antialias
         draw = DiagramDraw.DiagramDraw(format, diagram, filename, font=fontpath,
                                        antialias=antialias)
     except Exception, e:
-        raise NetdiagError('netdiag error:\n%s\n' % e)
+        raise NwdiagError('nwdiag error:\n%s\n' % e)
 
     return draw
 
 
-def render_dot_html(self, node, code, options, prefix='netdiag',
+def render_dot_html(self, node, code, options, prefix='nwdiag',
                     imgcls=None, alt=None):
     has_thumbnail = False
     try:
         format = 'PNG'
         relfn, outfn = get_image_filename(self, code, format, options, prefix)
 
-        image = create_netdiag(self, code, format, outfn, options, prefix)
+        image = create_nwdiag(self, code, format, outfn, options, prefix)
         if not os.path.isfile(outfn):
             image.draw()
             image.save()
@@ -189,11 +189,11 @@ def render_dot_html(self, node, code, options, prefix='netdiag',
                 image.save(toutfn, thumb_size)
             thumb_size = image.drawer.image.size
 
-    except NetdiagError, exc:
+    except NwdiagError, exc:
         self.builder.warn('dot code %r: ' % code + str(exc))
         raise nodes.SkipNode
 
-    self.body.append(self.starttag(node, 'p', CLASS='netdiag'))
+    self.body.append(self.starttag(node, 'p', CLASS='nwdiag'))
     if relfn is None:
         self.body.append(self.encode(code))
     else:
@@ -257,21 +257,21 @@ def render_dot_html(self, node, code, options, prefix='netdiag',
     raise nodes.SkipNode
 
 
-def html_visit_netdiag(self, node):
+def html_visit_nwdiag(self, node):
     render_dot_html(self, node, node['code'], node['options'])
 
 
-def render_dot_latex(self, node, code, options, prefix='netdiag'):
+def render_dot_latex(self, node, code, options, prefix='nwdiag'):
     try:
-        format = self.builder.config.netdiag_tex_image_format
+        format = self.builder.config.nwdiag_tex_image_format
         fname, outfn = get_image_filename(self, code, format, options, prefix)
 
-        image = create_netdiag(self, code, format, outfn, options, prefix)
+        image = create_nwdiag(self, code, format, outfn, options, prefix)
         if not os.path.isfile(outfn):
             image.draw()
             image.save()
 
-    except NetdiagError, exc:
+    except NwdiagError, exc:
         self.builder.warn('dot code %r: ' % code + str(exc))
         raise nodes.SkipNode
 
@@ -280,15 +280,15 @@ def render_dot_latex(self, node, code, options, prefix='netdiag'):
     raise nodes.SkipNode
 
 
-def latex_visit_netdiag(self, node):
+def latex_visit_nwdiag(self, node):
     render_dot_latex(self, node, node['code'], node['options'])
 
 
 def setup(app):
-    app.add_node(netdiag,
-                 html=(html_visit_netdiag, None),
-                 latex=(latex_visit_netdiag, None))
-    app.add_directive('netdiag', Netdiag)
-    app.add_config_value('netdiag_fontpath', None, 'html')
-    app.add_config_value('netdiag_antialias', False, 'html')
-    app.add_config_value('netdiag_tex_image_format', 'PNG', 'html')
+    app.add_node(nwdiag,
+                 html=(html_visit_nwdiag, None),
+                 latex=(latex_visit_nwdiag, None))
+    app.add_directive('nwdiag', Nwdiag)
+    app.add_config_value('nwdiag_fontpath', None, 'html')
+    app.add_config_value('nwdiag_antialias', False, 'html')
+    app.add_config_value('nwdiag_tex_image_format', 'PNG', 'html')
