@@ -75,6 +75,10 @@ Python Software Foundation License.
 History
 =======
 
+0.2.0 (2011-05-02)
+------------------
+* Rename package to nwdiag
+
 0.1.6 (2011-04-30)
 ------------------
 * Fix bugs
