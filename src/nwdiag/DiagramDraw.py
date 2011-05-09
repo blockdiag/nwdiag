@@ -33,27 +33,22 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         self._draw_trunklines()
 
     def _draw_trunklines(self):
-        m = self.metrix
-
         for network in self.diagram.networks:
-            nodes = [n for n in self.diagram.nodes  if network in n.networks]
-            nodes.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
+            m = self.metrix.network(network)
 
-            cell = m.cell(network)
-            y = cell.top().y - m.spanHeight / 2
-            x0 = cell.left().x - m.spanWidth / 2
-            x1 = cell.right().x + m.spanWidth / 2
-
-            self.drawer.line([XY(x0, y), XY(x1, y)], fill=self.fill)
-
-            self.network_label(network)
+            self.drawer.line(m.trunkline, fill=self.fill)
+            if network.display_label:
+                self.drawer.textarea(m.textbox, network.display_label,
+                                     fill=self.fill, halign="right",
+                                     font=self.font,
+                                     fontsize=self.metrix.fontSize)
 
             # FIXME: first network links to global network
             if network == self.diagram.networks[0]:
-                x = x0 + (x1 - x0) / 2
-                y0 = y - m.spanHeight * 2 / 3
+                pt1 = m.top()
+                pt0 = XY(pt1.x, pt1.y - m.metrix.spanHeight * 2 / 3)
 
-                self.drawer.line([XY(x, y0), XY(x, y)], fill=self.fill)
+                self.drawer.line([pt0, pt1], fill=self.fill)
 
     def node(self, node, **kwargs):
         m = self.metrix
@@ -115,25 +110,6 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
         super(DiagramDraw, self).node(node, **kwargs)
 
-    def network_label(self, network):
-        m = self.metrix
 
-        if network.label:
-            label = network.label
-        else:
-            label = ""
-
-        if network.address:
-            if label:
-                label += "\n"
-
-            label += network.address
-
-        cell = m.cell(network)
-        y = cell.top().y - m.spanHeight / 2
-        x = cell.left().x - m.spanWidth / 2
-
-        box = [x - m.nodeWidth * 3 / 2, y - m.nodeHeight / 2,
-               x, y + m.nodeHeight / 2]
-        self.drawer.textarea(box, label, fill=self.fill, halign="right",
-                             font=self.font, fontsize=self.metrix.fontSize)
+from DiagramMetrix import DiagramMetrix
+DiagramDraw.set_metrix_class(DiagramMetrix)
