@@ -55,3 +55,15 @@ class NodeGroup(blockdiag.elements.NodeGroup):
         super(NodeGroup, self).__init__(id)
 
         self.address = None
+
+    @property
+    def display_label(self):
+        if self.label:
+            if self.address:
+                label = "%s\n%s" % (self.label, self.address)
+            else:
+                label = self.label
+        else:
+            label = self.address
+
+        return label
