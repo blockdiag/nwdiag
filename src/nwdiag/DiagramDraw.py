@@ -53,52 +53,30 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def node(self, node, **kwargs):
         m = self.metrix
 
-        i = 0
-        textbox_width = m.nodeWidth + m.spanWidth
-        node.networks.sort(lambda a, b: cmp(a.xy.y, b.xy.y))
-        for network in node.networks:
-            if network.xy.y == node.xy.y:
-                x, y2 = m.node(node).top()
-                y1 = m.network(network).top().y
-
-                x_shift = 0
-                textbox = [x, y1, x + textbox_width, y2]
-            else:
-                x, y1 = m.node(node).bottom()
-                y2 = m.network(network).top().y
-
-                num = len(node.networks) - 2
-                x_shift = int(math.floor(num / 2.0 - i)) * m.cellSize * 2
-
-                i += 1
-
-            textbox = [x + x_shift, y2 - m.spanHeight / 2, x + textbox_width, y2]
-            x += x_shift
-
-            jumps = []
-            for j in range(node.xy.y + 1, network.xy.y):
-                crosses = (n for n in self.diagram.networks if n.xy.y == j)
-                for nw in crosses:
+        for connector in m.node(node).connectors:
+            for i in range(node.xy.y + 1, connector.network.xy.y):
+                networks = (n for n in self.diagram.networks if n.xy.y == i)
+                for nw in networks:
                     if nw.xy.x <= node.xy.x <= nw.xy.x + nw.width:
-                        jumps.append(nw)
+                        connector.jumps.append(nw)
 
-            self.draw_connectors([XY(x, y1), XY(x, y2)], jumps)
+            self.draw_connector(connector)
 
-            if network in node.address:
-                label = node.address[network]
-                self.drawer.textarea(textbox, label, fill=self.fill,
+            if connector.network in node.address:
+                label = node.address[connector.network]
+                self.drawer.textarea(connector.textbox, label, fill=self.fill,
                                      halign="left", font=self.font,
                                      fontsize=self.metrix.fontSize)
 
         super(DiagramDraw, self).node(node, **kwargs)
 
-    def draw_connectors(self, line, jumps):
+    def draw_connector(self, connector):
         m = self.metrix
 
-        if jumps:
-            pt1, pt2 = line
+        if connector.jumps:
+            pt1, pt2 = connector.line
             lines = [pt1]
-            for nw in jumps:
+            for nw in connector.jumps:
                 pt = m.cell(nw).top().y - m.spanHeight / 2
                 r = m.cellSize / 2
 
@@ -113,7 +91,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
             for j, point in enumerate(lines[::2]):
                 self.drawer.line([point, lines[j * 2 + 1]], fill=self.fill)
         else:
-            self.drawer.line(line, fill=self.fill)
+            self.drawer.line(connector.line, fill=self.fill)
 
 
 from DiagramMetrix import DiagramMetrix
