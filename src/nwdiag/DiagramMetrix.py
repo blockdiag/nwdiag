@@ -38,6 +38,10 @@ class DiagramMetrix(blockdiag.DiagramMetrix.DiagramMetrix):
 
         return DiagramMetrix(self, **kwargs)
 
+    def node(self, node):
+        metrix = super(DiagramMetrix, self).node(node)
+        return NodeMetrix(node, metrix)
+
     def network(self, network):
         return NetworkMetrix(network, self)
 
@@ -72,3 +76,49 @@ class NetworkMetrix(blockdiag.DiagramMetrix.NodeMetrix):
         height = self.metrix.nodeHeight
 
         return (x - width, y - height / 2, x, y + height / 2)
+
+
+class NodeMetrix(object):
+    def __init__(self, node, metrix):
+        self.node = node
+        self.metrix = metrix
+
+    def top(self):
+        return self.metrix.top()
+
+    def bottom(self):
+        return self.metrix.bottom()
+
+    @property
+    def connectors(self):
+        m = self.metrix.metrix
+
+        above = [n for n in self.node.networks if n.xy.y <= self.node.xy.y]
+        above.sort(lambda a, b: -cmp(a.xy.y, b.xy.y))
+
+        bottom = [n for n in self.node.networks if n.xy.y > self.node.xy.y]
+        bottom.sort(lambda a, b: cmp(a.xy.y, b.xy.y))
+
+        Connector = namedtuple('Connector', 'network line textbox jumps')
+
+        for networks in [above, bottom]:
+            for network in networks:
+                if network.xy.y <= self.node.xy.y:
+                    x, y2 = self.top()
+                    y1 = m.network(network).top().y
+                else:
+                    x, y1 = self.bottom()
+                    y2 = m.network(network).top().y
+
+                if len(networks) == 1:
+                    dx = 0
+                else:
+                    pos = networks.index(network)
+                    base_x = (len(networks) - 1) / 2.0 - pos
+                    dx = int(math.floor(base_x * m.cellSize * 2))
+
+                width = m.nodeWidth + m.spanWidth
+                textbox = [x + dx, y2 - m.spanHeight / 2, x + width, y2]
+                line = [XY(x + dx, y1), XY(x + dx, y2)]
+
+                yield Connector(network, line, textbox, [])
