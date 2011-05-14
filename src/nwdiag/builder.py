@@ -21,7 +21,7 @@ from blockdiag.utils.XY import XY
 class DiagramTreeBuilder:
     def build(self, tree):
         self.diagram = Diagram()
-        self.instantiate(self.diagram, None, tree)
+        self.instantiate(None, None, tree)
         for subnetwork in self.diagram.networks:
             nodes = [n for n in self.diagram.nodes if subnetwork in n.networks]
             if len(nodes) == 0:
@@ -42,14 +42,14 @@ class DiagramTreeBuilder:
                     node.group = group
                     group.nodes.append(node)
                 if network not in node.networks:
-                    node.networks.append(network)
+                    if network is not None:
+                        node.networks.append(network)
                 if node not in self.diagram.nodes:
                     self.diagram.nodes.append(node)
 
             elif isinstance(stmt, diagparser.Network):
                 subnetwork = Network.get(stmt.id)
                 subnetwork.label = stmt.id
-                subnetwork.level = network.level + 1
 
                 if subnetwork not in self.diagram.networks:
                     self.diagram.networks.append(subnetwork)
@@ -60,7 +60,7 @@ class DiagramTreeBuilder:
 
                 if subgroup not in self.diagram.groups:
                     self.diagram.groups.append(subgroup)
-                self.instantiate(subnetwork, subgroup, stmt)
+                self.instantiate(network, subgroup, stmt)
 
             elif isinstance(stmt, diagparser.DefAttrs):
                 network.set_attributes(stmt.attrs)
