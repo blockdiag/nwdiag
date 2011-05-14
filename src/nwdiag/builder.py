@@ -125,6 +125,7 @@ class DiagramLayoutManager:
 
     def layout_nodes(self):
         networks = self.diagram.networks
+        last_group = None
         for node in self.diagram.nodes:
             y1 = min(networks.index(g) for g in node.networks)
             y2 = max(networks.index(g) for g in node.networks)
@@ -135,6 +136,21 @@ class DiagramLayoutManager:
                     node.xy = XY(x, y1)
                     self.coordinates += points
                     break
+
+            if last_group and last_group != node.group:
+                self.set_coordinates(last_group)
+            last_group = node.group
+
+        if last_group:
+            self.set_coordinates(last_group)
+
+    def set_coordinates(self, group):
+        self.set_group_size(group)
+
+        xy = group.xy
+        for i in range(xy.x, xy.x + group.width):
+            for j in range(xy.y, xy.y + group.height):
+                self.coordinates.append(XY(i, j))
 
     def set_network_size(self):
         for network in self.diagram.networks:
@@ -147,18 +163,18 @@ class DiagramLayoutManager:
             x1 = max(n.xy.x for n in nodes)
             network.width = x1 - x0 + 1
 
-        for group in self.diagram.groups:
-            nodes = list(group.nodes)
-            nodes.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
+    def set_group_size(self, group):
+        nodes = list(group.nodes)
+        nodes.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
 
-            x0 = min(n.xy.x for n in nodes)
-            y0 = min(n.xy.y for n in nodes)
-            group.xy = XY(x0, y0)
+        x0 = min(n.xy.x for n in nodes)
+        y0 = min(n.xy.y for n in nodes)
+        group.xy = XY(x0, y0)
 
-            x1 = max(n.xy.x for n in nodes)
-            y1 = max(n.xy.y for n in nodes)
-            group.width = x1 - x0 + 1
-            group.height = y1 - y0 + 1
+        x1 = max(n.xy.x for n in nodes)
+        y1 = max(n.xy.y for n in nodes)
+        group.width = x1 - x0 + 1
+        group.height = y1 - y0 + 1
 
 
 class ScreenNodeBuilder:
