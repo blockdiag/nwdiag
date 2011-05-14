@@ -143,7 +143,7 @@ def parse_file(path):
         input = codecs.open(path, 'r', 'utf-8').read()
         return parse(tokenize(input))
     except LexerError, e:
-        message = "Got unexpected token at line %d (%d chars)" % e.place
+        message = "Got unexpected token at line %d column %d" % e.place
         raise ParseException, message
     except Exception, e:
         raise ParseException, str(e)
