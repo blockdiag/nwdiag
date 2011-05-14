@@ -75,6 +75,11 @@ Python Software Foundation License.
 History
 =======
 
+0.2.0 (2011-05-14)
+------------------
+* Change license to Apache License 2.0
+* Support blockdiag 0.8.1 core interface 
+
 0.2.0 (2011-05-02)
 ------------------
 * Rename package to nwdiag
