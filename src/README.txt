@@ -69,7 +69,7 @@ Requirements
 
 License
 =======
-Python Software Foundation License.
+Apache License 2.0
 
 
 History
