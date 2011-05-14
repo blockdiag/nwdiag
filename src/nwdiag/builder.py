@@ -36,7 +36,7 @@ class DiagramTreeBuilder:
                 node.set_attributes(network, stmt.attrs)
 
                 if group:
-                    if node.group:
+                    if node.group and group != node.group:
                         msg = "DiagramNode could not belong to two groups"
                         raise RuntimeError(msg)
                     node.group = group
