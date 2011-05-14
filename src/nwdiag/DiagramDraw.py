@@ -22,6 +22,10 @@ from blockdiag.DiagramMetrix import DiagramMetrix
 
 
 class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
+    @property
+    def groups(self):
+        return self.diagram.groups
+
     def pagesize(self, scaled=False):
         # FIXME: force int'ize
         xy = super(DiagramDraw, self).pagesize(scaled)

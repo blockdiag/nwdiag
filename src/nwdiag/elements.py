@@ -26,6 +26,7 @@ class Diagram(blockdiag.elements.Diagram):
 
         self.orientation = 'portrait'
         self.span_height = 120
+        self.groups = []
         self.networks = []
 
     def fixiate(self):
@@ -50,9 +51,9 @@ class DiagramNode(blockdiag.elements.DiagramNode):
                 self.set_attribute(attr)
 
 
-class NodeGroup(blockdiag.elements.NodeGroup):
+class Network(blockdiag.elements.NodeGroup):
     def __init__(self, id):
-        super(NodeGroup, self).__init__(id)
+        super(Network, self).__init__(id)
 
         self.address = None
 
@@ -67,3 +68,10 @@ class NodeGroup(blockdiag.elements.NodeGroup):
             label = self.address
 
         return label
+
+
+class NodeGroup(blockdiag.elements.NodeGroup):
+    def __init__(self, id):
+        super(NodeGroup, self).__init__(id)
+
+        self.layouted = False

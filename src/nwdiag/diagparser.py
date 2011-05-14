@@ -50,6 +50,7 @@ from blockdiag.utils.namedtuple import namedtuple
 ENCODING = 'utf-8'
 
 Graph = namedtuple('Graph', 'type id stmts')
+Network = namedtuple('Network', 'id stmts')
 SubGraph = namedtuple('SubGraph', 'id stmts')
 Node = namedtuple('Node', 'id attrs')
 Attr = namedtuple('Attr', 'name value')
@@ -120,9 +121,22 @@ def parse(seq):
         op_('{') +
         network_stmt_list +
         op_('}')
+        >> unarg(Network))
+    group_stmt = (
+        graph_attr
+        | node_stmt
+    )
+    group_stmt_list = many(group_stmt + skip(maybe(op(';'))))
+    group = (
+        skip(n('group')) +
+        maybe(id) +
+        op_('{') +
+        group_stmt_list +
+        op_('}')
         >> unarg(SubGraph))
     stmt = (
         network
+        | group
         | graph_attr
     )
     stmt_list = many(stmt + skip(maybe(op(';'))))

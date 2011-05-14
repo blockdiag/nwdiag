@@ -21,7 +21,7 @@ from blockdiag.utils.XY import XY
 class DiagramTreeBuilder:
     def build(self, tree):
         self.diagram = Diagram()
-        self.instantiate(self.diagram, tree)
+        self.instantiate(self.diagram, None, tree)
         for subnetwork in self.diagram.networks:
             nodes = [n for n in self.diagram.nodes if subnetwork in n.networks]
             if len(nodes) == 0:
@@ -29,25 +29,38 @@ class DiagramTreeBuilder:
 
         return self.diagram
 
-    def instantiate(self, network, tree):
+    def instantiate(self, network, group, tree):
         for stmt in tree.stmts:
             if isinstance(stmt, diagparser.Node):
                 node = DiagramNode.get(stmt.id)
                 node.set_attributes(network, stmt.attrs)
 
+                if group:
+                    if node.group:
+                        msg = "DiagramNode could not belong to two groups"
+                        raise RuntimeError(msg)
+                    node.group = group
+                    group.nodes.append(node)
                 if network not in node.networks:
                     node.networks.append(network)
                 if node not in self.diagram.nodes:
                     self.diagram.nodes.append(node)
 
-            elif isinstance(stmt, diagparser.SubGraph):
-                subnetwork = NodeGroup.get(stmt.id)
+            elif isinstance(stmt, diagparser.Network):
+                subnetwork = Network.get(stmt.id)
                 subnetwork.label = stmt.id
                 subnetwork.level = network.level + 1
 
                 if subnetwork not in self.diagram.networks:
                     self.diagram.networks.append(subnetwork)
-                self.instantiate(subnetwork, stmt)
+                self.instantiate(subnetwork, group, stmt)
+
+            elif isinstance(stmt, diagparser.SubGraph):
+                subgroup = NodeGroup.get(stmt.id)
+
+                if subgroup not in self.diagram.groups:
+                    self.diagram.groups.append(subgroup)
+                self.instantiate(subnetwork, subgroup, stmt)
 
             elif isinstance(stmt, diagparser.DefAttrs):
                 network.set_attributes(stmt.attrs)
@@ -70,6 +83,7 @@ class DiagramLayoutManager:
 
     def do_layout(self):
         self.sort_networks()
+        self.sort_nodes()
         self.layout_nodes()
         self.set_network_size()
 
@@ -93,6 +107,21 @@ class DiagramLayoutManager:
 
         for i, network in enumerate(self.diagram.networks):
             network.xy = XY(0, i)
+
+    def sort_nodes(self):
+        for i in range(len(self.diagram.nodes)):
+            if self.diagram.nodes[i].group:
+                n = 1
+                basenode = self.diagram.nodes[i]
+                group = basenode.group
+
+                for j in range(i + 1, len(self.diagram.nodes)):
+                    if basenode.group == self.diagram.nodes[j].group:
+                        node = self.diagram.nodes[j]
+
+                        self.diagram.nodes.remove(node)
+                        self.diagram.nodes.insert(i + n, node)
+                        n += 1
 
     def layout_nodes(self):
         networks = self.diagram.networks
@@ -118,6 +147,19 @@ class DiagramLayoutManager:
             x1 = max(n.xy.x for n in nodes)
             network.width = x1 - x0 + 1
 
+        for group in self.diagram.groups:
+            nodes = list(group.nodes)
+            nodes.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
+
+            x0 = min(n.xy.x for n in nodes)
+            y0 = min(n.xy.y for n in nodes)
+            group.xy = XY(x0, y0)
+
+            x1 = max(n.xy.x for n in nodes)
+            y1 = max(n.xy.y for n in nodes)
+            group.width = x1 - x0 + 1
+            group.height = y1 - y0 + 1
+
 
 class ScreenNodeBuilder:
     @classmethod
@@ -125,6 +167,7 @@ class ScreenNodeBuilder:
         DiagramNode.clear()
         DiagramEdge.clear()
         NodeGroup.clear()
+        Network.clear()
 
         diagram = DiagramTreeBuilder().build(tree)
         DiagramLayoutManager(diagram).run()
