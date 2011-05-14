@@ -57,6 +57,10 @@ Edge = namedtuple('Edge', 'nodes attrs')
 DefAttrs = namedtuple('DefAttrs', 'object attrs')
 
 
+class ParseException(Exception):
+    pass
+
+
 def tokenize(str):
     'str -> Sequence(Token)'
     specs = [
@@ -135,5 +139,11 @@ def parse(seq):
 
 
 def parse_file(path):
-    input = codecs.open(path, 'r', 'utf-8').read()
-    return parse(tokenize(input))
+    try:
+        input = codecs.open(path, 'r', 'utf-8').read()
+        return parse(tokenize(input))
+    except LexerError, e:
+        message = "Got unexpected token at line %d (%d chars)" % e.place
+        raise ParseException, message
+    except Exception, e:
+        raise ParseException, str(e)
