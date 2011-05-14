@@ -306,3 +306,5 @@ def setup(app):
     app.add_config_value('nwdiag_fontpath', None, 'html')
     app.add_config_value('nwdiag_antialias', False, 'html')
     app.add_config_value('nwdiag_tex_image_format', 'PNG', 'html')
+
+    app.warn('sphinxcontrib_nwdiag was deprecated; Use sphinxcontrib.nwdiag package (including DOT)')
