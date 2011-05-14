@@ -30,7 +30,7 @@ setup(
      author_email='i.tkomiya at gmail.com',
      url='http://tk0miya.bitbucket.org/nwdiag/build/html/index.html',
      license='Apache License 2.0',
-     py_modules=['sphinxcontrib_nwdiag'],
+     py_modules=['sphinxcontrib_nwdiag', 'nwdiag_sphinxhelper'],
      packages=find_packages('src'),
      package_dir={'': 'src'},
      package_data = {'': ['buildout.cfg']},
