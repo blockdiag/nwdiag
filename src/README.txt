@@ -75,7 +75,11 @@ Apache License 2.0
 History
 =======
 
-0.2.0 (2011-05-14)
+0.2.2 (2011-05-15)
+------------------
+* Implement grouping nodes
+
+0.2.1 (2011-05-14)
 ------------------
 * Change license to Apache License 2.0
 * Support blockdiag 0.8.1 core interface 
