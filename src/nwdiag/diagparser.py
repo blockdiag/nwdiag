@@ -110,18 +110,6 @@ def parse(seq):
     node_stmt = node_id + attr_list >> unarg(Node)
     # We use a forward_decl becaue of circular definitions like (stmt_list ->
     # stmt -> subgraph -> stmt_list)
-    network_stmt = (
-        graph_attr
-        | node_stmt
-    )
-    network_stmt_list = many(network_stmt + skip(maybe(op(';'))))
-    network = (
-        skip(n('network')) +
-        maybe(id) +
-        op_('{') +
-        network_stmt_list +
-        op_('}')
-        >> unarg(Network))
     group_stmt = (
         graph_attr
         | node_stmt
@@ -134,6 +122,19 @@ def parse(seq):
         group_stmt_list +
         op_('}')
         >> unarg(SubGraph))
+    network_stmt = (
+        graph_attr
+        | group
+        | node_stmt
+    )
+    network_stmt_list = many(network_stmt + skip(maybe(op(';'))))
+    network = (
+        skip(n('network')) +
+        maybe(id) +
+        op_('{') +
+        network_stmt_list +
+        op_('}')
+        >> unarg(Network))
     stmt = (
         network
         | group
