@@ -16,6 +16,7 @@
 from elements import *
 import diagparser
 from blockdiag.utils.XY import XY
+from blockdiag.utils.namedtuple import namedtuple
 
 
 class DiagramTreeBuilder:
@@ -57,17 +58,33 @@ class DiagramTreeBuilder:
 
                 if subnetwork not in self.diagram.networks:
                     self.diagram.networks.append(subnetwork)
-                self.instantiate(subnetwork, group, stmt)
+
+                substmt = namedtuple('Statements', 'stmts')([])
+                for s in stmt.stmts:
+                    if isinstance(s, diagparser.DefAttrs):
+                        subnetwork.set_attributes(s.attrs)
+                    else:
+                        substmt.stmts.append(s)
+
+                self.instantiate(subnetwork, group, substmt)
 
             elif isinstance(stmt, diagparser.SubGraph):
                 subgroup = NodeGroup.get(stmt.id)
 
                 if subgroup not in self.diagram.groups:
                     self.diagram.groups.append(subgroup)
-                self.instantiate(network, subgroup, stmt)
+
+                substmt = namedtuple('Statements', 'stmts')([])
+                for s in stmt.stmts:
+                    if isinstance(s, diagparser.DefAttrs):
+                        subgroup.set_attributes(s.attrs)
+                    else:
+                        substmt.stmts.append(s)
+
+                self.instantiate(network, subgroup, substmt)
 
             elif isinstance(stmt, diagparser.DefAttrs):
-                network.set_attributes(stmt.attrs)
+                self.diagram.set_attributes(stmt.attrs)
 
             else:
                 raise AttributeError("Unknown sentense: " + str(type(stmt)))
