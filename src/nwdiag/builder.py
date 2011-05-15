@@ -156,7 +156,12 @@ class DiagramLayoutManager:
             y1 = min(networks.index(g) for g in node.networks)
             y2 = max(networks.index(g) for g in node.networks)
 
-            for x in range(len(self.diagram.nodes)):
+            if node.group:
+                starts = max(n.xy.x for n in node.group.nodes)
+            else:
+                starts = 0
+
+            for x in range(starts, len(self.diagram.nodes)):
                 points = [XY(x, y) for y in range(y1, y2 + 1)]
                 if not set(points) & set(self.coordinates):
                     node.xy = XY(x, y1)
