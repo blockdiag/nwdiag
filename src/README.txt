@@ -75,6 +75,10 @@ Apache License 2.0
 History
 =======
 
+0.2.3 (2011-05-15)
+------------------
+* Fix bugs
+
 0.2.2 (2011-05-15)
 ------------------
 * Implement grouping nodes
