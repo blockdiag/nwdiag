@@ -27,6 +27,10 @@ class DiagramTreeBuilder:
             if len(nodes) == 0:
                 self.diagram.networks.remove(subnetwork)
 
+        for subgroup in self.diagram.groups:
+            if len(subgroup.nodes) == 0:
+                self.diagram.groups.remove(subgroup)
+
         return self.diagram
 
     def instantiate(self, network, group, tree):
