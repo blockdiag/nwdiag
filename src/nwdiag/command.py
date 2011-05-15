@@ -18,6 +18,7 @@ import re
 import sys
 from ConfigParser import SafeConfigParser
 from optparse import OptionParser
+import nwdiag
 import DiagramDraw
 import diagparser
 from blockdiag import utils
@@ -25,8 +26,9 @@ from builder import ScreenNodeBuilder
 
 
 def parse_option():
+    version = "%%prog %s" % nwdiag.__version__
     usage = "usage: %prog [options] infile"
-    p = OptionParser(usage=usage)
+    p = OptionParser(usage=usage, version=version)
     p.add_option('-a', '--antialias', action='store_true',
                  help='Pass diagram image to anti-alias filter')
     p.add_option('-c', '--config',
