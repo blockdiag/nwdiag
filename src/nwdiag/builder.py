@@ -131,6 +131,11 @@ class DiagramLayoutManager:
         networks = self.diagram.networks
         last_group = None
         for node in self.diagram.nodes:
+            if last_group != node.group:
+                if last_group:
+                    self.set_coordinates(last_group)
+                last_group = node.group
+
             y1 = min(networks.index(g) for g in node.networks)
             y2 = max(networks.index(g) for g in node.networks)
 
@@ -140,10 +145,6 @@ class DiagramLayoutManager:
                     node.xy = XY(x, y1)
                     self.coordinates += points
                     break
-
-            if last_group and last_group != node.group:
-                self.set_coordinates(last_group)
-            last_group = node.group
 
         if last_group:
             self.set_coordinates(last_group)
