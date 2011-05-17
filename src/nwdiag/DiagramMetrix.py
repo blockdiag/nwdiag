@@ -26,7 +26,7 @@ class DiagramMetrix(blockdiag.DiagramMetrix.DiagramMetrix):
         self.setdefault('networks', diagram.networks)
 
         if diagram.page_padding is None:
-            top_padding = self['nodeHeight'] + self['spanHeight']
+            top_padding = self['spanHeight'] / 2
             left_padding = (self['nodeWidth'] + self['spanWidth']) * 3 / 4
             self['pagePadding'] = [top_padding, 0, 0, left_padding]
 
