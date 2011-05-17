@@ -40,13 +40,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         metrix = self.metrix.originalMetrix()
         for network in self.diagram.networks:
             m = metrix.network(network)
-
             self.drawer.line(m.trunkline, fill=self.fill)
-            if network.display_label:
-                self.drawer.textarea(m.textbox, network.display_label,
-                                     fill=self.fill, halign="right",
-                                     font=self.font,
-                                     fontsize=self.metrix.fontSize)
 
             # FIXME: first network links to global network
             if network == self.diagram.networks[0]:
@@ -54,6 +48,20 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 pt0 = XY(pt1.x, pt1.y - m.metrix.spanHeight * 2 / 3)
 
                 self.drawer.line([pt0, pt1], fill=self.fill)
+
+    def draw(self):
+        super(DiagramDraw, self).draw()
+
+        self._draw_trunkline_labels()
+
+    def _draw_trunkline_labels(self):
+        for network in self.diagram.networks:
+            if network.display_label:
+                m = self.metrix.network(network)
+                self.drawer.textarea(m.textbox, network.display_label,
+                                     fill=self.fill, halign="right",
+                                     font=self.font,
+                                     fontsize=self.metrix.fontSize)
 
     def node(self, node, **kwargs):
         m = self.metrix
