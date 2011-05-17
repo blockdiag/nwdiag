@@ -75,6 +75,11 @@ Apache License 2.0
 History
 =======
 
+0.2.4 (2011-05-17)
+------------------
+* Add --version option
+* Fix bugs
+
 0.2.3 (2011-05-15)
 ------------------
 * Fix bugs
