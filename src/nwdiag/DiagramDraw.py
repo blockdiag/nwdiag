@@ -37,8 +37,9 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         self._draw_trunklines()
 
     def _draw_trunklines(self):
+        metrix = self.metrix.originalMetrix()
         for network in self.diagram.networks:
-            m = self.metrix.network(network)
+            m = metrix.network(network)
 
             self.drawer.line(m.trunkline, fill=self.fill)
             if network.display_label:
