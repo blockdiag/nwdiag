@@ -25,7 +25,9 @@ class Diagram(blockdiag.elements.Diagram):
         super(Diagram, self).__init__()
 
         self.orientation = 'portrait'
-        self.span_height = 120
+        self.node_width = 104
+        self.span_width = 48
+        self.span_height = 104
         self.groups = []
         self.networks = []
 
