@@ -26,9 +26,15 @@ class DiagramMetrix(blockdiag.DiagramMetrix.DiagramMetrix):
         self.setdefault('networks', diagram.networks)
 
         if diagram.page_padding is None:
-            top_padding = self['spanHeight'] / 2
+            top_padding = self['spanHeight']
             left_padding = (self['nodeWidth'] + self['spanWidth']) * 3 / 4
-            self['pagePadding'] = [top_padding, 0, 0, left_padding]
+
+            margin = self['cellSize'] * 6
+            self['pagePadding'] = [top_padding + margin, margin,
+                                   margin, left_padding + margin]
+
+        self['pageMargin'] = XY(0, 0)
+
 
     def originalMetrix(self):
         kwargs = {}
