@@ -70,7 +70,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
             for i in range(node.xy.y + 1, connector.network.xy.y):
                 networks = (n for n in self.diagram.networks if n.xy.y == i)
                 for nw in networks:
-                    if nw.xy.x <= node.xy.x <= nw.xy.x + nw.width:
+                    if nw.xy.x <= node.xy.x <= nw.xy.x + nw.width - 1:
                         connector.jumps.append(nw)
 
             self.draw_connector(connector)
