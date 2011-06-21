@@ -56,6 +56,8 @@ class Network(blockdiag.elements.NodeGroup):
         super(Network, self).__init__(id)
 
         self.address = None
+        self.width = 0
+        self.height = 0
 
     @property
     def display_label(self):
