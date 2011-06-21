@@ -32,10 +32,10 @@ class DiagramMetrix(blockdiag.DiagramMetrix.DiagramMetrix):
 
             margin = self['cellSize'] * 6
             self['pagePadding'] = [top_padding + margin, margin,
-                                   bottom_padding + margin, left_padding + margin]
+                                   bottom_padding + margin,
+                                   left_padding + margin]
 
         self['pageMargin'] = XY(0, 0)
-
 
     def originalMetrix(self):
         kwargs = {}
