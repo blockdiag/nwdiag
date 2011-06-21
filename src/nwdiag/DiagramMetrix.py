@@ -27,11 +27,12 @@ class DiagramMetrix(blockdiag.DiagramMetrix.DiagramMetrix):
 
         if diagram.page_padding is None:
             top_padding = self['spanHeight']
+            bottom_padding = self['spanHeight'] / 3
             left_padding = (self['nodeWidth'] + self['spanWidth']) * 3 / 4
 
             margin = self['cellSize'] * 6
             self['pagePadding'] = [top_padding + margin, margin,
-                                   margin, left_padding + margin]
+                                   bottom_padding + margin, left_padding + margin]
 
         self['pageMargin'] = XY(0, 0)
 
