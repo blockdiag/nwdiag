@@ -22,6 +22,7 @@ import nwdiag
 import DiagramDraw
 import diagparser
 from blockdiag import utils
+from blockdiag.command import detectfont
 from builder import ScreenNodeBuilder
 
 
@@ -76,23 +77,6 @@ def parse_option():
             options.font.append(fontpath)
 
     return options, args
-
-
-def detectfont(options):
-    fonts = options.font + \
-            ['c:/windows/fonts/VL-Gothic-Regular.ttf',  # for Windows
-             'c:/windows/fonts/msmincho.ttf',  # for Windows
-             '/usr/share/fonts/truetype/ipafont/ipagp.ttf',  # for Debian
-             '/usr/local/share/font-ipa/ipagp.otf',  # for FreeBSD
-             '/System/Library/Fonts/AppleGothic.ttf']  # for MaxOS
-
-    fontpath = None
-    for path in fonts:
-        if path and os.path.isfile(path):
-            fontpath = path
-            break
-
-    return fontpath
 
 
 def main():
