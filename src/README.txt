@@ -75,6 +75,10 @@ Apache License 2.0
 History
 =======
 
+0.2.5 (2011-06-29)
+------------------
+* Adjust parameters for span and margin
+
 0.2.4 (2011-05-17)
 ------------------
 * Add --version option
