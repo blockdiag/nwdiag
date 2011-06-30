@@ -46,6 +46,9 @@ class DiagramTreeBuilder:
                         raise RuntimeError(msg)
                     node.group = group
                     group.nodes.append(node)
+                else:
+                    node.group = self.diagram
+
                 if network not in node.networks:
                     if network is not None:
                         node.networks.append(network)
