@@ -159,7 +159,7 @@ class DiagramLayoutManager:
             y1 = min(networks.index(g) for g in node.networks)
             y2 = max(networks.index(g) for g in node.networks)
 
-            if node.group:
+            if node.group and node.group != self.diagram:
                 starts = max(n.xy.x for n in node.group.nodes)
             else:
                 starts = 0
