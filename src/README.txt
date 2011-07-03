@@ -6,7 +6,7 @@ Features
 * Multilingualization for node-label (utf-8 only).
 
 You can get some examples and generated images on 
-`tk0miya.bitbucket.org <http://tk0miya.bitbucket.org/nwdiag/build/html/index.html>`_ .
+`blockdiag.com <http://blockdiag.com/nwdiag/build/html/index.html>`_ .
 
 Setup
 =====
@@ -31,7 +31,7 @@ spec-text setting sample
 
 Few examples are available.
 You can get more examples at
-`tk0miya.bitbucket.org <http://tk0miya.bitbucket.org/nwdiag/build/html/index.html>`_ .
+`blockdiag.com <http://blockdiag.com/nwdiag/build/html/index.html>`_ .
 
 simple.diag
 ------------
@@ -74,6 +74,14 @@ Apache License 2.0
 
 History
 =======
+
+0.2.6 (2011-07-03)
+------------------
+* Allow "." to id token
+* Support input from stdin
+* Support multiple node address (using comma)
+* Do not sort networks (ordered as declarations)
+* Fix bugs
 
 0.2.5 (2011-06-29)
 ------------------
