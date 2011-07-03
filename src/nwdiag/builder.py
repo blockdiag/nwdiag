@@ -23,10 +23,13 @@ class DiagramTreeBuilder:
     def build(self, tree):
         self.diagram = Diagram()
         self.instantiate(None, None, tree)
-        for subnetwork in self.diagram.networks:
-            nodes = [n for n in self.diagram.nodes if subnetwork in n.networks]
+        for network in self.diagram.networks:
+            nodes = [n for n in self.diagram.nodes if network in n.networks]
             if len(nodes) == 0:
-                self.diagram.networks.remove(subnetwork)
+                self.diagram.networks.remove(network)
+
+        for i, network in enumerate(self.diagram.networks):
+            network.xy = XY(0, i)
 
         for subgroup in self.diagram.groups:
             if len(subgroup.nodes) == 0:
@@ -106,31 +109,9 @@ class DiagramLayoutManager:
         self.diagram.fixiate()
 
     def do_layout(self):
-        self.sort_networks()
         self.sort_nodes()
         self.layout_nodes()
         self.set_network_size()
-
-    def sort_networks(self):
-        def compare(a, b):
-            n1 = [n for n in nodes  if a in n.networks]
-            n2 = [n for n in nodes  if b in n.networks]
-
-            return cmp(len(n1), len(n2))
-
-        for i in range(len(self.diagram.networks) - 1):
-            parent = self.diagram.networks[i]
-            others = self.diagram.networks[i + 1:]
-            nodes = [n for n in self.diagram.nodes  if parent in n.networks]
-
-            others.sort(compare, reverse=True)
-
-            if self.diagram.networks[i + 1] != others[0]:
-                self.diagram.networks.remove(others[0])
-                self.diagram.networks.insert(i + 1, others[0])
-
-        for i, network in enumerate(self.diagram.networks):
-            network.xy = XY(0, i)
 
     def sort_nodes(self):
         for i in range(len(self.diagram.nodes)):
