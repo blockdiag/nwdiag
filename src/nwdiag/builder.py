@@ -44,12 +44,13 @@ class DiagramTreeBuilder:
                 node.set_attributes(network, stmt.attrs)
 
                 if group:
-                    if node.group and group != node.group:
+                    if node.group and node.group != self.diagram and \
+                       group != node.group:
                         msg = "DiagramNode could not belong to two groups"
                         raise RuntimeError(msg)
                     node.group = group
                     group.nodes.append(node)
-                else:
+                elif node.group is None:
                     node.group = self.diagram
 
                 if network not in node.networks:
