@@ -77,6 +77,10 @@ History
 
 0.2.6 (2011-07-03)
 ------------------
+* Fix bugs
+
+0.2.6 (2011-07-03)
+------------------
 * Allow "." to id token
 * Support input from stdin
 * Support multiple node address (using comma)
