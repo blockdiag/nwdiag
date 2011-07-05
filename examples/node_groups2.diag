@@ -1,0 +1,20 @@
+diagram {
+  // define group at outside network definitions
+  group {
+    color = "#FF7777";
+
+    web01;
+    web02;
+    db01;
+  }
+
+  network dmz {
+    web01;
+    web02;
+  }
+  network internal {
+    web01;
+    web02;
+    db01;
+  }
+}
