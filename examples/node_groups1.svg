@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd ">
+<svg viewBox="0 0 770 418 " xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" >
+	<defs id="defs_block">
+		<filter inkspace:collect="always" height="1.504" width="1.1575" y="-0.252" x="-0.07875" id="filter_blur">
+			<feGaussianBlur stdDeviation="4.2" id="feGaussianBlur3780" inkspace:collect="always"/>
+		</filter>
+	</defs>
+	<title>blockdiag</title>
+	<rect style="filter:url(#filter_blur)" height="92" width="268" y="126" x="156" stroke-width="1" fill="rgb(243,152,0)"/>
+	<rect style="filter:url(#filter_blur)" height="92" width="268" y="270" x="460" stroke-width="1" fill="rgb(243,152,0)"/>
+	<rect style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" height="40" width="104" stroke="rgb(0,0,0)" y="158" x="165" stroke-width="1" fill="rgb(0,0,0)"/>
+	<rect style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" height="40" width="104" stroke="rgb(0,0,0)" y="158" x="317" stroke-width="1" fill="rgb(0,0,0)"/>
+	<rect style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" height="40" width="104" stroke="rgb(0,0,0)" y="302" x="469" stroke-width="1" fill="rgb(0,0,0)"/>
+	<rect style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" height="40" width="104" stroke="rgb(0,0,0)" y="302" x="621" stroke-width="1" fill="rgb(0,0,0)"/>
+	<path stroke="rgb(0,0,0)" d="M 138 100 L 442 100" fill="none"/>
+	<path stroke="rgb(0,0,0)" d="M 290 31 L 290 100" fill="none"/>
+	<path stroke="rgb(0,0,0)" d="M 138 244 L 746 244" fill="none"/>
+	<path stroke="rgb(0,0,0)" d="M 214 100 L 214 152" fill="none"/>
+	<text y="132" x="226" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">.1</text>
+	<path stroke="rgb(0,0,0)" d="M 214 192 L 214 244" fill="none"/>
+	<text y="224" x="226" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">.1</text>
+	<rect style="None" height="40" width="104" stroke="rgb(0,0,0)" y="152" x="162" stroke-width="1" fill="rgb(255,255,255)"/>
+	<text y="178" x="197" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">web01</text>
+	<path stroke="rgb(0,0,0)" d="M 366 100 L 366 152" fill="none"/>
+	<text y="132" x="378" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">.2</text>
+	<path stroke="rgb(0,0,0)" d="M 366 192 L 366 244" fill="none"/>
+	<text y="224" x="378" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">.2</text>
+	<rect style="None" height="40" width="104" stroke="rgb(0,0,0)" y="152" x="314" stroke-width="1" fill="rgb(255,255,255)"/>
+	<text y="178" x="349" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">web02</text>
+	<path stroke="rgb(0,0,0)" d="M 518 244 L 518 296" fill="none"/>
+	<text y="276" x="530" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">.101</text>
+	<rect style="None" height="40" width="104" stroke="rgb(0,0,0)" y="296" x="466" stroke-width="1" fill="rgb(255,255,255)"/>
+	<text y="322" x="504" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">db01</text>
+	<path stroke="rgb(0,0,0)" d="M 670 244 L 670 296" fill="none"/>
+	<text y="276" x="682" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">.102</text>
+	<rect style="None" height="40" width="104" stroke="rgb(0,0,0)" y="296" x="618" stroke-width="1" fill="rgb(255,255,255)"/>
+	<text y="322" x="656" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">db02</text>
+	<text y="99" x="57" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">Sample_front</text>
+	<text y="112" x="34" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">192.168.10.0/24</text>
+	<text y="243" x="57" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">Sample_back</text>
+	<text y="256" x="34" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">192.168.20.0/24</text>
+</svg>
