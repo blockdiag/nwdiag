@@ -102,16 +102,19 @@ def main():
             tree = diagparser.parse_string(stream.read())
         else:
             tree = diagparser.parse_file(infile)
+
+        diagram = ScreenNodeBuilder.build(tree)
+
+        draw = DiagramDraw.DiagramDraw(options.type, diagram, outfile,
+                                       font=fontpath,
+                                       antialias=options.antialias)
+        draw.draw()
+        draw.save()
+    except UnicodeEncodeError, e:
+        msg = "ERROR: UnicodeEncodeError caught (check your font settings)\n"
+        sys.stderr.write(msg)
     except Exception, e:
         sys.stderr.write("ERROR: %s\n" % e)
-        return
-
-    diagram = ScreenNodeBuilder.build(tree)
-
-    draw = DiagramDraw.DiagramDraw(options.type, diagram, outfile,
-                                   font=fontpath, antialias=options.antialias)
-    draw.draw()
-    draw.save()
 
 
 if __name__ == '__main__':
