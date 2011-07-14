@@ -34,6 +34,14 @@ def test_node_attributes():
     assert screen.nodes[1].address[network] == '192.168.0.2\n192.168.0.3'
 
 
+def test_node_including_hyphen_diagram():
+    screen = __build_diagram('node_including_hyphen.diag')
+
+    network = screen.networks[0]
+    assert screen.nodes[0].id == 'web-01'
+    assert screen.nodes[1].id == 'web-02'
+
+
 def test_single_network_diagram():
     screen = __build_diagram('single_network.diag')
 
