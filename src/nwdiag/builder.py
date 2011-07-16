@@ -144,7 +144,16 @@ class DiagramLayoutManager:
             if node.group and node.group != self.diagram:
                 starts = min(n.xy.x for n in node.group.nodes)
             else:
+                nw = [n for n in node.networks if n.xy.y == y1][0]
+                nodes = [n for n in self.diagram.nodes if nw in n.networks]
+                layouted = [n for n in nodes  if n.xy.x > 0]
+
                 starts = 0
+                if layouted:
+                    starts = min(n.xy.x for n in layouted) - len(nodes) + 1
+
+                if starts < 0:
+                    starts = 0
 
             for x in range(starts, len(self.diagram.nodes)):
                 points = [XY(x, y) for y in range(y1, y2 + 1)]
