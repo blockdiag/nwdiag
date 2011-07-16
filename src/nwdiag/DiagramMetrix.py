@@ -141,10 +141,25 @@ class NodeMetrix(object):
 
 
 class GroupMetrix(blockdiag.DiagramMetrix.NodeMetrix):
+    def __init__(self, node, metrix):
+        super(GroupMetrix, self).__init__(node, metrix)
+
+        network = min(node.nodes[0].networks, key=lambda n: n.xy.y)
+        if self.top().x == metrix.network(network).top().x:
+            self.is_root_group = True
+        else:
+            self.is_root_group = False
+
     def groupLabelBox(self):
         box = super(GroupMetrix, self).groupLabelBox()
         span = self.metrix.spanHeight / 2 - self.metrix.cellSize
-        return (box[0], box[1] - span, box[2], box[3] - span)
+        box = (box[0], box[1] - span, box[2], box[3] - span)
+
+        if self.is_root_group:
+            width = box[2] - box[1]
+            box = (box[0] + width / 2, box[1], box[2], box[3])
+
+        return box
 
     def marginBox(self):
         box = super(GroupMetrix, self).marginBox()
