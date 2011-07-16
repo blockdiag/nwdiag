@@ -125,7 +125,8 @@ class NodeMetrix(object):
                     dx = int(math.floor(base_x * m.cellSize * 2))
 
                 width = m.nodeWidth + m.spanWidth
-                textbox = [x + dx, y2 - m.spanHeight / 2, x + width, y2]
+                textbox = [x + dx - m.cellSize, y2 - m.spanHeight / 2,
+                           x + width, y2]
                 line = [XY(x + dx, y1), XY(x + dx, y2)]
 
                 yield Connector(network, line, textbox, [])
