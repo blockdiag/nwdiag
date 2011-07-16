@@ -69,6 +69,15 @@ def test_two_networks_diagram():
         assert node.xy == assert_pos[node.id]
 
 
+def test_node_belongs_to_multiple_networks_diagram():
+    screen = __build_diagram('node_belongs_to_multiple_networks.diag')
+
+    assert_pos = {'A': (0, 0)}
+    for node in screen.nodes:
+        print assert_pos[node.id], node.xy
+        assert node.xy == assert_pos[node.id]
+
+
 def test_connected_networks_diagram():
     screen = __build_diagram('connected_networks.diag')
 

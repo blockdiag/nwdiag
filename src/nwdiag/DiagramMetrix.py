@@ -144,11 +144,11 @@ class GroupMetrix(blockdiag.DiagramMetrix.NodeMetrix):
     def __init__(self, node, metrix):
         super(GroupMetrix, self).__init__(node, metrix)
 
-        network = min(node.nodes[0].networks, key=lambda n: n.xy.y)
-        if self.top().x == metrix.network(network).top().x:
-            self.is_root_group = True
-        else:
-            self.is_root_group = False
+        self.is_root_group = False
+        if node.nodes:
+            network = min(node.nodes[0].networks, key=lambda n: n.xy.y)
+            if self.top().x == metrix.network(network).top().x:
+                self.is_root_group = True
 
     def groupLabelBox(self):
         box = super(GroupMetrix, self).groupLabelBox()

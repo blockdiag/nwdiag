@@ -1,0 +1,11 @@
+{
+  network {
+    A;
+  }
+  network {
+    A;
+  }
+  network {
+    A;
+  }
+}
