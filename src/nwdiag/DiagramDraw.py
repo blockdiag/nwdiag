@@ -106,6 +106,13 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         else:
             self.drawer.line(connector.line, fill=self.fill)
 
+    def group_label(self, group):
+        if group.label:
+            m = self.metrix.cell(group)
+            self.drawer.textarea(m.groupLabelBox(), group.label, valign='top',
+                                 fill=self.fill, font=self.font,
+                                 fontsize=self.metrix.fontSize)
+
 
 from DiagramMetrix import DiagramMetrix
 DiagramDraw.set_metrix_class(DiagramMetrix)

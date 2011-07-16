@@ -143,7 +143,7 @@ class NodeMetrix(object):
 class GroupMetrix(blockdiag.DiagramMetrix.NodeMetrix):
     def groupLabelBox(self):
         box = super(GroupMetrix, self).groupLabelBox()
-        span = self.metrix.spanHeight / 4
+        span = self.metrix.spanHeight / 2 - self.metrix.cellSize
         return (box[0], box[1] - span, box[2], box[3] - span)
 
     def marginBox(self):
