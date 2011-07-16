@@ -72,6 +72,7 @@ def tokenize(str):
         ('Name',    (ur'[A-Za-z_\u0080-\uffff]'
                      ur'[A-Za-z_\-.0-9\u0080-\uffff]*',)),
         ('Op',      (r'[{};,=\[\]]',)),
+        ('IPAddr',  (r'([0-9]+(\.[0-9]+){3}|[:0-9a-fA-F]+)',)),
         ('Number',  (r'-?(\.[0-9]+)|([0-9]+(\.[0-9]*)?)',)),
         ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),
     ]
@@ -90,7 +91,7 @@ def parse(seq):
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
     id = some(lambda t:
-        t.type in ['Name', 'Number', 'String']).named('id') >> tokval
+        t.type in ['Name', 'IPAddr', 'Number', 'String']).named('id') >> tokval
     make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
     make_edge = lambda x, x2, xs, attrs: Edge([x, x2] + xs, attrs)
 
