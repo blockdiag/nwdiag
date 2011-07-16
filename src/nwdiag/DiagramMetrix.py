@@ -15,6 +15,7 @@
 
 import math
 import blockdiag.DiagramMetrix
+from blockdiag import elements
 from blockdiag.utils.namedtuple import namedtuple
 from blockdiag.utils.XY import XY
 
@@ -48,6 +49,13 @@ class DiagramMetrix(blockdiag.DiagramMetrix.DiagramMetrix):
     def node(self, node):
         metrix = super(DiagramMetrix, self).node(node)
         return NodeMetrix(node, metrix)
+
+    def cell(self, node):
+        if isinstance(node, elements.NodeGroup):
+            metrix = GroupMetrix(node, self)
+        else:
+            metrix = super(DiagramMetrix, self).cell(node)
+        return metrix
 
     def network(self, network):
         return NetworkMetrix(network, self)
@@ -130,3 +138,17 @@ class NodeMetrix(object):
                 line = [XY(x + dx, y1), XY(x + dx, y2)]
 
                 yield Connector(network, line, textbox, [])
+
+
+class GroupMetrix(blockdiag.DiagramMetrix.NodeMetrix):
+    def groupLabelBox(self):
+        box = super(GroupMetrix, self).groupLabelBox()
+        span = self.metrix.spanHeight / 4
+        return (box[0], box[1] - span, box[2], box[3] - span)
+
+    def marginBox(self):
+        box = super(GroupMetrix, self).marginBox()
+        margin_x = self.metrix.spanHeight / 2
+        margin_y = self.metrix.cellSize
+        return (box[0] - margin_y, box[1] - margin_x,
+                box[2] + margin_y, box[3] + margin_x)
