@@ -75,6 +75,13 @@ Apache License 2.0
 History
 =======
 
+0.3.0 (2011-07-18)
+------------------
+* Upgrade layout engine
+* Allow to note ip addresses directly
+* Allow node_id including hyphen chars
+* Fix bugs
+
 0.2.7 (2011-07-05)
 ------------------
 * Fix bugs
