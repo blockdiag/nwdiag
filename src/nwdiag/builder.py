@@ -150,7 +150,11 @@ class DiagramLayoutManager:
 
                 starts = 0
                 if layouted:
-                    starts = min(n.xy.x for n in layouted) - len(nodes) + 1
+                    basenode = min(layouted, key=lambda n: n.xy.x)
+                    if basenode.xy.y == y1:
+                        starts = basenode.xy.x + 1
+                    else:
+                        starts = basenode.xy.x + 1 - len(nodes)
 
                 if starts < 0:
                     starts = 0

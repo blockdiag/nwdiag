@@ -97,6 +97,17 @@ def test_connected_networks2_diagram():
         assert node.xy == assert_pos[node.id]
 
 
+def test_connected_networks3_diagram():
+    screen = __build_diagram('connected_networks3.diag')
+
+    assert_pos = {'A': (0, 0), 'B': (1, 0), 'C': (2, 0), 'D': (3, 0),
+                  'E': (4, 0), 'F': (5, 0), 'G': (6, 0), 'H': (1, 1),
+                  'I': (2, 1), 'J': (4, 2), 'K': (5, 2)}
+    for node in screen.nodes:
+        print assert_pos[node.id], node.xy
+        assert node.xy == assert_pos[node.id]
+
+
 def test_group_inner_network_diagram():
     screen = __build_diagram('group_inner_network.diag')
 
