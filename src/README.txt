@@ -75,6 +75,10 @@ Apache License 2.0
 History
 =======
 
+0.3.1 (2011-08-01)
+------------------
+* Fix bugs
+
 0.3.0 (2011-07-18)
 ------------------
 * Upgrade layout engine
