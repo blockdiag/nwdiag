@@ -150,7 +150,8 @@ class DiagramLayoutManager:
 
                 starts = 0
                 if layouted:
-                    basenode = min(layouted, key=lambda n: n.xy.x)
+                    layouted.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
+                    basenode = min(layouted)
                     if basenode.xy.y == y1:
                         starts = basenode.xy.x + 1
                     else:
