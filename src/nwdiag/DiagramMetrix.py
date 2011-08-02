@@ -146,7 +146,9 @@ class GroupMetrix(blockdiag.DiagramMetrix.NodeMetrix):
 
         self.is_root_group = False
         if node.nodes:
-            network = min(node.nodes[0].networks, key=lambda n: n.xy.y)
+            networks = node.nodes[0].networks[:]
+            networks.sort(lambda a, b: cmp(a.xy.y, b.xy.y))
+            network = min(networks)
             if self.top().x == metrix.network(network).top().x:
                 self.is_root_group = True
 
