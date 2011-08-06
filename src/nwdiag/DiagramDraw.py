@@ -22,6 +22,10 @@ from blockdiag.DiagramMetrix import DiagramMetrix
 
 
 class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
+    def __init__(self, format, diagram, filename=None, **kwargs):
+        super(DiagramDraw, self).__init__(format, diagram, filename, **kwargs)
+        self.drawer.forward = 'vertical'
+
     @property
     def groups(self):
         return self.diagram.groups
@@ -40,7 +44,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         metrix = self.metrix.originalMetrix()
         for network in self.diagram.networks:
             m = metrix.network(network)
-            self.drawer.line(m.trunkline, fill=self.fill)
+            self.drawer.line(m.trunkline, fill=self.fill, jump=True)
 
             # FIXME: first network links to global network
             if network == self.diagram.networks[0]:
@@ -67,12 +71,6 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         m = self.metrix
 
         for connector in m.node(node).connectors:
-            for i in range(node.xy.y + 1, connector.network.xy.y):
-                networks = (n for n in self.diagram.networks if n.xy.y == i)
-                for nw in networks:
-                    if nw.xy.x <= node.xy.x <= nw.xy.x + nw.width - 1:
-                        connector.jumps.append(nw)
-
             self.draw_connector(connector)
 
             if connector.network in node.address:
@@ -85,26 +83,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
     def draw_connector(self, connector):
         m = self.metrix
-
-        if connector.jumps:
-            pt1, pt2 = connector.line
-            lines = [pt1]
-            for nw in connector.jumps:
-                pt = m.cell(nw).top().y - m.spanHeight / 2
-                r = m.cellSize / 2
-
-                lines.append(XY(pt1.x, pt - r))
-                lines.append(XY(pt1.x, pt + r))
-
-                box = [pt1.x - r, pt - r, pt1.x + r, pt + r]
-                self.drawer.arc(box, 270, 90, fill=self.fill)
-
-            lines.append(pt2)
-
-            for j, point in enumerate(lines[::2]):
-                self.drawer.line([point, lines[j * 2 + 1]], fill=self.fill)
-        else:
-            self.drawer.line(connector.line, fill=self.fill)
+        self.drawer.line(connector.line, fill=self.fill, jump=True)
 
     def group_label(self, group):
         if group.label:
