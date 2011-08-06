@@ -114,7 +114,7 @@ class NodeMetrix(object):
         bottom = [n for n in self.node.networks if n.xy.y > self.node.xy.y]
         bottom.sort(lambda a, b: cmp(a.xy.y, b.xy.y))
 
-        Connector = namedtuple('Connector', 'network line textbox jumps')
+        Connector = namedtuple('Connector', 'network line textbox')
 
         for networks in [above, bottom]:
             for network in networks:
@@ -137,7 +137,7 @@ class NodeMetrix(object):
                            x + width, y2]
                 line = [XY(x + dx, y1), XY(x + dx, y2)]
 
-                yield Connector(network, line, textbox, [])
+                yield Connector(network, line, textbox)
 
 
 class GroupMetrix(blockdiag.DiagramMetrix.NodeMetrix):
