@@ -59,8 +59,19 @@ class Network(blockdiag.elements.NodeGroup):
         super(Network, self).__init__(id)
 
         self.address = None
+        self.hidden = False
         self.width = 0
         self.height = 0
+
+    @classmethod
+    def create_anonymous(klass, nodes):
+        network = klass(None)
+        network.hidden = True
+        for node in nodes:
+            node.networks.append(network)
+            network.nodes.append(node)
+
+        return network
 
     @property
     def display_label(self):

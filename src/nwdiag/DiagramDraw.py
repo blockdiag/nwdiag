@@ -43,15 +43,16 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def _draw_trunklines(self):
         metrix = self.metrix.originalMetrix()
         for network in self.diagram.networks:
-            m = metrix.network(network)
-            self.drawer.line(m.trunkline, fill=self.fill, jump=True)
+            if network.hidden == False:
+                m = metrix.network(network)
+                self.drawer.line(m.trunkline, fill=self.fill, jump=True)
 
-            # FIXME: first network links to global network
-            if network == self.diagram.networks[0]:
-                pt1 = m.top()
-                pt0 = XY(pt1.x, pt1.y - m.metrix.spanHeight * 2 / 3)
+                # FIXME: first network links to global network
+                if network == self.diagram.networks[0]:
+                    pt1 = m.top()
+                    pt0 = XY(pt1.x, pt1.y - m.metrix.spanHeight * 2 / 3)
 
-                self.drawer.line([pt0, pt1], fill=self.fill)
+                    self.drawer.line([pt0, pt1], fill=self.fill)
 
     def draw(self):
         super(DiagramDraw, self).draw()

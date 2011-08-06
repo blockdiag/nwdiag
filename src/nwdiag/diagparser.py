@@ -71,7 +71,7 @@ def tokenize(str):
         ('Space',   (r'[ \t\r\n]+',)),
         ('Name',    (ur'[A-Za-z_\u0080-\uffff]'
                      ur'[A-Za-z_\-.0-9\u0080-\uffff]*',)),
-        ('Op',      (r'[{};,=\[\]]',)),
+        ('Op',      (r'([{};,=\[\]]|--)',)),
         ('IPAddr',  (r'([0-9]+(\.[0-9]+){3}|[:0-9a-fA-F]+)',)),
         ('Number',  (r'-?(\.[0-9]+)|([0-9]+(\.[0-9]*)?)',)),
         ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),
@@ -108,6 +108,13 @@ def parse(seq):
     attr_list = (
         many(op_('[') + many(a_list) + op_(']'))
         >> flatten)
+    edge_rhs = op_('--') + node_id
+    edge_stmt = (
+        node_id +
+        edge_rhs +
+        many(edge_rhs) +
+        attr_list
+        >> unarg(make_edge))
     graph_attr = id + op_('=') + id >> make_graph_attr
     node_stmt = node_id + attr_list >> unarg(Node)
     # We use a forward_decl becaue of circular definitions like (stmt_list ->
@@ -141,6 +148,8 @@ def parse(seq):
         network
         | group
         | graph_attr
+        | edge_stmt
+        | node_stmt
     )
     stmt_list = many(stmt + skip(maybe(op(';'))))
     graph = (

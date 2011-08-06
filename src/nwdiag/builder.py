@@ -35,6 +35,11 @@ class DiagramTreeBuilder:
             if len(subgroup.nodes) == 0:
                 self.diagram.groups.remove(subgroup)
 
+        for node in self.diagram.nodes:
+            if len(node.networks) == 0:
+                msg = "DiagramNode %s does not belong to any networks"
+                raise RuntimeError(msg % msg.id)
+
         return self.diagram
 
     def instantiate(self, network, group, tree):
@@ -90,6 +95,21 @@ class DiagramTreeBuilder:
 
                 self.instantiate(network, subgroup, substmt)
 
+            elif isinstance(stmt, diagparser.Edge):
+                nodes = [DiagramNode.get(n) for n in stmt.nodes]
+                for node in nodes:
+                    if node.group is None:
+                        node.group = self.diagram
+                    if node not in self.diagram.nodes:
+                        self.diagram.nodes.append(node)
+
+                subnetwork = Network.create_anonymous([nodes[0]])
+                self.diagram.networks.append(subnetwork)
+
+                for i in range(len(nodes) - 1):
+                    subnetwork = Network.create_anonymous(nodes[i:i + 2])
+                    self.diagram.networks.append(subnetwork)
+
             elif isinstance(stmt, diagparser.DefAttrs):
                 self.diagram.set_attributes(stmt.attrs)
 
@@ -138,8 +158,12 @@ class DiagramLayoutManager:
                     self.set_coordinates(last_group)
                 last_group = node.group
 
+            joined = [g for g in node.networks if g.hidden == False]
             y1 = min(networks.index(g) for g in node.networks)
-            y2 = max(networks.index(g) for g in node.networks)
+            if joined:
+                y2 = max(networks.index(g) for g in joined)
+            else:
+                y2 = y1
 
             if node.group and node.group != self.diagram:
                 starts = min(n.xy.x for n in node.group.nodes)

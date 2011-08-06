@@ -1,0 +1,8 @@
+{
+  A [shape = ellipse];
+  A -- B;
+
+  network {
+    B; C;
+  }
+}
