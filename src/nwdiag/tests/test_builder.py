@@ -145,3 +145,12 @@ def test_group_across_network_diagram():
     assert len(screen.groups[0].nodes) == 3
     assert screen.groups[0].width == 3
     assert screen.groups[0].height == 2
+
+
+def test_peer_network_diagram():
+    screen = __build_diagram('peer_network.diag')
+
+    assert_pos = {'A': (0, 0), 'B': (0, 1), 'C': (1, 2)}
+    for node in screen.nodes:
+        print assert_pos[node.id], node.xy
+        assert node.xy == assert_pos[node.id]
