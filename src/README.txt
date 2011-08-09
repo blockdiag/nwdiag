@@ -75,9 +75,13 @@ Apache License 2.0
 History
 =======
 
-0.3.3 (2011-08-07)
+0.4.0 (2011-08-09)
 ------------------
 * Add syntax for peer network
+
+0.3.3 (2011-08-07)
+------------------
+* Add syntax for peer network (experimental)
 * Fix bugs
 
 0.3.2 (2011-08-03)
