@@ -64,12 +64,15 @@ class Network(blockdiag.elements.NodeGroup):
         self.height = 0
 
     @classmethod
-    def create_anonymous(klass, nodes):
+    def create_anonymous(klass, nodes, attrs=[]):
         network = klass(None)
         network.hidden = True
         for node in nodes:
             node.networks.append(network)
             network.nodes.append(node)
+
+        if attrs:
+            node.set_attributes(network, attrs)
 
         return network
 
