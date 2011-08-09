@@ -103,8 +103,9 @@ class DiagramTreeBuilder:
                     if node not in self.diagram.nodes:
                         self.diagram.nodes.append(node)
 
-                subnetwork = Network.create_anonymous([nodes[0]])
-                self.diagram.networks.append(subnetwork)
+                if len(nodes[0].networks) == 0:
+                    subnetwork = Network.create_anonymous([nodes[0]])
+                    self.diagram.networks.append(subnetwork)
 
                 for i in range(len(nodes) - 1):
                     subnetwork = Network.create_anonymous(nodes[i:i + 2])
@@ -178,6 +179,9 @@ class DiagramLayoutManager:
                     basenode = min(layouted)
                     if basenode.xy.y == y1:
                         starts = basenode.xy.x + 1
+                    elif len(node.networks) == 1 and \
+                         node.networks[0].hidden == True:
+                        starts = basenode.xy.x
                     else:
                         starts = basenode.xy.x + 1 - len(nodes)
 
@@ -237,5 +241,21 @@ class ScreenNodeBuilder:
 
         diagram = DiagramTreeBuilder().build(tree)
         DiagramLayoutManager(diagram).run()
+        diagram = klass.update_network_status(diagram)
+
+        return diagram
+
+    @classmethod
+    def update_network_status(klass, diagram):
+        for node in diagram.nodes:
+            above = [nw for nw in node.networks  if nw.xy.y <= node.xy.y]
+            if len(above) > 1 and [nw for nw in above  if nw.hidden]:
+                for nw in above:
+                    nw.hidden = False
+
+            below = [nw for nw in node.networks  if nw.xy.y > node.xy.y]
+            if len(below) > 1 and [nw for nw in below  if nw.hidden]:
+                for nw in below:
+                    nw.hidden = False
 
         return diagram
