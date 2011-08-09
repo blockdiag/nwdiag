@@ -177,10 +177,12 @@ class DiagramLayoutManager:
                 if layouted:
                     layouted.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
                     basenode = min(layouted)
+                    commonnw = set(basenode.networks) & set(node.networks)
+
                     if basenode.xy.y == y1:
                         starts = basenode.xy.x + 1
-                    elif len(node.networks) == 1 and \
-                         node.networks[0].hidden == True:
+                    elif commonnw and \
+                         list(commonnw)[0].hidden == True:
                         starts = basenode.xy.x
                     else:
                         starts = basenode.xy.x + 1 - len(nodes)
