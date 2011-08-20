@@ -65,6 +65,10 @@ class Network(blockdiag.elements.NodeGroup):
 
     @classmethod
     def create_anonymous(klass, nodes, attrs=[]):
+        if len(set(nodes)) != len(nodes):
+            msg = "Do not connect same node to peer network: %s"
+            raise RuntimeError(msg % nodes[0].id)
+
         network = klass(None)
         network.hidden = True
         for node in nodes:
