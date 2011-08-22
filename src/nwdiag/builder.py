@@ -105,11 +105,13 @@ class DiagramTreeBuilder:
 
                 if len(nodes[0].networks) == 0:
                     nw = Network.create_anonymous([nodes[0]])
-                    self.diagram.networks.append(nw)
+                    if nw:
+                        self.diagram.networks.append(nw)
 
                 for i in range(len(nodes) - 1):
                     nw = Network.create_anonymous(nodes[i:i + 2], stmt.attrs)
-                    self.diagram.networks.append(nw)
+                    if nw:
+                        self.diagram.networks.append(nw)
 
             elif isinstance(stmt, diagparser.DefAttrs):
                 self.diagram.set_attributes(stmt.attrs)
