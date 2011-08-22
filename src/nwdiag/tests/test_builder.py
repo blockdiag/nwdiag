@@ -181,3 +181,12 @@ def test_peer_network_branched_diagram():
     for node in screen.nodes:
         print assert_pos[node.id], node.xy
         assert node.xy == assert_pos[node.id]
+
+
+def test_same_peer_network_diagram():
+    screen = __build_diagram('same_peer_network.diag')
+
+    assert_pos = {'A': (0, 0), 'B': (0, 1), 'C': (1, 2), 'D': (0, 3)}
+    for node in screen.nodes:
+        print assert_pos[node.id], node.xy
+        assert node.xy == assert_pos[node.id]
