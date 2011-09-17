@@ -40,6 +40,17 @@ class DiagramTreeBuilder:
                 msg = "DiagramNode %s does not belong to any networks"
                 raise RuntimeError(msg % msg.id)
 
+        # unhide network for multiple peer networks from same node
+        nodes = []
+        for nw in self.diagram.networks:
+            if nw.hidden and len(nw.nodes) == 2:
+                nodes.append(nw.nodes[0])  # parent node (FROM node)
+
+        for node in [node for node in set(nodes) if nodes.count(node) > 1]:
+            for network in node.networks:
+                if len(network.nodes) == 2:
+                    network.hidden = False
+
         return self.diagram
 
     def instantiate(self, network, group, tree):
