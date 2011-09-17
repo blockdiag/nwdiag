@@ -1,0 +1,10 @@
+{
+  network {
+    A; B; C;
+  }
+  network {
+    D;
+  }
+
+  A -- B;
+}

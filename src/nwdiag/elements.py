@@ -72,7 +72,7 @@ class Network(blockdiag.elements.NodeGroup):
         # search networks including same nodes
         is_same = lambda nw: set(nodes) & set(nw.nodes) == set(nodes)
         same = [nw for nw in nodes[0].networks if nw.hidden and is_same(nw)]
-        if [nw for nw in nodes[0].networks if is_same(nw)]:
+        if [nw for nw in nodes[0].networks if nw.hidden and is_same(nw)]:
             return None
 
         network = klass(None)
