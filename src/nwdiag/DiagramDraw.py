@@ -45,14 +45,15 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         for network in self.diagram.networks:
             if network.hidden == False:
                 m = metrix.network(network)
-                self.drawer.line(m.trunkline, fill=self.fill, jump=True)
+                self.drawer.line(m.trunkline,
+                                 fill=self.diagram.linecolor, jump=True)
 
                 # FIXME: first network links to global network
                 if network == self.diagram.networks[0]:
                     pt1 = m.top()
                     pt0 = XY(pt1.x, pt1.y - m.metrix.spanHeight * 2 / 3)
 
-                    self.drawer.line([pt0, pt1], fill=self.fill)
+                    self.drawer.line([pt0, pt1], fill=self.diagram.linecolor)
 
     def draw(self):
         super(DiagramDraw, self).draw()
@@ -84,7 +85,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
     def draw_connector(self, connector):
         m = self.metrix
-        self.drawer.line(connector.line, fill=self.fill, jump=True)
+        self.drawer.line(connector.line,
+                         fill=self.diagram.linecolor, jump=True)
 
     def group_label(self, group):
         if group.label:
