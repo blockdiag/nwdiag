@@ -75,6 +75,11 @@ Apache License 2.0
 History
 =======
 
+0.4.1 (2011-09-26)
+------------------
+* Add diagram attributes: default_node_color, default_group_color and default_line_color
+* Fix bugs
+
 0.4.0 (2011-08-09)
 ------------------
 * Add syntax for peer network
