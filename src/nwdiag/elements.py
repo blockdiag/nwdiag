@@ -20,24 +20,6 @@ from blockdiag.elements import *
 from blockdiag.utils.XY import XY
 
 
-class Diagram(blockdiag.elements.Diagram):
-    def __init__(self):
-        super(Diagram, self).__init__()
-
-        self.orientation = 'portrait'
-        self.node_width = 104
-        self.span_width = 48
-        self.span_height = 104
-        self.groups = []
-        self.networks = []
-
-    def fixiate(self):
-        if len(self.nodes) + len(self.networks) > 0:
-            nodes = self.nodes + self.networks
-            self.width = max(x.xy.x + x.width for x in nodes)
-            self.height = max(x.xy.y + x.height for x in nodes)
-
-
 class DiagramNode(blockdiag.elements.DiagramNode):
     def __init__(self, id):
         super(DiagramNode, self).__init__(id)
@@ -104,3 +86,24 @@ class NodeGroup(blockdiag.elements.NodeGroup):
         super(NodeGroup, self).__init__(id)
 
         self.layouted = False
+
+
+class Diagram(blockdiag.elements.Diagram):
+    _DiagramNode = DiagramNode
+    _NodeGroup = NodeGroup
+
+    def __init__(self):
+        super(Diagram, self).__init__()
+
+        self.orientation = 'portrait'
+        self.node_width = 104
+        self.span_width = 48
+        self.span_height = 104
+        self.groups = []
+        self.networks = []
+
+    def fixiate(self):
+        if len(self.nodes) + len(self.networks) > 0:
+            nodes = self.nodes + self.networks
+            self.width = max(x.xy.x + x.width for x in nodes)
+            self.height = max(x.xy.y + x.height for x in nodes)
