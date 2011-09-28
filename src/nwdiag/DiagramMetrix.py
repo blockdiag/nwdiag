@@ -29,10 +29,12 @@ class DiagramMetrix(blockdiag.DiagramMetrix.DiagramMetrix):
         if diagram.page_padding is None and kwargs.get('pagePadding') is None:
             top_padding = self['spanHeight']
             bottom_padding = self['spanHeight'] / 3
+            right_padding = (self['nodeWidth'] / 2 + self['spanWidth'])
             left_padding = (self['nodeWidth'] + self['spanWidth']) * 3 / 4
 
             margin = self['cellSize'] * 6
-            self['pagePadding'] = [top_padding + margin, margin,
+            self['pagePadding'] = [top_padding + margin,
+                                   right_padding,
                                    bottom_padding + margin,
                                    left_padding + margin]
 
@@ -134,7 +136,7 @@ class NodeMetrix(object):
 
                 width = m.nodeWidth + m.spanWidth
                 textbox = [x + dx - m.cellSize, y2 - m.spanHeight / 2,
-                           x + width, y2]
+                           x + width - m.cellSize * 2, y2]
                 line = [XY(x + dx, y1), XY(x + dx, y2)]
 
                 yield Connector(network, line, textbox)
