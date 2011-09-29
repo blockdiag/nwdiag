@@ -65,8 +65,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
             if network.display_label:
                 m = self.metrix.network(network)
                 self.drawer.textarea(m.textbox, network.display_label,
-                                     fill=self.diagram.textcolor, halign="right",
-                                     font=self.font,
+                                     fill=self.diagram.textcolor,
+                                     halign="right", font=self.font,
                                      fontsize=self.metrix.fontSize)
 
     def node(self, node, **kwargs):
@@ -77,7 +77,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
             if connector.network in node.address:
                 label = node.address[connector.network]
-                self.drawer.textarea(connector.textbox, label, fill=node.textcolor,
+                self.drawer.textarea(connector.textbox, label,
+                                     fill=node.textcolor,
                                      halign="left", font=self.font,
                                      fontsize=self.metrix.fontSize)
 
