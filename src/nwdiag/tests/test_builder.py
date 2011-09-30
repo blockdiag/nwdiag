@@ -147,6 +147,26 @@ def test_group_across_network_diagram():
     assert screen.groups[0].height == 2
 
 
+def test_group_network_diagram():
+    screen = __build_diagram('group_network.diag')
+
+    assert_pos = {'A': (0, 0), 'B': (2, 0), 'C': (0, 1),
+                  'D': (3, 1), 'E': (1, 1)}
+    for node in screen.nodes:
+        print assert_pos[node.id], node.xy
+        assert node.xy == assert_pos[node.id]
+
+
+def test_split_group_diagram():
+    screen = __build_diagram('split_group.diag')
+
+    assert_pos = {'A': (0, 0), 'B': (2, 0), 'C': (4, 0),
+                  'D': (3, 0), 'E': (1, 0)}
+    for node in screen.nodes:
+        print assert_pos[node.id], node.xy
+        assert node.xy == assert_pos[node.id]
+
+
 def test_peer_network_diagram():
     screen = __build_diagram('peer_network.diag')
 

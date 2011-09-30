@@ -26,6 +26,7 @@ class DiagramNode(blockdiag.elements.DiagramNode):
 
         self.address = {}
         self.networks = []
+        self.layouted = False
 
     def set_attributes(self, network, attrs):
         for attr in attrs:
