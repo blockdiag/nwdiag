@@ -1,0 +1,12 @@
+{
+  network {
+    A; B; C; D; E;
+  }
+
+  group {
+    B; D;
+  }
+  group {
+    C;
+  }
+}

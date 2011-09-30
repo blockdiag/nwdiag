@@ -150,8 +150,8 @@ def test_group_across_network_diagram():
 def test_group_network_diagram():
     screen = __build_diagram('group_network.diag')
 
-    assert_pos = {'A': (0, 0), 'B': (2, 0), 'C': (0, 1),
-                  'D': (3, 1), 'E': (1, 1)}
+    assert_pos = {'A': (0, 0), 'B': (1, 0), 'C': (0, 1),
+                  'D': (2, 1), 'E': (3, 1)}
     for node in screen.nodes:
         print assert_pos[node.id], node.xy
         assert node.xy == assert_pos[node.id]
@@ -160,8 +160,8 @@ def test_group_network_diagram():
 def test_split_group_diagram():
     screen = __build_diagram('split_group.diag')
 
-    assert_pos = {'A': (0, 0), 'B': (2, 0), 'C': (4, 0),
-                  'D': (3, 0), 'E': (1, 0)}
+    assert_pos = {'A': (0, 0), 'B': (1, 0), 'C': (3, 0),
+                  'D': (2, 0), 'E': (4, 0)}
     for node in screen.nodes:
         print assert_pos[node.id], node.xy
         assert node.xy == assert_pos[node.id]
@@ -225,6 +225,15 @@ def test_same_peer_network_diagram():
     screen = __build_diagram('same_peer_network.diag')
 
     assert_pos = {'A': (0, 0), 'B': (0, 1), 'C': (1, 2), 'D': (0, 3)}
+    for node in screen.nodes:
+        print assert_pos[node.id], node.xy
+        assert node.xy == assert_pos[node.id]
+
+
+def test_group_and_peer_network_diagram():
+    screen = __build_diagram('group_and_peer_network.diag')
+
+    assert_pos = {'A': (0, 0), 'B': (0, 1), 'C': (1, 2)}
     for node in screen.nodes:
         print assert_pos[node.id], node.xy
         assert node.xy == assert_pos[node.id]
