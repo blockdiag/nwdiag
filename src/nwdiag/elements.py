@@ -81,16 +81,8 @@ class Network(blockdiag.elements.NodeGroup):
         return label
 
 
-class NodeGroup(blockdiag.elements.NodeGroup):
-    def __init__(self, id):
-        super(NodeGroup, self).__init__(id)
-
-        self.layouted = False
-
-
 class Diagram(blockdiag.elements.Diagram):
     _DiagramNode = DiagramNode
-    _NodeGroup = NodeGroup
 
     def __init__(self):
         super(Diagram, self).__init__()
