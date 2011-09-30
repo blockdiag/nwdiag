@@ -156,33 +156,20 @@ class DiagramLayoutManager:
         self.diagram.fixiate()
 
     def do_layout(self):
-        self.sort_nodes()
         self.layout_nodes()
         self.set_network_size()
 
-    def sort_nodes(self):
-        for i in range(len(self.diagram.nodes)):
-            if self.diagram.nodes[i].group:
-                n = 1
-                basenode = self.diagram.nodes[i]
-                group = basenode.group
-
-                for j in range(i + 1, len(self.diagram.nodes)):
-                    if basenode.group == self.diagram.nodes[j].group:
-                        node = self.diagram.nodes[j]
-
-                        self.diagram.nodes.remove(node)
-                        self.diagram.nodes.insert(i + n, node)
-                        n += 1
-
-    def layout_nodes(self):
+    def layout_nodes(self, group=None):
         networks = self.diagram.networks
-        last_group = None
-        for node in self.diagram.nodes:
-            if last_group != node.group:
-                if last_group:
-                    self.set_coordinates(last_group)
-                last_group = node.group
+
+        if group:
+            nodes = (n for n in self.diagram.nodes  if n.group == group)
+        else:
+            nodes = self.diagram.nodes
+
+        for node in nodes:
+            if node.layouted:
+                continue
 
             joined = [g for g in node.networks if g.hidden == False]
             y1 = min(networks.index(g) for g in node.networks)
@@ -191,8 +178,8 @@ class DiagramLayoutManager:
             else:
                 y2 = y1
 
-            if node.group and node.group != self.diagram:
-                starts = min(n.xy.x for n in node.group.nodes)
+            if node.group and node.group != self.diagram and group:
+                starts = min(n.xy.x for n in group.nodes if n.layouted)
             else:
                 nw = [n for n in node.networks if n.xy.y == y1][0]
                 nodes = [n for n in self.diagram.nodes if nw in n.networks]
@@ -219,11 +206,15 @@ class DiagramLayoutManager:
                 points = [XY(x, y) for y in range(y1, y2 + 1)]
                 if not set(points) & set(self.coordinates):
                     node.xy = XY(x, y1)
+                    node.layouted = True
                     self.coordinates += points
                     break
 
-        if last_group:
-            self.set_coordinates(last_group)
+            if node.group and node.group != self.diagram and group is None:
+                self.layout_nodes(node.group)
+
+        if group:
+            self.set_coordinates(group)
 
     def set_coordinates(self, group):
         self.set_group_size(group)
