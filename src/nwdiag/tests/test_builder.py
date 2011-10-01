@@ -24,6 +24,7 @@ def test_diagram_attributes():
     assert screen.span_width == 32
     assert screen.span_height == 32
     assert screen.fontsize == 16
+    assert screen.networks[0].color == (255, 0, 0)
 
 
 def test_node_attributes():
