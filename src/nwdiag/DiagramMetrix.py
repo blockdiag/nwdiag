@@ -25,7 +25,9 @@ class DiagramMetrix(blockdiag.DiagramMetrix.DiagramMetrix):
         super(DiagramMetrix, self).__init__(diagram, **kwargs)
 
         self.setdefault('networks', diagram.networks)
-        self.setdefault('trunk_diameter', self['cellSize'] / 2)
+        self.setdefault('trunk_diameter', self['cellSize'])
+        self.setdefault('jump_radius', self['cellSize'] + \
+                                       self['trunk_diameter'] / 2)
 
         if diagram.page_padding is None and kwargs.get('pagePadding') is None:
             top_padding = self['spanHeight']
