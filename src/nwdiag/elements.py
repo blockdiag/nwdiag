@@ -39,12 +39,18 @@ class DiagramNode(blockdiag.elements.DiagramNode):
 
 
 class Network(blockdiag.elements.NodeGroup):
-    basecolor = (0, 0, 0)
+    basecolor = (255, 255, 255)
+    linecolor = (0, 0, 0)
+
+    @classmethod
+    def set_default_line_color(cls, color):
+        cls.linecolor = images.color_to_rgb(color)
 
     @classmethod
     def clear(cls):
         super(Network, cls).clear()
-        cls.basecolor = (0, 0, 0)
+        cls.basecolor = (255, 255, 255)
+        cls.linecolor = (0, 0, 0)
 
     def __init__(self, id):
         super(Network, self).__init__(id)
@@ -96,7 +102,7 @@ class Diagram(blockdiag.elements.Diagram):
 
     def set_default_line_color(self, color):
         super(Diagram, self).set_default_line_color(color)
-        self._Network.set_default_color(self.linecolor)
+        self._Network.set_default_line_color(self.linecolor)
 
     def set_default_network_color(self, color):
         color = images.color_to_rgb(color)

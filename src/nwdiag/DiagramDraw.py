@@ -25,6 +25,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def __init__(self, format, diagram, filename=None, **kwargs):
         super(DiagramDraw, self).__init__(format, diagram, filename, **kwargs)
         self.drawer.forward = 'vertical'
+        self.drawer.jump_radius = self.metrix.jump_radius
 
     @property
     def groups(self):
@@ -48,21 +49,26 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 r = metrix.trunk_diameter / 2
 
                 pt1, pt2 = m.trunkline
+                box = (pt1.x, pt1.y - r, pt2.x, pt2.y + r)
+                self.drawer.rectangle(box, outline=network.color,
+                                      fill=network.color)
+
                 upper = (XY(pt1.x, pt1.y - r), XY(pt2.x, pt2.y - r))
                 self.drawer.line(upper,
-                                 fill=network.color, jump=True)
+                                 fill=network.linecolor, jump=True)
 
                 bottom = (XY(pt1.x, pt1.y + r), XY(pt2.x, pt2.y + r))
                 self.drawer.line(bottom,
-                                 fill=network.color, jump=True)
+                                 fill=network.linecolor, jump=True)
 
                 arcbox = (upper[0].x - r / 2, upper[0].y,
                           bottom[0].x + r / 2, bottom[0].y)
-                self.drawer.arc(arcbox, 90, 270, fill=network.color)
+                self.drawer.arc(arcbox, 90, 270, fill=network.linecolor)
 
                 ellbox = (upper[1].x - r / 2, upper[1].y,
                           bottom[1].x + r / 2, bottom[1].y)
-                self.drawer.ellipse(ellbox, outline=network.color, fill='none')
+                self.drawer.ellipse(ellbox, outline=network.linecolor,
+                                    fill=network.color)
 
                 # FIXME: first network links to global network
                 if network == self.diagram.networks[0]:
@@ -70,7 +76,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                     pt0 = XY(pt.x, pt.y - m.metrix.spanHeight * 2 / 3)
                     pt1 = XY(pt.x, pt.y - r)
 
-                    self.drawer.line([pt0, pt1], fill=network.color)
+                    self.drawer.line([pt0, pt1], fill=network.linecolor)
 
     def draw(self):
         super(DiagramDraw, self).draw()
@@ -104,7 +110,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def draw_connector(self, connector):
         m = self.metrix
         self.drawer.line(connector.line,
-                         fill=connector.network.color, jump=True)
+                         fill=connector.network.linecolor, jump=True)
 
     def group_label(self, group):
         if group.label:
