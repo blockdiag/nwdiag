@@ -25,6 +25,7 @@ class DiagramMetrix(blockdiag.DiagramMetrix.DiagramMetrix):
         super(DiagramMetrix, self).__init__(diagram, **kwargs)
 
         self.setdefault('networks', diagram.networks)
+        self.setdefault('trunk_diameter', self['cellSize'] / 2)
 
         if diagram.page_padding is None and kwargs.get('pagePadding') is None:
             top_padding = self['spanHeight']
@@ -122,10 +123,10 @@ class NodeMetrix(object):
             for network in networks:
                 if network.xy.y <= self.node.xy.y:
                     x, y2 = self.top()
-                    y1 = m.network(network).top().y
+                    y1 = m.network(network).top().y + m.trunk_diameter / 2
                 else:
                     x, y1 = self.bottom()
-                    y2 = m.network(network).top().y
+                    y2 = m.network(network).top().y - m.trunk_diameter / 2
 
                 if len(networks) == 1:
                     dx = 0
