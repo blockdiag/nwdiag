@@ -18,6 +18,7 @@ import sys
 import blockdiag.elements
 from blockdiag.elements import *
 from blockdiag.utils.XY import XY
+from blockdiag.utils import images
 
 
 class DiagramNode(blockdiag.elements.DiagramNode):
@@ -38,6 +39,13 @@ class DiagramNode(blockdiag.elements.DiagramNode):
 
 
 class Network(blockdiag.elements.NodeGroup):
+    basecolor = (0, 0, 0)
+
+    @classmethod
+    def clear(cls):
+        super(Network, cls).clear()
+        cls.basecolor = (0, 0, 0)
+
     def __init__(self, id):
         super(Network, self).__init__(id)
 
@@ -84,6 +92,15 @@ class Network(blockdiag.elements.NodeGroup):
 
 class Diagram(blockdiag.elements.Diagram):
     _DiagramNode = DiagramNode
+    _Network = Network
+
+    def set_default_line_color(self, color):
+        super(Diagram, self).set_default_line_color(color)
+        self._Network.set_default_color(self.linecolor)
+
+    def set_default_network_color(self, color):
+        color = images.color_to_rgb(color)
+        self._Network.set_default_color(color)
 
     def __init__(self):
         super(Diagram, self).__init__()
