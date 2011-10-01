@@ -45,13 +45,30 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         for network in self.diagram.networks:
             if network.hidden == False:
                 m = metrix.network(network)
-                self.drawer.line(m.trunkline,
+                r = metrix.trunk_diameter / 2
+
+                pt1, pt2 = m.trunkline
+                upper = (XY(pt1.x, pt1.y - r), XY(pt2.x, pt2.y - r))
+                self.drawer.line(upper,
                                  fill=network.color, jump=True)
+
+                bottom = (XY(pt1.x, pt1.y + r), XY(pt2.x, pt2.y + r))
+                self.drawer.line(bottom,
+                                 fill=network.color, jump=True)
+
+                arcbox = (upper[0].x - r / 2, upper[0].y,
+                          bottom[0].x + r / 2, bottom[0].y)
+                self.drawer.arc(arcbox, 90, 270, fill=network.color)
+
+                ellbox = (upper[1].x - r / 2, upper[1].y,
+                          bottom[1].x + r / 2, bottom[1].y)
+                self.drawer.ellipse(ellbox, outline=network.color, fill='none')
 
                 # FIXME: first network links to global network
                 if network == self.diagram.networks[0]:
-                    pt1 = m.top()
-                    pt0 = XY(pt1.x, pt1.y - m.metrix.spanHeight * 2 / 3)
+                    pt = m.top()
+                    pt0 = XY(pt.x, pt.y - m.metrix.spanHeight * 2 / 3)
+                    pt1 = XY(pt.x, pt.y - r)
 
                     self.drawer.line([pt0, pt1], fill=network.color)
 
