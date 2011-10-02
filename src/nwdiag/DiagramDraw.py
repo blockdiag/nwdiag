@@ -37,9 +37,30 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         return XY(int(xy.x), int(xy.y))
 
     def _draw_background(self):
+        self._draw_trunklines_shadow()
         super(DiagramDraw, self)._draw_background()
 
         self._draw_trunklines()
+
+    def _draw_trunklines_shadow(self):
+        xdiff = self.metrix.shadowOffsetX
+        ydiff = self.metrix.shadowOffsetY
+
+        metrix = self.metrix.originalMetrix()
+        for network in self.diagram.networks:
+            if network.hidden == False:
+                m = metrix.network(network)
+                r = metrix.trunk_diameter / 2
+
+                pt1, pt2 = m.trunkline
+                box = (pt1.x + xdiff, pt1.y - r + ydiff,
+                       pt2.x + xdiff, pt2.y + r + ydiff)
+                lsection = (box[0] - r / 2, box[1], box[0] + r / 2, box[3])
+                rsection = (box[2] - r / 2, box[1], box[2] + r / 2, box[3])
+
+                self.drawer.rectangle(box, fill=self.shadow, filter='blur')
+                self.drawer.ellipse(lsection, fill=self.shadow, filter='blur')
+                self.drawer.ellipse(rsection, fill=self.shadow, filter='blur')
 
     def _draw_trunklines(self):
         metrix = self.metrix.originalMetrix()
@@ -50,6 +71,11 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
                 pt1, pt2 = m.trunkline
                 box = (pt1.x, pt1.y - r, pt2.x, pt2.y + r)
+                lsection = (box[0] - r / 2, box[1], box[0] + r / 2, box[3])
+                rsection = (box[2] - r / 2, box[1], box[2] + r / 2, box[3])
+
+                self.drawer.ellipse(lsection, outline=network.color,
+                                      fill=network.color)
                 self.drawer.rectangle(box, outline=network.color,
                                       fill=network.color)
 
@@ -61,13 +87,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 self.drawer.line(bottom,
                                  fill=network.linecolor, jump=True)
 
-                arcbox = (upper[0].x - r / 2, upper[0].y,
-                          bottom[0].x + r / 2, bottom[0].y)
-                self.drawer.arc(arcbox, 90, 270, fill=network.linecolor)
-
-                ellbox = (upper[1].x - r / 2, upper[1].y,
-                          bottom[1].x + r / 2, bottom[1].y)
-                self.drawer.ellipse(ellbox, outline=network.linecolor,
+                self.drawer.arc(lsection, 90, 270, fill=network.linecolor)
+                self.drawer.ellipse(rsection, outline=network.linecolor,
                                     fill=network.color)
 
                 # FIXME: first network links to global network
