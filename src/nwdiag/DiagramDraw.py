@@ -49,55 +49,83 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         metrix = self.metrix.originalMetrix()
         for network in self.diagram.networks:
             if network.hidden == False:
-                m = metrix.network(network)
-                r = metrix.trunk_diameter / 2
-
-                pt1, pt2 = m.trunkline
-                box = (pt1.x + xdiff, pt1.y - r + ydiff,
-                       pt2.x + xdiff, pt2.y + r + ydiff)
-                lsection = (box[0] - r / 2, box[1], box[0] + r / 2, box[3])
-                rsection = (box[2] - r / 2, box[1], box[2] + r / 2, box[3])
-
-                self.drawer.rectangle(box, fill=self.shadow, filter='blur')
-                self.drawer.ellipse(lsection, fill=self.shadow, filter='blur')
-                self.drawer.ellipse(rsection, fill=self.shadow, filter='blur')
+                self.trunkline(network, shadow=True)
 
     def _draw_trunklines(self):
         metrix = self.metrix.originalMetrix()
         for network in self.diagram.networks:
             if network.hidden == False:
-                m = metrix.network(network)
-                r = metrix.trunk_diameter / 2
+                self.trunkline(network)
 
-                pt1, pt2 = m.trunkline
-                box = (pt1.x, pt1.y - r, pt2.x, pt2.y + r)
-                lsection = (box[0] - r / 2, box[1], box[0] + r / 2, box[3])
-                rsection = (box[2] - r / 2, box[1], box[2] + r / 2, box[3])
+                # FIXME: first network links to global network
+                if network == self.diagram.networks[0]:
+                    r = metrix.trunk_diameter / 2
 
-                self.drawer.ellipse(lsection, outline=network.color,
-                                      fill=network.color)
-                self.drawer.rectangle(box, outline=network.color,
-                                      fill=network.color)
+                    pt = metrix.network(network).top()
+                    pt0 = XY(pt.x, pt.y - metrix.spanHeight * 2 / 3)
+                    pt1 = XY(pt.x, pt.y - r)
 
-                upper = (XY(pt1.x, pt1.y - r), XY(pt2.x, pt2.y - r))
+                    self.drawer.line([pt0, pt1], fill=network.linecolor)
+
+    def trunkline(self, network, shadow=False):
+        metrix = self.metrix.originalMetrix()
+        m = metrix.network(network)
+        r = metrix.trunk_diameter / 2
+
+        pt1, pt2 = m.trunkline
+        box = (pt1.x, pt1.y - r, pt2.x, pt2.y + r)
+
+        if shadow:
+            xdiff = self.metrix.shadowOffsetX
+            ydiff = self.metrix.shadowOffsetY
+
+            box = (pt1.x + xdiff, pt1.y - r + ydiff,
+                   pt2.x + xdiff, pt2.y + r + ydiff)
+
+        if self.format == 'SVG':
+            from blockdiag.imagedraw.SVGdraw import pathdata
+
+            path = pathdata(box[0], box[1])
+            path.line(box[2], box[1])
+            path.ellarc(r / 2, r, 0, 0, 1, box[2], box[3])
+            path.line(box[0], box[3])
+            path.ellarc(r / 2, r, 0, 0, 1, box[0], box[1])
+
+            if shadow:
+                self.drawer.path(path, fill=self.shadow, filter='blur')
+            else:
+                self.drawer.path(path, fill=network.color,
+                                 outline=network.linecolor)
+
+                path = pathdata(box[2], box[3])
+                path.ellarc(r / 2, r, 0, 0, 1, box[2], box[1])
+                self.drawer.path(path, fill='none', outline=network.linecolor)
+        else:
+            lsection = (box[0] - r / 2, box[1], box[0] + r / 2, box[3])
+            rsection = (box[2] - r / 2, box[1], box[2] + r / 2, box[3])
+
+            if shadow:
+                color = self.shadow
+            else:
+                color = network.color
+
+            # fill background
+            self.drawer.rectangle(box, outline=color, fill=color)
+            self.drawer.ellipse(lsection, outline=color, fill=color)
+            self.drawer.ellipse(rsection, outline=color, fill=color)
+
+            if not shadow:
+                upper = (XY(box[0], box[1]), XY(box[2], box[1]))
                 self.drawer.line(upper,
                                  fill=network.linecolor, jump=True)
 
-                bottom = (XY(pt1.x, pt1.y + r), XY(pt2.x, pt2.y + r))
+                bottom = (XY(box[0], box[3]), XY(box[2], box[3]))
                 self.drawer.line(bottom,
                                  fill=network.linecolor, jump=True)
 
                 self.drawer.arc(lsection, 90, 270, fill=network.linecolor)
                 self.drawer.ellipse(rsection, outline=network.linecolor,
                                     fill=network.color)
-
-                # FIXME: first network links to global network
-                if network == self.diagram.networks[0]:
-                    pt = m.top()
-                    pt0 = XY(pt.x, pt.y - m.metrix.spanHeight * 2 / 3)
-                    pt1 = XY(pt.x, pt.y - r)
-
-                    self.drawer.line([pt0, pt1], fill=network.linecolor)
 
     def draw(self):
         super(DiagramDraw, self).draw()
