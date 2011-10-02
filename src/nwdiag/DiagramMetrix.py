@@ -127,7 +127,7 @@ class NodeMetrix(object):
                     span = 0
                 else:
                     span = m.trunk_diameter / 2
- 
+
                 if network.xy.y <= self.node.xy.y:
                     x, y2 = self.top()
                     y1 = m.network(network).top().y + span
