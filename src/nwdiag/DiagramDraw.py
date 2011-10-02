@@ -100,6 +100,10 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 path = pathdata(box[2], box[3])
                 path.ellarc(r / 2, r, 0, 0, 1, box[2], box[1])
                 self.drawer.path(path, fill='none', outline=network.linecolor)
+
+                # for edge jumping
+                line = (XY(box[0], box[1]), XY(box[2], box[1]))
+                self.drawer.line(line, fill='none', jump=True)
         else:
             lsection = (box[0] - r / 2, box[1], box[0] + r / 2, box[3])
             rsection = (box[2] - r / 2, box[1], box[2] + r / 2, box[3])
