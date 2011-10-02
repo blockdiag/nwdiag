@@ -123,12 +123,17 @@ class NodeMetrix(object):
 
         for networks in [above, bottom]:
             for network in networks:
+                if network.hidden:
+                    span = 0
+                else:
+                    span = m.trunk_diameter / 2
+ 
                 if network.xy.y <= self.node.xy.y:
                     x, y2 = self.top()
-                    y1 = m.network(network).top().y + m.trunk_diameter / 2
+                    y1 = m.network(network).top().y + span
                 else:
                     x, y1 = self.bottom()
-                    y2 = m.network(network).top().y - m.trunk_diameter / 2
+                    y2 = m.network(network).top().y - span
 
                 if len(networks) == 1:
                     dx = 0
