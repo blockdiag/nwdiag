@@ -188,7 +188,7 @@ class DiagramLayoutManager:
                 starts = 0
                 if layouted:
                     layouted.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
-                    basenode = min(layouted)
+                    basenode = layouted[0]
                     commonnw = set(basenode.networks) & set(node.networks)
 
                     if basenode.xy.y == y1:
