@@ -26,6 +26,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         super(DiagramDraw, self).__init__(format, diagram, filename, **kwargs)
         self.drawer.forward = 'vertical'
         self.drawer.jump_radius = self.metrix.jump_radius
+        self.drawer.jump_shift = self.metrix.jump_shift
 
     @property
     def groups(self):
@@ -37,10 +38,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         return XY(int(xy.x), int(xy.y))
 
     def _draw_background(self):
-        self._draw_trunklines_shadow()
         super(DiagramDraw, self)._draw_background()
-
-        self._draw_trunklines()
+        self._draw_trunklines_shadow()
 
     def _draw_trunklines_shadow(self):
         xdiff = self.metrix.shadowOffsetX
@@ -52,7 +51,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 self.trunkline(network, shadow=True)
 
     def _draw_trunklines(self):
-        metrix = self.metrix.originalMetrix()
+        metrix = self.metrix
         for network in self.diagram.networks:
             if network.hidden == False:
                 self.trunkline(network)
@@ -68,7 +67,11 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                     self.drawer.line([pt0, pt1], fill=network.linecolor)
 
     def trunkline(self, network, shadow=False):
-        metrix = self.metrix.originalMetrix()
+        if shadow:
+            metrix = self.metrix.originalMetrix()
+        else:
+            metrix = self.metrix
+
         m = metrix.network(network)
         r = metrix.trunk_diameter / 2
 
@@ -77,13 +80,13 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
         if shadow:
             xdiff = self.metrix.shadowOffsetX
-            ydiff = self.metrix.shadowOffsetY
+            ydiff = self.metrix.shadowOffsetY / 2
 
             box = (pt1.x + xdiff, pt1.y - r + ydiff,
                    pt2.x + xdiff, pt2.y + r + ydiff)
 
         if self.format == 'SVG':
-            from blockdiag.imagedraw.SVGdraw import pathdata
+            from blockdiag.imagedraw.simplesvg import pathdata
 
             path = pathdata(box[0], box[1])
             path.line(box[2], box[1])
@@ -131,10 +134,10 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 self.drawer.ellipse(rsection, outline=network.linecolor,
                                     fill=network.color)
 
-    def draw(self):
-        super(DiagramDraw, self).draw()
-
+    def _draw_elements(self):
+        self._draw_trunklines()
         self._draw_trunkline_labels()
+        super(DiagramDraw, self)._draw_elements()
 
     def _draw_trunkline_labels(self):
         for network in self.diagram.networks:
