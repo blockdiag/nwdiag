@@ -39,7 +39,7 @@ class DiagramNode(blockdiag.elements.DiagramNode):
 
 
 class Network(blockdiag.elements.NodeGroup):
-    basecolor = (255, 255, 255)
+    basecolor = (185, 203, 228)
     linecolor = (0, 0, 0)
 
     @classmethod
@@ -49,7 +49,7 @@ class Network(blockdiag.elements.NodeGroup):
     @classmethod
     def clear(cls):
         super(Network, cls).clear()
-        cls.basecolor = (255, 255, 255)
+        cls.basecolor = (185, 203, 228)
         cls.linecolor = (0, 0, 0)
 
     def __init__(self, id):
