@@ -75,6 +75,12 @@ Apache License 2.0
 History
 =======
 
+0.5.0 (2011-10-07)
+------------------
+* Change shape of trunkline like a pipeline
+* Add network attribute: color
+* Add diagram attribute: default_network_color
+
 0.4.2 (2011-09-30)
 ------------------
 * Add diagram attributes: default_text_color
