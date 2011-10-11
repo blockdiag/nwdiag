@@ -96,9 +96,14 @@ class Network(blockdiag.elements.NodeGroup):
         return label
 
 
+class Route(blockdiag.elements.DiagramEdge):
+    pass
+
+
 class Diagram(blockdiag.elements.Diagram):
     _DiagramNode = DiagramNode
     _Network = Network
+    _Route = Route
 
     def set_default_line_color(self, color):
         super(Diagram, self).set_default_line_color(color)
@@ -117,6 +122,7 @@ class Diagram(blockdiag.elements.Diagram):
         self.span_height = 104
         self.groups = []
         self.networks = []
+        self.routes = []
 
     def fixiate(self):
         if len(self.nodes) + len(self.networks) > 0:

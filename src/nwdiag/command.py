@@ -21,7 +21,6 @@ from optparse import OptionParser
 import nwdiag
 import DiagramDraw
 import diagparser
-from blockdiag import utils
 from blockdiag.command import detectfont
 from builder import ScreenNodeBuilder
 
@@ -38,8 +37,6 @@ def parse_option():
                  help='write diagram to FILE', metavar='FILE')
     p.add_option('-f', '--font', default=[], action='append',
                  help='use FONT to draw diagram', metavar='FONT')
-    p.add_option('-P', '--pdb', dest='pdb', action='store_true', default=False,
-                 help='Drop into debugger on exception')
     p.add_option('-T', dest='type', default='PNG',
                  help='Output diagram as TYPE format')
     options, args = p.parse_args()
@@ -89,9 +86,6 @@ def main():
         outfile = 'output.' + options.type.lower()
     else:
         outfile = re.sub('\..*', '', infile) + '.' + options.type.lower()
-
-    if options.pdb:
-        sys.excepthook = utils.postmortem
 
     fontpath = detectfont(options)
 
