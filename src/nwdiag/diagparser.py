@@ -55,6 +55,7 @@ SubGraph = namedtuple('SubGraph', 'id stmts')
 Node = namedtuple('Node', 'id attrs')
 Attr = namedtuple('Attr', 'name value')
 Edge = namedtuple('Edge', 'nodes attrs')
+Route = namedtuple('Route', 'nodes attrs')
 DefAttrs = namedtuple('DefAttrs', 'object attrs')
 
 
@@ -71,7 +72,7 @@ def tokenize(str):
         ('Space',   (r'[ \t\r\n]+',)),
         ('Name',    (ur'[A-Za-z_\u0080-\uffff]'
                      ur'[A-Za-z_\-.0-9\u0080-\uffff]*',)),
-        ('Op',      (r'([{};,=\[\]]|--)',)),
+        ('Op',      (r'([{};,=\[\]]|--|->)',)),
         ('IPAddr',  (r'([0-9]+(\.[0-9]+){3}|[:0-9a-fA-F]+)',)),
         ('Number',  (r'-?(\.[0-9]+)|([0-9]+(\.[0-9]*)?)',)),
         ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),
@@ -94,6 +95,7 @@ def parse(seq):
         t.type in ['Name', 'IPAddr', 'Number', 'String']).named('id') >> tokval
     make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
     make_edge = lambda x, x2, xs, attrs: Edge([x, x2] + xs, attrs)
+    make_route = lambda x, x2, xs, attrs: Route([x, x2] + xs, attrs)
 
     node_id = id  # + maybe(port)
     node_list = (
@@ -144,10 +146,22 @@ def parse(seq):
         network_stmt_list +
         op_('}')
         >> unarg(Network))
+    route_rhs = op_('->') + node_id
+    route = (
+        skip(n('route')) +
+        op_('{') +
+        node_id +
+        route_rhs +
+        many(route_rhs) +
+        attr_list +
+        skip(maybe(op(';'))) +
+        op_('}')
+        >> unarg(make_route))
     stmt = (
         network
         | group
         | graph_attr
+        | route
         | edge_stmt
         | node_stmt
     )

@@ -136,6 +136,13 @@ class DiagramTreeBuilder:
                     if nw:
                         self.diagram.networks.append(nw)
 
+            elif isinstance(stmt, diagparser.Route):
+                nodes = [DiagramNode.get(n) for n in stmt.nodes]
+                for node1, node2 in zip(nodes[:-1], nodes[1:]):
+                    route = Route(node1, node2)
+                    route.set_attributes(stmt.attrs)
+                    self.diagram.routes.append(route)
+
             elif isinstance(stmt, diagparser.DefAttrs):
                 self.diagram.set_attributes(stmt.attrs)
 
