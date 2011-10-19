@@ -18,15 +18,15 @@ import math
 import blockdiag.DiagramDraw
 from blockdiag.utils.XY import XY
 from blockdiag import noderenderer
-from blockdiag.DiagramMetrix import DiagramMetrix
+from blockdiag.DiagramMetrics import DiagramMetrics
 
 
 class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def __init__(self, format, diagram, filename=None, **kwargs):
         super(DiagramDraw, self).__init__(format, diagram, filename, **kwargs)
         self.drawer.forward = 'vertical'
-        self.drawer.jump_radius = self.metrix.jump_radius
-        self.drawer.jump_shift = self.metrix.jump_shift
+        self.drawer.jump_radius = self.metrics.jump_radius
+        self.drawer.jump_shift = self.metrics.jump_shift
 
     @property
     def groups(self):
@@ -42,45 +42,45 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         self._draw_trunklines_shadow()
 
     def _draw_trunklines_shadow(self):
-        xdiff = self.metrix.shadowOffsetX
-        ydiff = self.metrix.shadowOffsetY
+        xdiff = self.metrics.shadow_offset.x
+        ydiff = self.metrics.shadow_offset.y
 
-        metrix = self.metrix.originalMetrix()
+        metrics = self.metrics.originalMetrics()
         for network in self.diagram.networks:
             if network.hidden == False:
                 self.trunkline(network, shadow=True)
 
     def _draw_trunklines(self):
-        metrix = self.metrix
+        metrics = self.metrics
         for network in self.diagram.networks:
             if network.hidden == False:
                 self.trunkline(network)
 
                 # FIXME: first network links to global network
                 if network == self.diagram.networks[0]:
-                    r = metrix.trunk_diameter / 2
+                    r = metrics.trunk_diameter / 2
 
-                    pt = metrix.network(network).top()
-                    pt0 = XY(pt.x, pt.y - metrix.spanHeight * 2 / 3)
+                    pt = metrics.network(network).top
+                    pt0 = XY(pt.x, pt.y - metrics.span_height * 2 / 3)
                     pt1 = XY(pt.x, pt.y - r)
 
                     self.drawer.line([pt0, pt1], fill=network.linecolor)
 
     def trunkline(self, network, shadow=False):
         if shadow:
-            metrix = self.metrix.originalMetrix()
+            metrics = self.metrics.originalMetrics()
         else:
-            metrix = self.metrix
+            metrics = self.metrics
 
-        m = metrix.network(network)
-        r = metrix.trunk_diameter / 2
+        m = metrics.network(network)
+        r = metrics.trunk_diameter / 2
 
         pt1, pt2 = m.trunkline
         box = (pt1.x, pt1.y - r, pt2.x, pt2.y + r)
 
         if shadow:
-            xdiff = self.metrix.shadowOffsetX
-            ydiff = self.metrix.shadowOffsetY / 2
+            xdiff = self.metrics.shadow_offset.x
+            ydiff = self.metrics.shadow_offset.y / 2
 
             box = (pt1.x + xdiff, pt1.y - r + ydiff,
                    pt2.x + xdiff, pt2.y + r + ydiff)
@@ -142,14 +142,14 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def _draw_trunkline_labels(self):
         for network in self.diagram.networks:
             if network.display_label:
-                m = self.metrix.network(network)
+                m = self.metrics.network(network)
                 self.drawer.textarea(m.textbox, network.display_label,
                                      fill=self.diagram.textcolor,
                                      halign="right", font=self.font,
-                                     fontsize=self.metrix.fontSize)
+                                     fontsize=self.metrics.fontsize)
 
     def node(self, node, **kwargs):
-        m = self.metrix
+        m = self.metrics
 
         for connector in m.node(node).connectors:
             self.draw_connector(connector)
@@ -159,22 +159,22 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 self.drawer.textarea(connector.textbox, label,
                                      fill=node.textcolor,
                                      halign="left", font=self.font,
-                                     fontsize=self.metrix.fontSize)
+                                     fontsize=self.metrics.fontsize)
 
         super(DiagramDraw, self).node(node, **kwargs)
 
     def draw_connector(self, connector):
-        m = self.metrix
+        m = self.metrics
         self.drawer.line(connector.line,
                          fill=connector.network.linecolor, jump=True)
 
     def group_label(self, group):
         if group.label:
-            m = self.metrix.cell(group)
-            self.drawer.textarea(m.groupLabelBox(), group.label, valign='top',
+            m = self.metrics.cell(group)
+            self.drawer.textarea(m.grouplabelbox, group.label, valign='top',
                                  fill=group.textcolor, font=self.font,
-                                 fontsize=self.metrix.fontSize)
+                                 fontsize=self.metrics.fontsize)
 
 
-from DiagramMetrix import DiagramMetrix
-DiagramDraw.set_metrix_class(DiagramMetrix)
+from DiagramMetrics import DiagramMetrics
+DiagramDraw.set_metrics_class(DiagramMetrics)

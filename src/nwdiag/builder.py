@@ -227,8 +227,8 @@ class DiagramLayoutManager:
         self.set_group_size(group)
 
         xy = group.xy
-        for i in range(xy.x, xy.x + group.width):
-            for j in range(xy.y, xy.y + group.height):
+        for i in range(xy.x, xy.x + group.colwidth):
+            for j in range(xy.y, xy.y + group.colheight):
                 self.coordinates.append(XY(i, j))
 
     def set_network_size(self):
@@ -240,7 +240,7 @@ class DiagramLayoutManager:
             network.xy = XY(x0, network.xy.y)
 
             x1 = max(n.xy.x for n in nodes)
-            network.width = x1 - x0 + 1
+            network.colwidth = x1 - x0 + 1
 
     def set_group_size(self, group):
         nodes = list(group.nodes)
@@ -252,8 +252,8 @@ class DiagramLayoutManager:
 
         x1 = max(n.xy.x for n in nodes)
         y1 = max(n.xy.y for n in nodes)
-        group.width = x1 - x0 + 1
-        group.height = y1 - y0 + 1
+        group.colwidth = x1 - x0 + 1
+        group.colheight = y1 - y0 + 1
 
 
 class ScreenNodeBuilder:

@@ -57,8 +57,8 @@ class Network(blockdiag.elements.NodeGroup):
 
         self.address = None
         self.hidden = False
-        self.width = 0
-        self.height = 0
+        self.colwidth = 1
+        self.colheight = 1
 
     @classmethod
     def create_anonymous(klass, nodes, attrs=[]):
@@ -127,5 +127,5 @@ class Diagram(blockdiag.elements.Diagram):
     def fixiate(self):
         if len(self.nodes) + len(self.networks) > 0:
             nodes = self.nodes + self.networks
-            self.width = max(x.xy.x + x.width for x in nodes)
-            self.height = max(x.xy.y + x.height for x in nodes)
+            self.colwidth = max(x.xy.x + x.colwidth for x in nodes)
+            self.colheight = max(x.xy.y + x.colheight for x in nodes)
