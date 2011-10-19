@@ -118,8 +118,8 @@ def test_group_inner_network_diagram():
         assert node.xy == assert_pos[node.id]
 
     assert len(screen.groups[0].nodes) == 2
-    assert screen.groups[0].width == 2
-    assert screen.groups[0].height == 1
+    assert screen.groups[0].colwidth == 2
+    assert screen.groups[0].colheight == 1
 
 
 def test_group_outer_network_diagram():
@@ -131,8 +131,8 @@ def test_group_outer_network_diagram():
         assert node.xy == assert_pos[node.id]
 
     assert len(screen.groups[0].nodes) == 2
-    assert screen.groups[0].width == 2
-    assert screen.groups[0].height == 1
+    assert screen.groups[0].colwidth == 2
+    assert screen.groups[0].colheight == 1
 
 
 def test_group_across_network_diagram():
@@ -144,8 +144,8 @@ def test_group_across_network_diagram():
         assert node.xy == assert_pos[node.id]
 
     assert len(screen.groups[0].nodes) == 3
-    assert screen.groups[0].width == 3
-    assert screen.groups[0].height == 2
+    assert screen.groups[0].colwidth == 3
+    assert screen.groups[0].colheight == 2
 
 
 def test_group_network_diagram():
