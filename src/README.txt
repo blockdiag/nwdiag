@@ -75,6 +75,10 @@ Apache License 2.0
 History
 =======
 
+0.5.1 (2011-10-19)
+------------------
+* Follow blockdiag-0.9.5 interface
+
 0.5.0 (2011-10-07)
 ------------------
 * Change shape of trunkline like a pipeline
