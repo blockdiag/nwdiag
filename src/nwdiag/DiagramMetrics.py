@@ -36,8 +36,10 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
             left_padding = (self.node_width + self.span_width) * 3 / 4
 
             margin = self.cellsize * 6
-            self.page_padding = [top_padding + margin, right_padding,
-                                 bottom_padding + margin, left_padding + margin]
+            self.page_padding = [top_padding + margin,
+                                 right_padding,
+                                 bottom_padding + margin,
+                                 left_padding + margin]
 
         self.page_margin = XY(0, 0)
 
