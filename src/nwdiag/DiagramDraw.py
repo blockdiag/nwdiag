@@ -16,7 +16,7 @@
 import sys
 import math
 import blockdiag.DiagramDraw
-from blockdiag.utils.XY import XY
+from blockdiag.utils import XY
 from blockdiag import noderenderer
 from blockdiag.DiagramMetrics import DiagramMetrics
 
@@ -39,18 +39,14 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
     def _draw_background(self):
         super(DiagramDraw, self)._draw_background()
-        self._draw_trunklines_shadow()
+        self.trunklines_shadow()
 
-    def _draw_trunklines_shadow(self):
-        xdiff = self.metrics.shadow_offset.x
-        ydiff = self.metrics.shadow_offset.y
-
-        metrics = self.metrics.originalMetrics()
+    def trunklines_shadow(self):
         for network in self.diagram.networks:
             if network.hidden == False:
                 self.trunkline(network, shadow=True)
 
-    def _draw_trunklines(self):
+    def trunklines(self):
         metrics = self.metrics
         for network in self.diagram.networks:
             if network.hidden == False:
@@ -67,11 +63,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                     self.drawer.line([pt0, pt1], fill=network.linecolor)
 
     def trunkline(self, network, shadow=False):
-        if shadow:
-            metrics = self.metrics.originalMetrics()
-        else:
-            metrics = self.metrics
-
+        metrics = self.metrics
         m = metrics.network(network)
         r = metrics.trunk_diameter / 2
 
@@ -123,30 +115,27 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
             if not shadow:
                 upper = (XY(box[0], box[1]), XY(box[2], box[1]))
-                self.drawer.line(upper,
-                                 fill=network.linecolor, jump=True)
+                self.drawer.line(upper, fill=network.linecolor, jump=True)
 
                 bottom = (XY(box[0], box[3]), XY(box[2], box[3]))
-                self.drawer.line(bottom,
-                                 fill=network.linecolor, jump=True)
+                self.drawer.line(bottom, fill=network.linecolor, jump=True)
 
                 self.drawer.arc(lsection, 90, 270, fill=network.linecolor)
                 self.drawer.ellipse(rsection, outline=network.linecolor,
                                     fill=network.color)
 
     def _draw_elements(self):
-        self._draw_trunklines()
-        self._draw_trunkline_labels()
+        self.trunklines()
+        self.trunkline_labels()
         super(DiagramDraw, self)._draw_elements()
 
-    def _draw_trunkline_labels(self):
+    def trunkline_labels(self):
         for network in self.diagram.networks:
             if network.display_label:
                 m = self.metrics.network(network)
                 self.drawer.textarea(m.textbox, network.display_label,
                                      fill=self.diagram.textcolor,
-                                     halign="right", font=self.font,
-                                     fontsize=self.metrics.fontsize)
+                                     halign="right")
 
     def node(self, node, **kwargs):
         m = self.metrics
@@ -157,9 +146,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
             if connector.network in node.address:
                 label = node.address[connector.network]
                 self.drawer.textarea(connector.textbox, label,
-                                     fill=node.textcolor,
-                                     halign="left", font=self.font,
-                                     fontsize=self.metrics.fontsize)
+                                     fill=node.textcolor, halign="left")
 
         super(DiagramDraw, self).node(node, **kwargs)
 
@@ -171,9 +158,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def group_label(self, group):
         if group.label:
             m = self.metrics.cell(group)
-            self.drawer.textarea(m.grouplabelbox, group.label, valign='top',
-                                 fill=group.textcolor, font=self.font,
-                                 fontsize=self.metrics.fontsize)
+            self.drawer.textarea(m.grouplabelbox, group.label,
+                                 valign='top', fill=group.textcolor)
 
 
 from DiagramMetrics import DiagramMetrics

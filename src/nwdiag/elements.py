@@ -17,8 +17,7 @@ import re
 import sys
 import blockdiag.elements
 from blockdiag.elements import *
-from blockdiag.utils.XY import XY
-from blockdiag.utils import images
+from blockdiag.utils import images, XY
 
 
 class DiagramNode(blockdiag.elements.DiagramNode):

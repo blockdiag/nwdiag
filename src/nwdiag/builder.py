@@ -15,8 +15,8 @@
 
 from elements import *
 import diagparser
-from blockdiag.utils.XY import XY
-from blockdiag.utils.namedtuple import namedtuple
+from blockdiag.utils import XY
+from blockdiag.utils.collections import namedtuple
 
 
 class DiagramTreeBuilder:
