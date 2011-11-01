@@ -119,15 +119,14 @@ class Diagram(blockdiag.elements.Diagram):
         super(Diagram, self).__init__()
 
         self.orientation = 'portrait'
-        self.node_width = 104
-        self.span_width = 48
-        self.span_height = 104
         self.groups = []
         self.networks = []
         self.routes = []
 
     def fixiate(self):
-        if len(self.nodes) + len(self.networks) > 0:
-            nodes = self.nodes + self.networks
-            self.colwidth = max(x.xy.x + x.colwidth for x in nodes)
-            self.colheight = max(x.xy.y + x.colheight for x in nodes)
+        self.colwidth = max(n.xy.x + n.colwidth for n in self.nodes)
+        self.colheight = max(n.xy.y + n.colheight for n in self.nodes)
+
+        colheight = max(nw.xy.y + nw.colheight - 1 for nw in self.networks)
+        if self.colheight < colheight:
+            self.colheight = colheight
