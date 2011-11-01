@@ -56,6 +56,7 @@ Node = namedtuple('Node', 'id attrs')
 Attr = namedtuple('Attr', 'name value')
 Edge = namedtuple('Edge', 'nodes attrs')
 Route = namedtuple('Route', 'nodes attrs')
+AttrClass = namedtuple('AttrClass', 'name attrs')
 DefAttrs = namedtuple('DefAttrs', 'object attrs')
 
 
@@ -157,8 +158,14 @@ def parse(seq):
         skip(maybe(op(';'))) +
         op_('}')
         >> unarg(make_route))
+    class_stmt = (
+        skip(n('class')) +
+        node_id +
+        attr_list
+        >> unarg(AttrClass))
     stmt = (
-        network
+          network
+        | class_stmt
         | group
         | graph_attr
         | route
