@@ -19,8 +19,14 @@ import elements
 from blockdiag.utils import XY
 from blockdiag.utils.collections import namedtuple
 
+cellsize = blockdiag.DiagramMetrics.DiagramMetrics.cellsize
+
 
 class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
+    node_width = cellsize * 13
+    span_width = cellsize * 6
+    span_height = cellsize * 13
+
     def __init__(self, diagram, **kwargs):
         super(DiagramMetrics, self).__init__(diagram, **kwargs)
 
@@ -28,20 +34,7 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         self.trunk_diameter = self.cellsize
         self.jump_shift = self.trunk_diameter / 2
         self.jump_radius = self.trunk_diameter
-
-        if diagram.page_padding is None:
-            top_padding = self.span_height
-            bottom_padding = self.span_height / 3
-            right_padding = (self.node_width / 2 + self.span_width)
-            left_padding = (self.node_width + self.span_width) * 3 / 4
-
-            margin = self.cellsize * 6
-            self.page_padding = [top_padding + margin,
-                                 right_padding,
-                                 bottom_padding + margin,
-                                 left_padding + margin]
-
-        self.page_margin = XY(0, 0)
+        self.page_padding = [self.span_height / 2, 0, 0, self.node_width]
 
     def node(self, node):
         n = super(DiagramMetrics, self).cell(node)
