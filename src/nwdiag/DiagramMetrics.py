@@ -16,8 +16,8 @@
 import math
 import blockdiag.DiagramMetrics
 import elements
-from blockdiag.utils.namedtuple import namedtuple
-from blockdiag.utils.XY import XY
+from blockdiag.utils import XY
+from blockdiag.utils.collections import namedtuple
 
 
 class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
