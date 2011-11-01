@@ -28,7 +28,10 @@ class DiagramNode(blockdiag.elements.DiagramNode):
         self.networks = []
         self.layouted = False
 
-    def set_attributes(self, network, attrs):
+    def set_attributes(self, network, attrs=None):
+        if attrs is None:
+            attrs, network = network, None
+
         for attr in attrs:
             if attr.name == 'address':
                 address = re.sub('\s*,\s*', '\n', unquote(attr.value))
