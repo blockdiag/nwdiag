@@ -45,8 +45,12 @@ class Network(blockdiag.elements.NodeGroup):
     linecolor = (0, 0, 0)
 
     @classmethod
-    def set_default_line_color(cls, color):
+    def set_default_linecolor(cls, color):
         cls.linecolor = images.color_to_rgb(color)
+
+    @classmethod
+    def set_default_textcolor(cls, color):
+        cls.textcolor = images.color_to_rgb(color)
 
     @classmethod
     def clear(cls):
@@ -107,9 +111,13 @@ class Diagram(blockdiag.elements.Diagram):
     _Network = Network
     _Route = Route
 
-    def set_default_line_color(self, color):
-        super(Diagram, self).set_default_line_color(color)
-        self._Network.set_default_line_color(self.linecolor)
+    def set_default_linecolor(self, color):
+        super(Diagram, self).set_default_linecolor(color)
+        self._Network.set_default_linecolor(self.linecolor)
+
+    def set_default_textcolor(self, color):
+        super(Diagram, self).set_default_textcolor(color)
+        self._Network.set_default_text_color(self.textcolor)
 
     def set_default_network_color(self, color):
         color = images.color_to_rgb(color)
