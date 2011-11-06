@@ -75,6 +75,12 @@ Apache License 2.0
 History
 =======
 
+0.6.0 (2011-11-06)
+------------------
+* Add rackdiag which supports genarating rack-structure diagram
+* Add docutils extension
+* Fix bugs
+
 0.5.3 (2011-11-01)
 ------------------
 * Add class feature (experimental)
