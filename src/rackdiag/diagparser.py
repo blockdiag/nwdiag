@@ -68,7 +68,7 @@ def tokenize(str):
         ('RackItem', (r':[^\r\n\[]+',)),
         ('Name',    (ur'[A-Za-z_\u0080-\uffff]'
                      ur'[A-Za-z_\-.0-9\u0080-\uffff]*',)),
-        ('Units',   (r'[0-9]+[uU]',)),
+        ('Units',   (r'([0-9]+U|[0-9]+(?:\.[0-9]+)?(A|kg))',)),
         ('Op',      (r'[{}:;,=\[\]]',)),
         ('Number',  (r'[0-9]+',)),
         ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),

@@ -25,10 +25,31 @@ class RackItem(blockdiag.elements.DiagramNode):
         super(RackItem, self).__init__(None)
         self.number = int(number)
         self.label = label
+        self.ampere = None
+        self.weight = None
+
+    @property
+    def display_label(self):
+        attrs = []
+        if self.colheight > 1:
+            attrs.append(u"%dU" % self.colheight)
+        if self.ampere:
+            attrs.append(u"%.1fA" % self.ampere)
+        if self.weight:
+            attrs.append(u"%.1fkg" % self.weight)
+
+        if attrs:
+            return u"%s\n[%s]" % (self.label, u"/".join(attrs))
+        else:
+            return self.label
 
     def set_attribute(self, attr):
-        if re.search('^\d+[uU]$', attr.name):
+        if re.search('^\d+U$', attr.name):
             self.colheight = int(attr.name[:-1])
+        elif re.search('^\d+(\.[0-9]+)?A$', attr.name):
+            self.ampere = float(attr.name[:-1])
+        elif re.search('^\d+(\.[0-9]+)?kg$', attr.name):
+            self.weight = float(attr.name[:-2])
         else:
             return super(RackItem, self).set_attribute(attr)
 
