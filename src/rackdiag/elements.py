@@ -26,6 +26,12 @@ class RackItem(blockdiag.elements.DiagramNode):
         self.number = int(number)
         self.label = label
 
+    def set_attribute(self, attr):
+        if re.search('^\d+[uU]$', attr.name):
+            self.colheight = int(attr.name[:-1])
+        else:
+            return super(RackItem, self).set_attribute(attr)
+
     def set_height(self, value):
         self.colheight = int(value)
 

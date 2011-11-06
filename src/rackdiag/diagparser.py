@@ -68,6 +68,7 @@ def tokenize(str):
         ('RackItem', (r':[^\r\n\[]+',)),
         ('Name',    (ur'[A-Za-z_\u0080-\uffff]'
                      ur'[A-Za-z_\-.0-9\u0080-\uffff]*',)),
+        ('Units',   (r'[0-9]+[uU]',)),
         ('Op',      (r'[{}:;,=\[\]]',)),
         ('Number',  (r'[0-9]+',)),
         ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),
@@ -87,7 +88,7 @@ def parse(seq):
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
     id = some(lambda t:
-        t.type in ['Name', 'Number', 'String']).named('id') >> tokval
+        t.type in ['Name', 'Number', 'String', 'Units']).named('id') >> tokval
     number = some(lambda t: t.type == 'Number').named('number') >> tokval
     rackitem = some(lambda t: t.type == 'RackItem').named('rackitem') >> tokval
     make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
