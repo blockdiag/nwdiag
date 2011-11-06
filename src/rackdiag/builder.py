@@ -45,7 +45,7 @@ class DiagramLayoutManager:
     def run(self):
         height = self.diagram.rackheight
         for item in self.diagram.nodes:
-            y = height - item.number - item.colheight
+            y = height - item.number - item.colheight + 1
             item.xy = XY(0, y)
             self.validate_rack(item)
         self.diagram.fixiate()

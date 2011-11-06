@@ -22,9 +22,10 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         frame = self.metrics.frame
         self.drawer.rectangle(frame, outline=self.diagram.linecolor)
 
-        for i in range(1, self.diagram.rackheight):
+        for i in range(self.diagram.rackheight):
             box = self.metrics.racknumber(i)
-            self.drawer.textarea(box, str(i), halign='right')
+            number = u"%d" % (i + 1)
+            self.drawer.textarea(box, number, halign='right')
 
         super(DiagramDraw, self)._draw_elements(**kwargs)
 

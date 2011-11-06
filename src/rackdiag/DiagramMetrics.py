@@ -29,6 +29,9 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         self.spreadsheet.set_span_height(0, span_height)
         self.spreadsheet.set_span_height(diagram.rackheight, span_height)
 
+        # FIXME: fill height + 1 (bugs in blockdiag-1.0.1)
+        self.spreadsheet.set_span_height(diagram.rackheight + 1, span_height)
+
     @property
     def frame(self):
         dummy = elements.DiagramNode(None)
