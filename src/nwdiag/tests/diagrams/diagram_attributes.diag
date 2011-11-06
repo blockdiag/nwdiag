@@ -5,6 +5,8 @@
   span_height = 32;
   default_fontsize = 16;
   default_network_color = red;
+  default_textcolor = red;
+  default_linecolor = red;
 
   network {
     A;
