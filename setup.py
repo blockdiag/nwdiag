@@ -30,7 +30,7 @@ setup(
      author_email='i.tkomiya at gmail.com',
      url='http://blockdiag.com/',
      license='Apache License 2.0',
-     py_modules=['sphinxcontrib_nwdiag', 'nwdiag_sphinxhelper'],
+     py_modules=['nwdiag_sphinxhelper'],
      packages=find_packages('src'),
      package_dir={'': 'src'},
      package_data = {'': ['buildout.cfg']},
