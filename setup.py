@@ -54,6 +54,7 @@ setup(
      entry_points="""
         [console_scripts]
         nwdiag = nwdiag.command:main
+        rackdiag = rackdiag.command:main
      """,
 )
 
