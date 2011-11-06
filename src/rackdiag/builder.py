@@ -51,12 +51,15 @@ class DiagramLayoutManager:
         self.diagram.fixiate()
 
     def validate_rack(self, item):
+        if item.xy.y < 0:
+            msg = "Rack %d is oversized to rack-height\n" % item.number
+            raise AttributeError(msg)
+
         for i in range(item.xy.y, item.xy.y + item.colheight):
             if i in self.rack_usage:
-                number = self.diagram.rackheight - i
-                used = self.rack_usage[i]
-                print "Rack %d is already used: %s\n" % (number, used.label)
-                raise
+                used = self.rack_usage[i].label.encode('utf-8')
+                msg = "Rack %d is already used: %s\n" % (item.number, used)
+                raise AttributeError(msg)
             else:
                 self.rack_usage[i] = item
 
