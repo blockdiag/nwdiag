@@ -1,30 +1,36 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd ">
-<svg viewBox="0 0 618 418 " xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" >
-	<defs id="defs_block">
-		<filter inkspace:collect="always" height="1.504" width="1.1575" y="-0.252" x="-0.07875" id="filter_blur">
-			<feGaussianBlur stdDeviation="4.2" id="feGaussianBlur3780" inkspace:collect="always"/>
-		</filter>
-	</defs>
-	<title>blockdiag</title>
-	<rect style="filter:url(#filter_blur)" height="236" width="420" y="126" x="156" stroke-width="1" fill="rgb(255,119,119)"/>
-	<rect style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" height="40" width="104" stroke="rgb(0,0,0)" y="158" x="165" stroke-width="1" fill="rgb(0,0,0)"/>
-	<rect style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" height="40" width="104" stroke="rgb(0,0,0)" y="158" x="317" stroke-width="1" fill="rgb(0,0,0)"/>
-	<rect style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" height="40" width="104" stroke="rgb(0,0,0)" y="302" x="469" stroke-width="1" fill="rgb(0,0,0)"/>
-	<path stroke="rgb(0,0,0)" d="M 138 100 L 442 100" fill="none"/>
-	<path stroke="rgb(0,0,0)" d="M 290 31 L 290 100" fill="none"/>
-	<path stroke="rgb(0,0,0)" d="M 138 244 L 594 244" fill="none"/>
-	<path stroke="rgb(0,0,0)" d="M 214 100 L 214 152" fill="none"/>
-	<path stroke="rgb(0,0,0)" d="M 214 192 L 214 244" fill="none"/>
-	<rect style="None" height="40" width="104" stroke="rgb(0,0,0)" y="152" x="162" stroke-width="1" fill="rgb(255,255,255)"/>
-	<text y="178" x="197" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">web01</text>
-	<path stroke="rgb(0,0,0)" d="M 366 100 L 366 152" fill="none"/>
-	<path stroke="rgb(0,0,0)" d="M 366 192 L 366 244" fill="none"/>
-	<rect style="None" height="40" width="104" stroke="rgb(0,0,0)" y="152" x="314" stroke-width="1" fill="rgb(255,255,255)"/>
-	<text y="178" x="349" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">web02</text>
-	<path stroke="rgb(0,0,0)" d="M 518 244 L 518 296" fill="none"/>
-	<rect style="None" height="40" width="104" stroke="rgb(0,0,0)" y="296" x="466" stroke-width="1" fill="rgb(255,255,255)"/>
-	<text y="322" x="504" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">db01</text>
-	<text y="106" x="104" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">dmz</text>
-	<text y="250" x="86" font-size="11" font-family="/usr/share/fonts/truetype/ipafont/ipagp.ttf" fill="rgb(0,0,0)">internal</text>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg viewBox="0 0 608 444" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs id="defs_block">
+    <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
+      <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
+    </filter>
+  </defs>
+  <title>blockdiag</title>
+  <rect fill="rgb(255,119,119)" height="236" style="filter:url(#filter_blur)" width="420" x="146" y="130" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="104" x="155" y="162" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="104" x="307" y="162" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="104" x="459" y="306" />
+  <path d="M 131 103 L 435 103 A2,4 0 0 1 435 111 L 131 111 A2,4 0 0 1 131 103" fill="rgb(0,0,0)" style="filter:url(#filter_blur)" />
+  <path d="M 131 247 L 587 247 A2,4 0 0 1 587 255 L 131 255 A2,4 0 0 1 131 247" fill="rgb(0,0,0)" style="filter:url(#filter_blur)" />
+  <path d="M 128 100 L 432 100 A2,4 0 0 1 432 108 L 128 108 A2,4 0 0 1 128 100" fill="rgb(185,203,228)" stroke="rgb(0,0,0)" />
+  <path d="M 432 108 A2,4 0 0 1 432 100" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 128 100 L 432 100" fill="none" stroke="none" />
+  <path d="M 280 35 L 280 100" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 128 244 L 584 244 A2,4 0 0 1 584 252 L 128 252 A2,4 0 0 1 128 244" fill="rgb(185,203,228)" stroke="rgb(0,0,0)" />
+  <path d="M 584 252 A2,4 0 0 1 584 244" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 128 244 L 584 244" fill="none" stroke="none" />
+  <text fill="rgb(0,0,0)" font-size="11" x="94" y="110">dmz</text>
+  <text fill="rgb(0,0,0)" font-size="11" x="76" y="254">internal</text>
+  <path d="M 204 108 L 204 156" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 204 196 L 204 244" fill="none" stroke="rgb(0,0,0)" />
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="152" y="156" />
+  <text fill="rgb(0,0,0)" font-size="11" x="187" y="182">web01</text>
+  <path d="M 356 108 L 356 156" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 356 196 L 356 244" fill="none" stroke="rgb(0,0,0)" />
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="304" y="156" />
+  <text fill="rgb(0,0,0)" font-size="11" x="339" y="182">web02</text>
+  <path d="M 508 252 L 508 300" fill="none" stroke="rgb(0,0,0)" />
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="456" y="300" />
+  <text fill="rgb(0,0,0)" font-size="11" x="494" y="326">db01</text>
 </svg>
