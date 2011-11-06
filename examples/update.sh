@@ -3,7 +3,7 @@
 EXAMPLES=`dirname $0`
 NWDIAG=$EXAMPLES/../bin/nwdiag
 
-for diag in `ls $EXAMPLES/*.diag`
+for diag in `ls $EXAMPLES/nwdiag/*.diag`
 do
     png=$EXAMPLES/`basename $diag .diag`.png
     echo $NWDIAG -Tpng -o $png $diag
