@@ -30,6 +30,11 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
         super(DiagramDraw, self)._draw_elements(**kwargs)
 
+    def node(self, node, **kwargs):
+        label, node.label = node.label, node.display_label
+        super(DiagramDraw, self).node(node, **kwargs)
+        node.label = label
+
 
 from DiagramMetrics import DiagramMetrics
 DiagramDraw.set_metrics_class(DiagramMetrics)
