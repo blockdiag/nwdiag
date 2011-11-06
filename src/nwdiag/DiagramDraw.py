@@ -126,16 +126,18 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
     def _draw_elements(self):
         self.trunklines()
-        self.trunkline_labels()
+
+        for network in self.diagram.networks:
+            self.trunkline_label(network)
+
         super(DiagramDraw, self)._draw_elements()
 
-    def trunkline_labels(self):
-        for network in self.diagram.networks:
-            if network.display_label:
-                m = self.metrics.network(network)
-                self.drawer.textarea(m.textbox, network.display_label,
-                                     fill=self.diagram.textcolor,
-                                     halign="right")
+    def trunkline_label(self, network):
+        if network.display_label:
+            m = self.metrics.network(network)
+            self.drawer.textarea(m.textbox, network.display_label,
+                                 fill=network.textcolor, halign="right",
+                                 fontsize=self.metrics.fontsize_for(network))
 
     def node(self, node, **kwargs):
         m = self.metrics
@@ -159,7 +161,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         if group.label:
             m = self.metrics.cell(group)
             self.drawer.textarea(m.grouplabelbox, group.label,
-                                 valign='top', fill=group.textcolor)
+                                 valign='top', fill=group.textcolor,
+                                 fontsize=self.metrics.fontsize_for(group))
 
 
 from DiagramMetrics import DiagramMetrics
