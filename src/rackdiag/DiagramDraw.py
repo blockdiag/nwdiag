@@ -14,13 +14,14 @@
 #  limitations under the License.
 
 import blockdiag.DiagramDraw
-from blockdiag.utils import XY
+from blockdiag.utils import Box, XY
 
 
 class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def _draw_elements(self, **kwargs):
         frame = self.metrics.frame
-        self.drawer.rectangle(frame, outline=self.diagram.linecolor)
+        self.drawer.rectangle(frame, fill='white',
+                              outline=self.diagram.linecolor)
 
         for i in range(self.diagram.rackheight):
             box = self.metrics.racknumber(i)
@@ -29,6 +30,16 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                                  fill=self.diagram.textcolor)
 
         super(DiagramDraw, self)._draw_elements(**kwargs)
+
+    def _draw_background(self):
+        # do not call blockdiag.DiagramDraw#_draw_background()
+
+        # draw shadow of frame
+        frame = self.metrics.frame
+        dx, dy = self.metrics.shadow_offset
+        shadow = Box(frame.x1 + dx, frame.y1 + dy,
+                     frame.x2 + dx, frame.y2 + dy)
+        self.drawer.rectangle(shadow, fill=self.shadow, filter='blur')
 
     def node(self, node, **kwargs):
         label, node.label = node.label, node.display_label
