@@ -57,11 +57,44 @@ class RackItem(blockdiag.elements.DiagramNode):
         self.colheight = int(value)
 
 
+class Rack(blockdiag.elements.NodeGroup):
+    def __init__(self):
+        super(Rack, self).__init__(None)
+        self.colheight = 42
+        self.description = None
+
+    @property
+    def display_label(self):
+        attrs = []
+        if self.rackheight > 1:
+            attrs.append(u"%dU" % self.rackheight)
+
+        if attrs:
+            return u"%s\n[%s]" % (self.description, u"/".join(attrs))
+        else:
+            return self.description
+
+    def set_attribute(self, attr):
+        if re.search('^\d+U$', attr.name):
+            self.colheight = int(attr.name[:-1])
+        else:
+            return super(Rack, self).set_attribute(attr)
+
+
 class Diagram(blockdiag.elements.Diagram):
     def __init__(self):
         super(Diagram, self).__init__()
 
-        self.rackheight = 42
+        self.racks = [Rack()]
 
     def set_rackheight(self, value):
-        self.rackheight = int(value)
+        self.rack[0].colheight = int(value)
+
+    def fixiate(self):
+        self.colwidth = sum(r.colwidth for r in self.racks)
+        self.colheight = max(r.colheight for r in self.racks)
+
+    def traverse_nodes(self, **kwargs):
+        for rack in self.racks:
+            for node in rack.traverse_nodes():
+                yield node
