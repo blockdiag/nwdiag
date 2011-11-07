@@ -51,9 +51,12 @@ class DiagramLayoutManager:
         self.rack_usage = {}
 
     def run(self):
-        x = 0
+        rack_x = 0
         for rack in self.diagram.racks:
             self.rack_usage = {}
+
+            for item in rack.nodes:
+                item.xy = XY(-1, -1)
 
             for item in rack.nodes:
                 if rack.descending:
@@ -61,12 +64,18 @@ class DiagramLayoutManager:
                 else:
                     y = item.number - 1
 
-                item.xy = XY(0, y)
+                nodes = [n for n in rack.nodes  if n.xy.y == y]
+                if nodes:
+                    x = max(n.xy.x for n in nodes) + 1
+                else:
+                    x = 0
+
+                item.xy = XY(x, y)
                 self.validate_rack(item)
-            rack.xy = XY(x, 0)
+            rack.xy = XY(rack_x, 0)
             rack.fixiate()
 
-            x += 1
+            rack_x += rack.colwidth
 
         self.diagram.fixiate()
 
@@ -77,9 +86,12 @@ class DiagramLayoutManager:
 
         for i in range(item.xy.y, item.xy.y + item.colheight):
             if i in self.rack_usage:
-                used = self.rack_usage[i].label.encode('utf-8')
-                msg = "Rack %d is already used: %s\n" % (item.number, used)
-                raise AttributeError(msg)
+                if self.rack_usage[i].colheight == item.colheight == 1:
+                    pass
+                else:
+                    used = self.rack_usage[i].label.encode('utf-8')
+                    msg = "Rack %d is already used: %s\n" % (item.number, used)
+                    raise AttributeError(msg)
             else:
                 self.rack_usage[i] = item
 

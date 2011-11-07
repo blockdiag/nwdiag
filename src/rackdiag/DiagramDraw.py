@@ -21,7 +21,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def _draw_elements(self, **kwargs):
 
         for rack in self.diagram.racks:
-            frame = self.metrics.cell(rack)
+            frame = self.metrics.cell(rack, use_padding=False)
             self.drawer.rectangle(frame, fill='white',
                                   outline=self.diagram.linecolor)
 
@@ -45,7 +45,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         # draw shadow of frame
         dx, dy = self.metrics.shadow_offset
         for rack in self.diagram.racks:
-            frame = self.metrics.cell(rack)
+            frame = self.metrics.cell(rack, use_padding=False)
             shadow = Box(frame.x1 + dx, frame.y1 + dy,
                          frame.x2 + dx, frame.y2 + dy)
             self.drawer.rectangle(shadow, fill=self.shadow, filter='blur')
