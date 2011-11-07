@@ -37,7 +37,7 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         dummy = elements.DiagramNode(None)
         dummy.xy = XY(0, 0)
         dummy.colwidth = 1
-        dummy.colheight = self.rackheight - 1
+        dummy.colheight = self.rackheight
         return self.cell(dummy, use_padding=False)
 
     def racknumber(self, number):
