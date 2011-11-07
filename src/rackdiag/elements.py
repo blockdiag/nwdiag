@@ -38,10 +38,13 @@ class RackItem(blockdiag.elements.DiagramNode):
         if self.weight:
             attrs.append(u"%.1fkg" % self.weight)
 
+        labels = []
+        if self.description:
+            labels.append(self.description)
         if attrs:
-            return u"%s\n[%s]" % (self.label, u"/".join(attrs))
-        else:
-            return self.label
+            labels.append(u"[%s]" % u"/".join(attrs))
+
+        return u"\n".join(labels)
 
     def set_attribute(self, attr):
         if re.search('^\d+U$', attr.name):
@@ -66,13 +69,16 @@ class Rack(blockdiag.elements.NodeGroup):
     @property
     def display_label(self):
         attrs = []
-        if self.rackheight > 1:
-            attrs.append(u"%dU" % self.rackheight)
+        if self.description or attrs:
+            attrs.insert(0, u"%dU" % self.colheight)
 
+        labels = []
+        if self.description:
+            labels.append(self.description)
         if attrs:
-            return u"%s\n[%s]" % (self.description, u"/".join(attrs))
-        else:
-            return self.description
+            labels.append(u"[%s]" % u"/".join(attrs))
+
+        return u"\n".join(labels)
 
     def set_attribute(self, attr):
         if re.search('^\d+U$', attr.name):

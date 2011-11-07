@@ -25,11 +25,24 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         self.span_height = 0
         super(DiagramMetrics, self).__init__(diagram, **kwargs)
 
-        self.spreadsheet.set_span_height(0, span_height)
+        labels = [r.display_label for r in diagram.racks  if r.display_label]
+        if labels:
+            labelheight = max(self.textsize(l).y for l in labels) + \
+                          self.line_spacing * 2
+        else:
+            labelheight = 0
+
+        self.spreadsheet.set_span_height(0, span_height + labelheight)
         self.spreadsheet.set_span_height(diagram.colheight, span_height)
 
         # FIXME: fill height + 1 (bugs in blockdiag-1.0.1)
         self.spreadsheet.set_span_height(diagram.colheight + 1, span_height)
+
+    def racklabel(self, rack):
+        cell = self.cell(rack)
+        textsize = self.textsize(rack.display_label)
+        y1 = cell.y1 - textsize.y - self.line_spacing * 2
+        return Box(cell.x1, y1, cell.x2, cell.y1)
 
     def racknumber(self, rack, number):
         dummy = elements.DiagramNode(None)

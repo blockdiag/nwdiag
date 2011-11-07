@@ -55,9 +55,8 @@ class DiagramLayoutManager:
         for rack in self.diagram.racks:
             self.rack_usage = {}
 
-            height = rack.colheight
             for item in rack.nodes:
-                y = height - item.number - item.colheight + 1
+                y = rack.colheight - item.number - item.colheight + 1
                 item.xy = XY(0, y)
                 self.validate_rack(item)
             rack.xy = XY(x, 0)
