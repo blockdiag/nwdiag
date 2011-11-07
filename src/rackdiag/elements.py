@@ -16,6 +16,7 @@
 import re
 import sys
 import blockdiag.elements
+from utils.math import lcm
 from blockdiag.elements import *
 from blockdiag.utils import images, XY
 
@@ -65,7 +66,7 @@ class Rack(blockdiag.elements.NodeGroup):
         super(Rack, self).__init__(None)
         self.colheight = 42
         self.description = None
-        self.descending = True 
+        self.descending = True
 
     @property
     def display_label(self):
@@ -81,7 +82,25 @@ class Rack(blockdiag.elements.NodeGroup):
 
         return u"\n".join(labels)
 
+    def _update_colwidth(self):
+        widths = []
+        for i in range(self.colheight):
+            nodes = [n for n in self.nodes  if n.xy.y == i]
+            if len(nodes) > 1:
+                widths.append(len(nodes))
+
+        self.colwidth = lcm(*widths) or 1
+        for i in range(self.colheight):
+            nodes = [n for n in self.nodes  if n.xy.y == i]
+            if nodes:
+                width = self.colwidth / len(nodes)
+                for i, node in enumerate(nodes):
+                    node.xy = XY(i * width, node.xy.y)
+                    node.colwidth = width
+
     def fixiate(self):
+        self._update_colwidth()
+
         for node in self.nodes:
             node.xy = XY(self.xy.x + node.xy.x,
                          self.xy.y + node.xy.y)

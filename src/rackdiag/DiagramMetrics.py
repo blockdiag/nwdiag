@@ -15,14 +15,16 @@
 
 import blockdiag.DiagramMetrics
 from blockdiag.utils import Box, XY
-from blockdiag.utils.collections import namedtuple
+from blockdiag.utils.collections import defaultdict, namedtuple
 import elements
 
 
 class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
     def __init__(self, diagram, **kwargs):
         span_height = self.span_height
+        span_width = self.span_width
         self.span_height = 0
+        self.span_width = 0
         super(DiagramMetrics, self).__init__(diagram, **kwargs)
 
         labels = [r.display_label for r in diagram.racks  if r.display_label]
@@ -32,11 +34,30 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         else:
             labelheight = 0
 
+        # reset node_width FORCE
+        self.spreadsheet.node_width = defaultdict(lambda: self.node_width)
+
         self.spreadsheet.set_span_height(0, span_height + labelheight)
         self.spreadsheet.set_span_height(diagram.colheight, span_height)
+        self.spreadsheet.set_span_width(0, span_width)
 
         # FIXME: fill height + 1 (bugs in blockdiag-1.0.1)
         self.spreadsheet.set_span_height(diagram.colheight + 1, span_height)
+        self.spreadsheet.set_span_width(diagram.colwidth + 1, span_width)
+
+        for rack in diagram.racks:
+            x = rack.xy.x + rack.colwidth
+            self.spreadsheet.set_span_width(x, span_width)
+
+            if rack.colwidth > 1:
+                node_width = self.node_width / rack.colwidth
+                for i in range(rack.colwidth):
+                    self.spreadsheet.set_node_width(rack.xy.x + i, node_width)
+
+                # FIXME: fill node.width to minimum node_width
+                #        (bugs in blockdiag-1.0.2)
+                for node in rack.nodes:
+                    node.width = node_width
 
     def racklabel(self, rack):
         cell = self.cell(rack)
