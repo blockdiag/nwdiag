@@ -22,19 +22,27 @@ from blockdiag.utils import XY
 
 class DiagramTreeBuilder:
     def build(self, tree):
-        diagram = Diagram()
-        self.instantiate(diagram, tree)
-        return diagram
+        self.diagram = Diagram()
+        self.instantiate(self.diagram.racks[0], tree)
 
-    def instantiate(self, diagram, tree):
+        for rack in self.diagram.racks[:]:
+            if len(rack.nodes) == 0:
+                self.diagram.racks.remove(rack)
+
+        return self.diagram
+
+    def instantiate(self, rack, tree):
         for stmt in tree.stmts:
-            if isinstance(stmt, diagparser.DefAttrs):
-                diagram.set_attributes(stmt.attrs)
-
+            if isinstance(stmt, diagparser.Attr):
+                rack.set_attribute(stmt)
             elif isinstance(stmt, diagparser.RackItem):
                 item = RackItem(stmt.number, stmt.label)
                 item.set_attributes(stmt.attrs)
-                diagram.nodes.append(item)
+                rack.nodes.append(item)
+            elif isinstance(stmt, diagparser.Rack):
+                _rack = Rack()
+                self.diagram.racks.append(_rack)
+                self.instantiate(_rack, stmt)
 
 
 class DiagramLayoutManager:
@@ -43,11 +51,20 @@ class DiagramLayoutManager:
         self.rack_usage = {}
 
     def run(self):
-        height = self.diagram.rackheight
-        for item in self.diagram.nodes:
-            y = height - item.number - item.colheight + 1
-            item.xy = XY(0, y)
-            self.validate_rack(item)
+        x = 0
+        for rack in self.diagram.racks:
+            self.rack_usage = {}
+
+            height = rack.colheight
+            for item in rack.nodes:
+                y = height - item.number - item.colheight + 1
+                item.xy = XY(0, y)
+                self.validate_rack(item)
+            rack.xy = XY(x, 0)
+            rack.fixiate(True)
+
+            x += 1
+
         self.diagram.fixiate()
 
     def validate_rack(self, item):

@@ -51,7 +51,7 @@ ENCODING = 'utf-8'
 Graph = namedtuple('Graph', 'type id stmts')
 RackItem = namedtuple('RackItem', 'number label attrs')
 Attr = namedtuple('Attr', 'name value')
-DefAttrs = namedtuple('DefAttrs', 'object attrs')
+Rack = namedtuple('Rack', 'id stmts')
 
 
 class ParseException(Exception):
@@ -83,7 +83,6 @@ def parse(seq):
     unarg = lambda f: lambda args: f(*args)
     tokval = lambda x: x.value
     flatten = lambda list: sum(list, [])
-    node_flatten = lambda l: sum([[l[0]]] + list(l[1:]), [])
     n = lambda s: a(Token('Name', s)) >> tokval
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
@@ -94,11 +93,6 @@ def parse(seq):
     make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
     make_rackitem = lambda no, text, attr: RackItem(no, text[1:].strip(), attr)
 
-    node_id = id  # + maybe(port)
-    node_list = (
-        node_id +
-        many(op_(',') + node_id)
-        >> node_flatten)
     a_list = (
         id +
         maybe(op_('=') + id) +
@@ -107,20 +101,32 @@ def parse(seq):
     attr_list = (
         many(op_('[') + many(a_list) + op_(']'))
         >> flatten)
-    attr_stmt = (
-       (n('graph') | n('node') | n('edge')) +
-       attr_list
-       >> unarg(DefAttrs))
     graph_attr = id + op_('=') + id >> make_graph_attr
     rackitem_stmt = (
         number +
         rackitem +
         attr_list
         >> unarg(make_rackitem))
-    stmt = (
-          attr_stmt
-        | rackitem_stmt
+
+    # rack definition
+    rack_stmt = (
+          rackitem_stmt
+        | a_list
         | graph_attr
+    )
+    rack_stmt_list = many(rack_stmt + skip(maybe(op(';'))))
+    rack = (
+        skip(n('rack')) +
+        maybe(id) +
+        op_('{') +
+        rack_stmt_list +
+        op_('}')
+        >> unarg(Rack))
+
+    stmt = (
+          rack
+        | rackitem_stmt
+        | a_list
     )
     stmt_list = many(stmt + skip(maybe(op(';'))))
     graph = (
