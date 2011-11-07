@@ -77,6 +77,40 @@ class RackdiagDirective(directives.BlockdiagDirective):
 
         return image
 
+    def description_table(self, diagram):
+        descriptions = []
+        widths = [25, 50, 50, 50, 50, 50]
+        headers = ['No', 'Name', 'Height', 'Capacity', 'Weight', 'Description']
+        nodes = diagram.traverse_nodes()
+
+        for n in nodes:
+            label = n.label or n.id
+            units = u"%dU" % n.colheight
+            ampere = n.ampere and (u"%.1fA" % n.ampere) or ''
+            weight = n.weight and (u"%.1fkg" % n.weight) or ''
+
+            record = [n.number, n.label, units, ampere, weight, n.description]
+            descriptions.append(record)
+        descriptions.sort(directives.cmp_node_number)
+
+        # records for total
+        total = ['-', 'Total', '', '', '', '']
+        total[2] = u"%dU" % sum(n.colheight for n in nodes  if n.colheight)
+        total[3] = u"%.1fA" % sum(n.ampere for n in nodes  if n.ampere)
+        total[4] = u"%.1fkg" % sum(n.weight for n in nodes  if n.weight)
+        descriptions.append(total)
+
+        for i in range(len(headers) - 1, -1, -1):
+            if any(desc[i] for desc in descriptions):
+                pass
+            else:
+                widths.pop(i)
+                headers.pop(i)
+                for desc in descriptions:
+                    desc.pop(i)
+
+        return self._description_table(descriptions, widths, headers)
+
 
 def setup(**kwargs):
     global format, antialias, fontpath
