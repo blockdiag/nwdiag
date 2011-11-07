@@ -31,6 +31,12 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
                 self.drawer.textarea(box, number, halign='right',
                                      fill=self.diagram.textcolor)
 
+            if rack.display_label:
+                box = self.metrics.racklabel(rack)
+                self.drawer.textarea(box, rack.display_label,
+                                     fill=rack.textcolor,
+                                     fontsize=self.metrics.fontsize_for(rack))
+
         super(DiagramDraw, self)._draw_elements(**kwargs)
 
     def _draw_background(self):
