@@ -45,8 +45,13 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         return Box(cell.x1, y1, cell.x2, cell.y1)
 
     def racknumber(self, rack, number):
+        if rack.descending:
+            y = rack.colheight - number - 1
+        else:
+            y = number
+
         dummy = elements.DiagramNode(None)
-        dummy.xy = XY(rack.xy.x, rack.colheight - number - 1)
+        dummy.xy = XY(rack.xy.x, y)
         dummy.colwidth = 1
         dummy.colheight = 1
 
