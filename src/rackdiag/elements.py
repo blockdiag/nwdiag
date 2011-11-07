@@ -39,8 +39,8 @@ class RackItem(blockdiag.elements.DiagramNode):
             attrs.append(u"%.1fkg" % self.weight)
 
         labels = []
-        if self.description:
-            labels.append(self.description)
+        if self.label:
+            labels.append(self.label)
         if attrs:
             labels.append(u"[%s]" % u"/".join(attrs))
 
@@ -65,6 +65,7 @@ class Rack(blockdiag.elements.NodeGroup):
         super(Rack, self).__init__(None)
         self.colheight = 42
         self.description = None
+        self.descending = True 
 
     @property
     def display_label(self):
@@ -79,6 +80,14 @@ class Rack(blockdiag.elements.NodeGroup):
             labels.append(u"[%s]" % u"/".join(attrs))
 
         return u"\n".join(labels)
+
+    def fixiate(self):
+        for node in self.nodes:
+            node.xy = XY(self.xy.x + node.xy.x,
+                         self.xy.y + node.xy.y)
+
+    def set_ascending(self, attr):
+        self.descending = False
 
     def set_attribute(self, attr):
         if re.search('^\d+U$', attr.name):

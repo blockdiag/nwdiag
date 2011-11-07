@@ -56,11 +56,15 @@ class DiagramLayoutManager:
             self.rack_usage = {}
 
             for item in rack.nodes:
-                y = rack.colheight - item.number - item.colheight + 1
+                if rack.descending:
+                    y = rack.colheight - item.number - item.colheight + 1
+                else:
+                    y = item.number - 1
+
                 item.xy = XY(0, y)
                 self.validate_rack(item)
             rack.xy = XY(x, 0)
-            rack.fixiate(True)
+            rack.fixiate()
 
             x += 1
 
