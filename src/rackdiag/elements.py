@@ -122,7 +122,7 @@ class Diagram(blockdiag.elements.Diagram):
         self.racks = [Rack()]
 
     def set_rackheight(self, value):
-        self.rack[0].colheight = int(value)
+        self.racks[0].colheight = int(value)
 
     def fixiate(self):
         self.colwidth = sum(r.colwidth for r in self.racks)
