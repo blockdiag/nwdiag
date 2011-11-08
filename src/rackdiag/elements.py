@@ -29,6 +29,9 @@ class RackItem(blockdiag.elements.DiagramNode):
         self.ampere = None
         self.weight = None
 
+        if self.label == 'N/A':
+            self.color = 'gray'
+
     @property
     def display_label(self):
         attrs = []
