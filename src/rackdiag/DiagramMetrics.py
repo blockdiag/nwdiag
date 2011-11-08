@@ -41,10 +41,6 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         self.spreadsheet.set_span_height(diagram.colheight, span_height)
         self.spreadsheet.set_span_width(0, span_width)
 
-        # FIXME: fill height + 1 (bugs in blockdiag-1.0.1)
-        self.spreadsheet.set_span_height(diagram.colheight + 1, span_height)
-        self.spreadsheet.set_span_width(diagram.colwidth + 1, span_width)
-
         for rack in diagram.racks:
             x = rack.xy.x + rack.colwidth
             self.spreadsheet.set_span_width(x, span_width)
