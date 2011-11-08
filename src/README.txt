@@ -75,6 +75,12 @@ Apache License 2.0
 History
 =======
 
+0.6.1 (2011-11-06)
+------------------
+* [rackdiag] Support multiple racks rendering 
+* [rackdiag] Add rack attribute: unit-height, weight, ampere, ascending
+* [rackdiag] Support putting multiple items to same rack-unit
+
 0.6.0 (2011-11-06)
 ------------------
 * Add rackdiag which supports genarating rack-structure diagram
