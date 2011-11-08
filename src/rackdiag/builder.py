@@ -34,7 +34,10 @@ class DiagramTreeBuilder:
     def instantiate(self, rack, tree):
         for stmt in tree.stmts:
             if isinstance(stmt, diagparser.Attr):
-                rack.set_attribute(stmt)
+                try:
+                    rack.set_attribute(stmt)
+                except AttributeError:
+                    self.diagram.set_attribute(stmt)
             elif isinstance(stmt, diagparser.RackItem):
                 item = RackItem(stmt.number, stmt.label)
                 item.set_attributes(stmt.attrs)
