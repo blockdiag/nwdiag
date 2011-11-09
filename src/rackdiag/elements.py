@@ -14,11 +14,10 @@
 #  limitations under the License.
 
 import re
-import sys
 import blockdiag.elements
 from utils.math import lcm
 from blockdiag.elements import *
-from blockdiag.utils import images, XY
+from blockdiag.utils import XY
 
 
 class RackItem(blockdiag.elements.DiagramNode):

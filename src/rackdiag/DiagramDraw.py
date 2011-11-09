@@ -14,7 +14,7 @@
 #  limitations under the License.
 
 import blockdiag.DiagramDraw
-from blockdiag.utils import Box, XY
+from blockdiag.utils import Box
 
 
 class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):

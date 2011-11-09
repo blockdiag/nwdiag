@@ -35,12 +35,8 @@ At the moment, the parser builds only a parse tree, not an abstract syntax tree
   [1]: http://www.graphviz.org/doc/info/lang.html
 '''
 
-import os
-import sys
 import codecs
 from re import MULTILINE, DOTALL
-from pprint import pformat
-from funcparserlib.util import pretty_tree
 from funcparserlib.lexer import make_tokenizer, Token, LexerError
 from funcparserlib.parser import (some, a, maybe, many, finished, skip,
     oneplus, forward_decl, NoParseError)
@@ -52,6 +48,7 @@ Graph = namedtuple('Graph', 'type id stmts')
 RackItem = namedtuple('RackItem', 'number label attrs')
 Attr = namedtuple('Attr', 'name value')
 Rack = namedtuple('Rack', 'id stmts')
+DefAttrs = namedtuple('DefAttrs', 'object attrs')
 
 
 class ParseException(Exception):

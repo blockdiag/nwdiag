@@ -14,10 +14,9 @@
 #  limitations under the License.
 
 import re
-import sys
 import blockdiag.elements
 from blockdiag.elements import *
-from blockdiag.utils import images, XY
+from blockdiag.utils import images
 
 
 class DiagramNode(blockdiag.elements.DiagramNode):
@@ -74,7 +73,6 @@ class Network(blockdiag.elements.NodeGroup):
 
         # search networks including same nodes
         is_same = lambda nw: set(nodes) & set(nw.nodes) == set(nodes)
-        same = [nw for nw in nodes[0].networks if nw.hidden and is_same(nw)]
         if [nw for nw in nodes[0].networks if nw.hidden and is_same(nw)]:
             return None
 

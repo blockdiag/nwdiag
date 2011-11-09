@@ -15,7 +15,7 @@
 
 import blockdiag.DiagramMetrics
 from blockdiag.utils import Box, XY
-from blockdiag.utils.collections import defaultdict, namedtuple
+from blockdiag.utils.collections import defaultdict
 import elements
 
 

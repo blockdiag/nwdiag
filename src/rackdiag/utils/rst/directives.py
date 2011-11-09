@@ -14,7 +14,6 @@
 #  limitations under the License.
 
 import os
-import codecs
 from docutils import nodes
 from docutils.parsers import rst
 from rackdiag import diagparser
@@ -89,7 +88,7 @@ class RackdiagDirective(directives.BlockdiagDirective):
             ampere = n.ampere and (u"%.1fA" % n.ampere) or ''
             weight = n.weight and (u"%.1fkg" % n.weight) or ''
 
-            record = [n.number, n.label, units, ampere, weight, n.description]
+            record = [n.number, label, units, ampere, weight, n.description]
             descriptions.append(record)
         descriptions.sort(directives.cmp_node_number)
 
