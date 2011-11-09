@@ -35,12 +35,8 @@ At the moment, the parser builds only a parse tree, not an abstract syntax tree
   [1]: http://www.graphviz.org/doc/info/lang.html
 '''
 
-import os
-import sys
 import codecs
 from re import MULTILINE, DOTALL
-from pprint import pformat
-from funcparserlib.util import pretty_tree
 from funcparserlib.lexer import make_tokenizer, Token, LexerError
 from funcparserlib.parser import (some, a, maybe, many, finished, skip,
     oneplus, forward_decl, NoParseError)
@@ -88,7 +84,6 @@ def parse(seq):
     unarg = lambda f: lambda args: f(*args)
     tokval = lambda x: x.value
     flatten = lambda list: sum(list, [])
-    node_flatten = lambda l: sum([[l[0]]] + list(l[1:]), [])
     n = lambda s: a(Token('Name', s)) >> tokval
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
@@ -99,10 +94,6 @@ def parse(seq):
     make_route = lambda x, x2, xs, attrs: Route([x, x2] + xs, attrs)
 
     node_id = id  # + maybe(port)
-    node_list = (
-        node_id +
-        many(op_(',') + node_id)
-        >> node_flatten)
     a_list = (
         id +
         maybe(op_('=') + id) +

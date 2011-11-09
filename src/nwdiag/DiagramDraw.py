@@ -13,12 +13,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import sys
-import math
 import blockdiag.DiagramDraw
 from blockdiag.utils import XY
-from blockdiag import noderenderer
-from blockdiag.DiagramMetrics import DiagramMetrics
 
 
 class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
@@ -153,7 +149,6 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         super(DiagramDraw, self).node(node, **kwargs)
 
     def draw_connector(self, connector):
-        m = self.metrics
         self.drawer.line(connector.line,
                          fill=connector.network.linecolor, jump=True)
 

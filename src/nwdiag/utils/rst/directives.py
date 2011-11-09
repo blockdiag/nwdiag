@@ -14,7 +14,6 @@
 #  limitations under the License.
 
 import os
-import codecs
 from docutils import nodes
 from docutils.parsers import rst
 from nwdiag import diagparser
