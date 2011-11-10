@@ -21,7 +21,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def _draw_elements(self, **kwargs):
 
         for rack in self.diagram.racks:
-            frame = self.metrics.cell(rack, use_padding=False)
+            frame = self.metrics.cell(rack, use_padding=False).box
             self.drawer.rectangle(frame, fill='white',
                                   outline=self.diagram.linecolor)
 
