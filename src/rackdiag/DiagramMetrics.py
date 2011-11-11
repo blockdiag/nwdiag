@@ -50,11 +50,6 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
                 for i in range(rack.colwidth):
                     self.spreadsheet.set_node_width(rack.xy.x + i, node_width)
 
-                # FIXME: fill node.width to minimum node_width
-                #        (bugs in blockdiag-1.0.2)
-                for node in rack.nodes:
-                    node.width = node_width
-
     def racklabel(self, rack):
         cell = self.cell(rack)
         textsize = self.textsize(rack.display_label)
