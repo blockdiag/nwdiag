@@ -37,7 +37,7 @@ setup(
      include_package_data=True,
      install_requires=[
         'setuptools',
-        'blockdiag>=1.0.2',
+        'blockdiag>=1.0.3',
          # -*- Extra requirements: -*-
      ],
      extras_require=dict(
