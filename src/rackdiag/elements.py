@@ -16,11 +16,25 @@
 import re
 import blockdiag.elements
 from utils.math import lcm
+from blockdiag import plugins
 from blockdiag.elements import *
 from blockdiag.utils import XY
+from rackdiag.plugins import NodeAttributes
 
 
 class RackItem(blockdiag.elements.DiagramNode):
+    desctable = []
+    attrname = {}
+
+    @classmethod
+    def clear(cls):
+        super(RackItem, cls).clear()
+        cls.desctable = ['number', 'label', 'units', 'ampere',
+                         'weight', 'description']
+        cls.attrname = dict(number='No', label='Name', units='Height',
+                            ampere='Capacity', weight='Weight',
+                            description='Description')
+
     def __init__(self, number, label):
         super(RackItem, self).__init__(None)
         self.number = int(number)
@@ -61,6 +75,30 @@ class RackItem(blockdiag.elements.DiagramNode):
 
     def set_height(self, value):
         self.colheight = int(value)
+
+    def to_desctable(self):
+        attrs = []
+        for name in self.desctable:
+            if name == 'units':
+                attrs.append(u"%dU" % self.colheight)
+            elif name == 'ampere':
+                if self.ampere is None:
+                    attrs.append(u"")
+                else:
+                    attrs.append((u"%.1fA" % self.ampere) or u"")
+            elif name == 'weight':
+                if self.weight is None:
+                    attrs.append(u"")
+                else:
+                    attrs.append((u"%.1fkg" % self.weight) or u"")
+            else:
+                value = getattr(self, name)
+                if value is None:
+                    attrs.append(u"")
+                else:
+                    attrs.append(getattr(self, name))
+
+        return attrs
 
 
 class Rack(blockdiag.elements.NodeGroup):
@@ -118,6 +156,13 @@ class Rack(blockdiag.elements.NodeGroup):
 
 
 class Diagram(blockdiag.elements.Diagram):
+    _DiagramNode = RackItem
+
+    @classmethod
+    def clear(cls):
+        super(Diagram, cls).clear()
+        cls._DiagramNode.clear()
+
     def __init__(self):
         super(Diagram, self).__init__()
 
@@ -125,6 +170,14 @@ class Diagram(blockdiag.elements.Diagram):
 
     def set_rackheight(self, value):
         self.racks[0].colheight = int(value)
+
+    def set_plugin(self, name, attrs):
+        if name == 'attributes':
+            kwargs = dict([a.name, a.value] for a in attrs)
+            handler = NodeAttributes(self, **kwargs)
+            plugins.install_node_handler(handler)
+        else:
+            super(Diagram, self).set_plugin(name, attrs)
 
     def fixiate(self):
         self.colwidth = sum(r.colwidth for r in self.racks)

@@ -49,6 +49,7 @@ RackItem = namedtuple('RackItem', 'number label attrs')
 Attr = namedtuple('Attr', 'name value')
 Rack = namedtuple('Rack', 'id stmts')
 DefAttrs = namedtuple('DefAttrs', 'object attrs')
+AttrPlugin = namedtuple('AttrPlugin', 'name attrs')
 
 
 class ParseException(Exception):
@@ -120,9 +121,17 @@ def parse(seq):
         op_('}')
         >> unarg(Rack))
 
+    # plugin definition
+    plugin_stmt = (
+        skip(n('plugin')) +
+        id +
+        attr_list
+        >> unarg(AttrPlugin))
+
     stmt = (
           rack
         | rackitem_stmt
+        | plugin_stmt
         | a_list
     )
     stmt_list = many(stmt + skip(maybe(op(';'))))
