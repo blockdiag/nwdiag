@@ -17,6 +17,7 @@ import os
 from docutils import nodes
 from docutils.parsers import rst
 from rackdiag import diagparser
+from rackdiag.elements import RackItem
 from rackdiag.builder import ScreenNodeBuilder
 from rackdiag.DiagramDraw import DiagramDraw
 from blockdiag.utils.rst import directives
@@ -77,26 +78,18 @@ class RackdiagDirective(directives.BlockdiagDirective):
         return image
 
     def description_table(self, diagram):
-        descriptions = []
-        widths = [25, 50, 50, 50, 50, 50]
-        headers = ['No', 'Name', 'Height', 'Capacity', 'Weight', 'Description']
-        nodes = diagram.traverse_nodes()
+        nodes = diagram.traverse_nodes
+        widths = [25] + [50] * (len(RackItem.desctable) - 1)
+        headers = [RackItem.attrname[name] for name in RackItem.desctable]
 
-        for n in nodes:
-            label = n.label or n.id
-            units = u"%dU" % n.colheight
-            ampere = n.ampere and (u"%.1fA" % n.ampere) or ''
-            weight = n.weight and (u"%.1fkg" % n.weight) or ''
-
-            record = [n.number, label, units, ampere, weight, n.description]
-            descriptions.append(record)
+        descriptions = [n.to_desctable() for n in nodes()]
         descriptions.sort(directives.cmp_node_number)
 
         # records for total
-        total = ['-', 'Total', '', '', '', '']
-        total[2] = u"%dU" % sum(n.colheight for n in nodes  if n.colheight)
-        total[3] = u"%.1fA" % sum(n.ampere for n in nodes  if n.ampere)
-        total[4] = u"%.1fkg" % sum(n.weight for n in nodes  if n.weight)
+        total = ['-', 'Total'] + [''] * (len(RackItem.desctable) - 2)
+        total[2] = u"%dU" % sum(n.colheight for n in nodes()  if n.colheight)
+        total[3] = u"%.1fA" % sum(n.ampere for n in nodes()  if n.ampere)
+        total[4] = u"%.1fkg" % sum(n.weight for n in nodes()  if n.weight)
         descriptions.append(total)
 
         for i in range(len(headers) - 1, -1, -1):

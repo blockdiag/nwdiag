@@ -44,6 +44,8 @@ class DiagramTreeBuilder:
                 _rack = Rack()
                 self.diagram.racks.append(_rack)
                 self.instantiate(_rack, stmt)
+            elif isinstance(stmt, diagparser.AttrPlugin):
+                self.diagram.set_plugin(stmt.name, stmt.attrs)
 
 
 class DiagramLayoutManager:
