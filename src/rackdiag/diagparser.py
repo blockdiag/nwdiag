@@ -64,11 +64,11 @@ def tokenize(str):
         ('NL',      (r'[\r\n]+',)),
         ('Space',   (r'[ \t\r\n]+',)),
         ('RackItem', (r':[^\r\n\[]+',)),
-        ('Name',    (ur'[A-Za-z_\u0080-\uffff]'
-                     ur'[A-Za-z_\-.0-9\u0080-\uffff]*',)),
         ('Units',   (r'([0-9]+U|[0-9]+(?:\.[0-9]+)?(A|kg))',)),
-        ('Op',      (r'[{}:;,=\[\]]',)),
         ('Number',  (r'[0-9]+',)),
+        ('Name',    (ur'[A-Za-z_0-9\u0080-\uffff]'
+                     ur'[A-Za-z_\-.0-9\u0080-\uffff]*',)),
+        ('Op',      (r'[{}:;,=\[\]]',)),
         ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),
     ]
     useless = ['Comment', 'NL', 'Space']
