@@ -55,7 +55,7 @@ def parse_option():
         try:
             import reportlab.pdfgen.canvas
         except ImportError:
-            msg = "ERROR: colud not output PDF format; Install reportlab\n"
+            msg = "ERROR: could not output PDF format; Install reportlab\n"
             sys.stderr.write(msg)
             sys.exit(0)
 
