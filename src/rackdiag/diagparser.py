@@ -136,7 +136,7 @@ def parse(seq):
     )
     stmt_list = many(stmt + skip(maybe(op(';'))))
     graph = (
-        maybe(n('diagram')) +
+        maybe(n('diagram') | n('rackdiag')) +
         maybe(id) +
         op_('{') +
         stmt_list +
