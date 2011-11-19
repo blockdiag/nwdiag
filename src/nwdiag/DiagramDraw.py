@@ -132,8 +132,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         if network.display_label:
             m = self.metrics.network(network)
             self.drawer.textarea(m.textbox, network.display_label,
-                                 fill=network.textcolor, halign="right",
-                                 fontsize=self.metrics.fontsize_for(network))
+                                 self.metrics.font_for(network),
+                                 fill=network.textcolor, halign="right")
 
     def node(self, node, **kwargs):
         m = self.metrics
@@ -144,6 +144,7 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
             if connector.network in node.address:
                 label = node.address[connector.network]
                 self.drawer.textarea(connector.textbox, label,
+                                     self.metrics.font_for(node),
                                      fill=node.textcolor, halign="left")
 
         super(DiagramDraw, self).node(node, **kwargs)
@@ -156,8 +157,8 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         if group.label:
             m = self.metrics.cell(group)
             self.drawer.textarea(m.grouplabelbox, group.label,
-                                 valign='top', fill=group.textcolor,
-                                 fontsize=self.metrics.fontsize_for(group))
+                                 self.metrics.font_for(group),
+                                 valign='top', fill=group.textcolor)
 
 
 from DiagramMetrics import DiagramMetrics

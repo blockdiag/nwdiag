@@ -19,6 +19,7 @@ from blockdiag.utils import Box
 
 class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
     def _draw_elements(self, **kwargs):
+        default_font = self.metrics.font_for(None)
 
         for rack in self.diagram.racks:
             frame = self.metrics.cell(rack, use_padding=False).box
@@ -28,14 +29,14 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
             for i in range(rack.colheight):
                 box = self.metrics.racknumber(rack, i)
                 number = u"%d" % (i + 1)
-                self.drawer.textarea(box, number, halign='right',
+                self.drawer.textarea(box, number, default_font, halign='right',
                                      fill=self.diagram.textcolor)
 
             if rack.display_label:
                 box = self.metrics.racklabel(rack)
-                self.drawer.textarea(box, rack.display_label,
+                self.drawer.textarea(box, rack.display_label, default_font,
                                      fill=rack.textcolor,
-                                     fontsize=self.metrics.fontsize_for(rack))
+                                     font=self.metrics.font_for(rack))
 
         super(DiagramDraw, self)._draw_elements(**kwargs)
 
