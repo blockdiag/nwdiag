@@ -34,9 +34,9 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
             if rack.display_label:
                 box = self.metrics.racklabel(rack)
-                self.drawer.textarea(box, rack.display_label, default_font,
-                                     fill=rack.textcolor,
-                                     font=self.metrics.font_for(rack))
+                self.drawer.textarea(box, rack.display_label,
+                                     self.metrics.font_for(rack),
+                                     fill=rack.textcolor)
 
         super(DiagramDraw, self)._draw_elements(**kwargs)
 
