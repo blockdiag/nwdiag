@@ -117,6 +117,14 @@ class Diagram(blockdiag.elements.Diagram):
         super(Diagram, self).set_default_textcolor(color)
         self._Network.set_default_text_color(self.textcolor)
 
+    def set_default_fontsize(self, fontsize):
+        super(Diagram, self).set_default_fontsize(fontsize)
+        self._Network.set_default_fontsize(fontsize)
+
+    def set_default_fontfamily(self, familyname):
+        super(Diagram, self).set_default_fontfamily(familyname)
+        self._Network.set_default_fontfamily(familyname)
+
     def set_default_network_color(self, color):
         color = images.color_to_rgb(color)
         self._Network.set_default_color(color)
