@@ -4,6 +4,7 @@
   span_width = 32;
   span_height = 32;
   default_fontsize = 16;
+  default_fontfamily = 'serif';
   default_network_color = red;
   default_textcolor = red;
   default_linecolor = red;

@@ -24,7 +24,10 @@ def test_diagram_attributes():
     assert screen.span_width == 32
     assert screen.span_height == 32
     assert screen.nodes[0].fontsize == 16
+    assert screen.nodes[0].fontfamily == 'serif'
     assert screen.networks[0].color == (255, 0, 0)
+    assert screen.networks[0].fontsize == 16
+    assert screen.networks[0].fontfamily == 'serif'
 
 
 def test_node_attributes():
