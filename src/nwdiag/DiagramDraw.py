@@ -140,9 +140,13 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
 
         for connector in m.node(node).connectors:
             self.draw_connector(connector)
+            if hasattr(connector, 'subject'):
+                network = connector.subject.network
+            else:
+                network = connector.network
 
-            if connector.network in node.address:
-                label = node.address[connector.network]
+            if network in node.address:
+                label = node.address[network]
                 self.drawer.textarea(connector.textbox, label,
                                      self.metrics.font_for(node),
                                      fill=node.textcolor, halign="left")
