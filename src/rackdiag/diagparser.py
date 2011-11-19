@@ -35,6 +35,7 @@ At the moment, the parser builds only a parse tree, not an abstract syntax tree
   [1]: http://www.graphviz.org/doc/info/lang.html
 '''
 
+import re
 import codecs
 from re import MULTILINE, DOTALL
 from funcparserlib.lexer import make_tokenizer, Token, LexerError
@@ -89,7 +90,9 @@ def parse(seq):
     number = some(lambda t: t.type == 'Number').named('number') >> tokval
     rackitem = some(lambda t: t.type == 'RackItem').named('rackitem') >> tokval
     make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
-    make_rackitem = lambda no, text, attr: RackItem(no, text[1:].strip(), attr)
+
+    racklabel = lambda text: re.sub("^:\s*(.*?)\s*;?$", "\\1", text)
+    make_rackitem = lambda no, text, attr: RackItem(no, racklabel(text), attr)
 
     a_list = (
         id +
