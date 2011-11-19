@@ -23,7 +23,7 @@ def test_diagram_attributes():
     assert screen.node_height == 160
     assert screen.span_width == 32
     assert screen.span_height == 32
-    assert screen.default_fontsize == 16
+    assert screen.nodes[0].fontsize == 16
     assert screen.networks[0].color == (255, 0, 0)
 
 

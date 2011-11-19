@@ -13,5 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from nwdiag import diagparser, builder, DiagramDraw
+from blockdiag.utils import collections
+from blockdiag.utils.fontmap import FontMap
+from nwdiag import command, diagparser, builder, DiagramDraw
 from nwdiag.utils.rst.directives import nwdiag, NwdiagDirective

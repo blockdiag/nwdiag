@@ -13,5 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from rackdiag import diagparser, builder, DiagramDraw
+from blockdiag.utils import collections
+from blockdiag.utils.fontmap import FontMap
+from rackdiag import command, diagparser, builder, DiagramDraw
 from rackdiag.utils.rst.directives import rackdiag, RackdiagDirective
