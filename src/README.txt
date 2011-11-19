@@ -75,6 +75,12 @@ Apache License 2.0
 History
 =======
 
+0.7.0 (2011-11-19)
+------------------
+* Accept N/A rack-unit
+* Add fontfamily attribute for switching fontface
+* Fix bugs
+
 0.6.1 (2011-11-06)
 ------------------
 * [rackdiag] Support multiple racks rendering 
