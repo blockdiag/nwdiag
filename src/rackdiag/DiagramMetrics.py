@@ -27,9 +27,10 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         self.span_width = 0
         super(DiagramMetrics, self).__init__(diagram, **kwargs)
 
-        labels = [r.display_label for r in diagram.racks  if r.display_label]
-        if labels:
-            labelheight = max(self.textsize(l).y for l in labels) + \
+        labelsize = [self.textsize(r.display_label, font=self.font_for(r)) \
+                     for r in diagram.racks  if r.display_label]
+        if labelsize:
+            labelheight = max(size.y for size in labelsize) + \
                           self.line_spacing * 2
         else:
             labelheight = 0
@@ -52,7 +53,7 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
 
     def racklabel(self, rack):
         cell = self.cell(rack)
-        textsize = self.textsize(rack.display_label)
+        textsize = self.textsize(rack.display_label, font=self.font_for(rack))
         y1 = cell.y1 - textsize.y - self.line_spacing * 2
         return Box(cell.x1, y1, cell.x2, cell.y1)
 
