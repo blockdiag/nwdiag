@@ -19,7 +19,6 @@ from utils.math import lcm
 from blockdiag import plugins
 from blockdiag.elements import *
 from blockdiag.utils import XY
-from rackdiag.plugins import NodeAttributes
 
 
 class RackItem(blockdiag.elements.DiagramNode):
@@ -170,14 +169,6 @@ class Diagram(blockdiag.elements.Diagram):
 
     def set_rackheight(self, value):
         self.racks[0].colheight = int(value)
-
-    def set_plugin(self, name, attrs):
-        if name == 'attributes':
-            kwargs = dict([a.name, a.value] for a in attrs)
-            handler = NodeAttributes(self, **kwargs)
-            plugins.install_node_handler(handler)
-        else:
-            super(Diagram, self).set_plugin(name, attrs)
 
     def fixiate(self):
         self.colwidth = sum(r.colwidth for r in self.racks)
