@@ -44,6 +44,7 @@ setup(
          test=[
              'Nose',
              'pep8',
+             'unittest2',
          ],
          pdf=[
              'reportlab',
