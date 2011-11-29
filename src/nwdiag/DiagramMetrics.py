@@ -36,13 +36,20 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         self.jump_radius = self.trunk_diameter
         self.page_padding = [self.span_height / 2, 0, 0, self.node_width]
 
+        for node in diagram.nodes:
+            bottom = [n for n in node.networks if n.xy.y > node.xy.y]
+            cnwidth = (len(bottom) + 1) * self.cellsize * 2
+            if self.cell(node).width < cnwidth:
+                node.width = cnwidth
+                self.spreadsheet.set_node_width(node.xy.x, cnwidth)
+
     def node(self, node):
         n = super(DiagramMetrics, self).cell(node)
         return NodeMetrics(node, self, n.x1, n.y1, n.x2, n.y2)
 
     def cell(self, node):
         if isinstance(node, elements.Network):
-            metrics = super(DiagramMetrics, self).cell(node)
+            metrics = super(DiagramMetrics, self).cell(node, use_padding=False)
         elif isinstance(node, elements.NodeGroup):
             n = super(DiagramMetrics, self).cell(node)
             metrics = GroupMetrics(node, self, n.x1, n.y1, n.x2, n.y2)

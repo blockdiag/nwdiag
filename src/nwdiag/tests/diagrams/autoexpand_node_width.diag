@@ -1,0 +1,15 @@
+{
+  network { A }
+  network { A }
+  network { A }
+  network { A }
+  network { A }
+  network { A }
+  network { A }
+  network { A }
+  network { A }
+  network { A }
+  network { A }
+
+  network { B }
+}
