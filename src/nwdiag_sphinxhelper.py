@@ -15,5 +15,7 @@
 
 from blockdiag.utils import collections
 from blockdiag.utils.fontmap import FontMap
-from nwdiag import command, diagparser, builder, DiagramDraw
+from nwdiag import command, parser, builder, drawer
+from nwdiag import parser as diagparser
+from nwdiag import drawer as DiagramDraw
 from nwdiag.utils.rst.directives import nwdiag, NwdiagDirective

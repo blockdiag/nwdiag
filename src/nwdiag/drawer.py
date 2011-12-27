@@ -13,11 +13,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import blockdiag.DiagramDraw
+import blockdiag.drawer
+from metrics import DiagramMetrics
 from blockdiag.utils import XY
 
 
-class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
+class DiagramDraw(blockdiag.drawer.DiagramDraw):
+    MetricsClass = DiagramMetrics
+
     def __init__(self, format, diagram, filename=None, **kwargs):
         super(DiagramDraw, self).__init__(format, diagram, filename, **kwargs)
         self.drawer.forward = 'vertical'
@@ -163,7 +166,3 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
             self.drawer.textarea(m.grouplabelbox, group.label,
                                  self.metrics.font_for(group),
                                  valign='top', fill=group.textcolor)
-
-
-from DiagramMetrics import DiagramMetrics
-DiagramDraw.set_metrics_class(DiagramMetrics)

@@ -16,9 +16,9 @@
 import os
 from docutils import nodes
 from docutils.parsers import rst
-from nwdiag import diagparser
+from nwdiag import parser
 from nwdiag.builder import ScreenNodeBuilder
-from nwdiag.DiagramDraw import DiagramDraw
+from nwdiag.drawer import DiagramDraw
 from blockdiag.utils.rst import directives
 
 
@@ -42,7 +42,7 @@ class NwdiagDirective(directives.BlockdiagDirective):
     node_class = nwdiag
 
     def node2diagram(self, node):
-        tree = diagparser.parse_string(node['code'])
+        tree = parser.parse_string(node['code'])
         return ScreenNodeBuilder.build(tree)
 
     def node2image(self, node, diagram):

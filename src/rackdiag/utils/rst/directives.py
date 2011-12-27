@@ -16,10 +16,10 @@
 import os
 from docutils import nodes
 from docutils.parsers import rst
-from rackdiag import diagparser
+from rackdiag import parser
 from rackdiag.elements import RackItem
 from rackdiag.builder import ScreenNodeBuilder
-from rackdiag.DiagramDraw import DiagramDraw
+from rackdiag.drawer import DiagramDraw
 from blockdiag.utils.rst import directives
 
 
@@ -43,7 +43,7 @@ class RackdiagDirective(directives.BlockdiagDirective):
     node_class = rackdiag
 
     def node2diagram(self, node):
-        tree = diagparser.parse_string(node['code'])
+        tree = parser.parse_string(node['code'])
         return ScreenNodeBuilder.build(tree)
 
     def node2image(self, node, diagram):

@@ -14,7 +14,7 @@
 #  limitations under the License.
 
 from elements import *
-import diagparser
+import parser
 from blockdiag.utils import XY
 from blockdiag.utils.collections import namedtuple
 
@@ -65,7 +65,7 @@ class DiagramTreeBuilder:
 
     def instantiate(self, network, group, tree):
         for stmt in tree.stmts:
-            if isinstance(stmt, diagparser.Node):
+            if isinstance(stmt, parser.Node):
                 node = DiagramNode.get(stmt.id)
                 node.set_attributes(network, stmt.attrs)
 
@@ -87,7 +87,7 @@ class DiagramTreeBuilder:
                 if node not in self.diagram.nodes:
                     self.diagram.nodes.append(node)
 
-            elif isinstance(stmt, diagparser.Network):
+            elif isinstance(stmt, parser.Network):
                 subnetwork = Network.get(stmt.id)
                 subnetwork.label = stmt.id
 
@@ -96,14 +96,14 @@ class DiagramTreeBuilder:
 
                 substmt = namedtuple('Statements', 'stmts')([])
                 for s in stmt.stmts:
-                    if isinstance(s, diagparser.DefAttrs):
+                    if isinstance(s, parser.DefAttrs):
                         subnetwork.set_attributes(s.attrs)
                     else:
                         substmt.stmts.append(s)
 
                 self.instantiate(subnetwork, group, substmt)
 
-            elif isinstance(stmt, diagparser.SubGraph):
+            elif isinstance(stmt, parser.SubGraph):
                 subgroup = NodeGroup.get(stmt.id)
 
                 if subgroup not in self.diagram.groups:
@@ -111,14 +111,14 @@ class DiagramTreeBuilder:
 
                 substmt = namedtuple('Statements', 'stmts')([])
                 for s in stmt.stmts:
-                    if isinstance(s, diagparser.DefAttrs):
+                    if isinstance(s, parser.DefAttrs):
                         subgroup.set_attributes(s.attrs)
                     else:
                         substmt.stmts.append(s)
 
                 self.instantiate(network, subgroup, substmt)
 
-            elif isinstance(stmt, diagparser.Edge):
+            elif isinstance(stmt, parser.Edge):
                 nodes = [DiagramNode.get(n) for n in stmt.nodes]
                 for node in nodes:
                     if node.group is None:
@@ -136,20 +136,20 @@ class DiagramTreeBuilder:
                     if nw:
                         self.diagram.networks.append(nw)
 
-            elif isinstance(stmt, diagparser.Route):
+            elif isinstance(stmt, parser.Route):
                 nodes = [DiagramNode.get(n) for n in stmt.nodes]
                 for node1, node2 in zip(nodes[:-1], nodes[1:]):
                     route = Route(node1, node2)
                     route.set_attributes(stmt.attrs)
                     self.diagram.routes.append(route)
 
-            elif isinstance(stmt, diagparser.DefAttrs):
+            elif isinstance(stmt, parser.DefAttrs):
                 self.diagram.set_attributes(stmt.attrs)
 
-            elif isinstance(stmt, diagparser.AttrPlugin):
+            elif isinstance(stmt, parser.AttrPlugin):
                 self.diagram.set_plugin(stmt.name, stmt.attrs)
 
-            elif isinstance(stmt, diagparser.AttrClass):
+            elif isinstance(stmt, parser.AttrClass):
                 name = unquote(stmt.name)
                 Diagram.classes[name] = stmt
 

@@ -14,7 +14,7 @@
 #  limitations under the License.
 
 from elements import *
-import diagparser
+import parser
 from blockdiag.utils import XY
 
 
@@ -31,20 +31,20 @@ class DiagramTreeBuilder:
 
     def instantiate(self, rack, tree):
         for stmt in tree.stmts:
-            if isinstance(stmt, diagparser.Attr):
+            if isinstance(stmt, parser.Attr):
                 try:
                     rack.set_attribute(stmt)
                 except AttributeError:
                     self.diagram.set_attribute(stmt)
-            elif isinstance(stmt, diagparser.RackItem):
+            elif isinstance(stmt, parser.RackItem):
                 item = RackItem(stmt.number, stmt.label)
                 item.set_attributes(stmt.attrs)
                 rack.nodes.append(item)
-            elif isinstance(stmt, diagparser.Rack):
+            elif isinstance(stmt, parser.Rack):
                 _rack = Rack()
                 self.diagram.racks.append(_rack)
                 self.instantiate(_rack, stmt)
-            elif isinstance(stmt, diagparser.AttrPlugin):
+            elif isinstance(stmt, parser.AttrPlugin):
                 self.diagram.set_plugin(stmt.name, stmt.attrs)
 
 

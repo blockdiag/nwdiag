@@ -15,5 +15,7 @@
 
 from blockdiag.utils import collections
 from blockdiag.utils.fontmap import FontMap
-from rackdiag import command, diagparser, builder, DiagramDraw
+from rackdiag import command, parser, builder, drawer
+from rackdiag import parser as diagparser
+from rackdiag import drawer as DiagramDraw
 from rackdiag.utils.rst.directives import rackdiag, RackdiagDirective

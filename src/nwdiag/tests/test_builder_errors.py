@@ -3,7 +3,7 @@
 import tempfile
 from nwdiag.builder import *
 from nwdiag.elements import *
-from nwdiag.diagparser import *
+from nwdiag.parser import *
 from nose.tools import raises
 
 
