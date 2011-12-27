@@ -13,11 +13,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import blockdiag.DiagramDraw
+import blockdiag.drawer
+from metrics import DiagramMetrics
 from blockdiag.utils import Box
 
 
-class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
+class DiagramDraw(blockdiag.drawer.DiagramDraw):
+    MetricsClass = DiagramMetrics
+
     def _draw_elements(self, **kwargs):
         default_font = self.metrics.font_for(None)
 
@@ -55,7 +58,3 @@ class DiagramDraw(blockdiag.DiagramDraw.DiagramDraw):
         label, node.label = node.label, node.display_label
         super(DiagramDraw, self).node(node, **kwargs)
         node.label = label
-
-
-from DiagramMetrics import DiagramMetrics
-DiagramDraw.set_metrics_class(DiagramMetrics)
