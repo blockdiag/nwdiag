@@ -17,10 +17,7 @@ import nwdiag
 import nwdiag.builder
 import nwdiag.drawer
 import nwdiag.parser
-from blockdiag.utils.bootstrap import Application, Options
-
-# for compatibility
-from blockdiag.utils.bootstrap import create_fontmap, detectfont
+from blockdiag.utils.bootstrap import Application
 
 
 class NwdiagApp(Application):

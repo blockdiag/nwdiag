@@ -17,10 +17,7 @@ import rackdiag
 import rackdiag.builder
 import rackdiag.drawer
 import rackdiag.parser
-from blockdiag.utils.bootstrap import Application, Options
-
-# for compatibility
-from blockdiag.utils.bootstrap import create_fontmap, detectfont
+from blockdiag.utils.bootstrap import Application
 
 
 class RackdiagApp(Application):
