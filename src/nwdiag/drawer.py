@@ -42,7 +42,7 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
 
     def trunklines_shadow(self):
         for network in self.diagram.networks:
-            if network.hidden == False:
+            if network.hidden == False and network.color != 'none':
                 self.trunkline(network, shadow=True)
 
     def trunklines(self):
