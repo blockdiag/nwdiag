@@ -137,8 +137,8 @@ class NodeMetrics(blockdiag.DiagramMetrics.NodeMetrics):
                     dx = int(math.floor(base_x * m.cellsize * 2))
 
                 width = m.node_width + m.span_width
-                textbox = [x + dx - m.cellsize, y2 - m.span_height / 2,
-                           x + width - m.cellsize * 2, y2]
+                textbox = [x + dx + m.cellsize / 2, y2 - m.span_height / 2,
+                           x + width - m.cellsize / 2, y2]
                 line = [XY(x + dx, y1), XY(x + dx, y2)]
 
                 cn = Connector(network, line, textbox)
