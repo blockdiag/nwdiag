@@ -27,8 +27,8 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         self.span_width = 0
         super(DiagramMetrics, self).__init__(diagram, **kwargs)
 
-        labelsize = [self.textsize(r.display_label, font=self.font_for(r)) \
-                     for r in diagram.racks  if r.display_label]
+        labelsize = [self.textsize(r.display_label, font=self.font_for(r))
+                     for r in diagram.racks if r.display_label]
         if labelsize:
             labelheight = max(size.y for size in labelsize) + \
                           self.line_spacing * 2

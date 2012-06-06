@@ -42,13 +42,13 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
 
     def trunklines_shadow(self):
         for network in self.diagram.networks:
-            if network.hidden == False and network.color != 'none':
+            if network.hidden is False and network.color != 'none':
                 self.trunkline(network, shadow=True)
 
     def trunklines(self):
         metrics = self.metrics
         for network in self.diagram.networks:
-            if network.hidden == False:
+            if network.hidden is False:
                 self.trunkline(network)
 
                 # FIXME: first network links to global network
