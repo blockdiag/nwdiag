@@ -174,7 +174,7 @@ class DiagramLayoutManager:
         networks = self.diagram.networks
 
         if group:
-            nodes = (n for n in self.diagram.nodes  if n.group == group)
+            nodes = (n for n in self.diagram.nodes if n.group == group)
         else:
             nodes = self.diagram.nodes
 
@@ -182,7 +182,7 @@ class DiagramLayoutManager:
             if node.layouted:
                 continue
 
-            joined = [g for g in node.networks if g.hidden == False]
+            joined = [g for g in node.networks if g.hidden is False]
             y1 = min(networks.index(g) for g in node.networks)
             if joined:
                 y2 = max(networks.index(g) for g in joined)
@@ -194,7 +194,7 @@ class DiagramLayoutManager:
             else:
                 nw = [n for n in node.networks if n.xy.y == y1][0]
                 nodes = [n for n in self.diagram.nodes if nw in n.networks]
-                layouted = [n for n in nodes  if n.xy.x > 0]
+                layouted = [n for n in nodes if n.xy.x > 0]
 
                 starts = 0
                 if layouted:
@@ -205,7 +205,7 @@ class DiagramLayoutManager:
                     if basenode.xy.y == y1:
                         starts = basenode.xy.x + 1
                     elif commonnw and \
-                         list(commonnw)[0].hidden == True:
+                         list(commonnw)[0].hidden is True:
                         starts = basenode.xy.x
                     else:
                         starts = basenode.xy.x + 1 - len(nodes)
@@ -237,7 +237,7 @@ class DiagramLayoutManager:
 
     def set_network_size(self):
         for network in self.diagram.networks:
-            nodes = [n for n in self.diagram.nodes  if network in n.networks]
+            nodes = [n for n in self.diagram.nodes if network in n.networks]
             nodes.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
 
             x0 = min(n.xy.x for n in nodes)
@@ -277,13 +277,13 @@ class ScreenNodeBuilder:
     @classmethod
     def update_network_status(klass, diagram):
         for node in diagram.nodes:
-            above = [nw for nw in node.networks  if nw.xy.y <= node.xy.y]
-            if len(above) > 1 and [nw for nw in above  if nw.hidden]:
+            above = [nw for nw in node.networks if nw.xy.y <= node.xy.y]
+            if len(above) > 1 and [nw for nw in above if nw.hidden]:
                 for nw in above:
                     nw.hidden = False
 
-            below = [nw for nw in node.networks  if nw.xy.y > node.xy.y]
-            if len(below) > 1 and [nw for nw in below  if nw.hidden]:
+            below = [nw for nw in node.networks if nw.xy.y > node.xy.y]
+            if len(below) > 1 and [nw for nw in below if nw.hidden]:
                 for nw in below:
                     nw.hidden = False
 

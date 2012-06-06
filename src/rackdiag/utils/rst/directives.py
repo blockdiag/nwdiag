@@ -87,9 +87,9 @@ class RackdiagDirective(directives.BlockdiagDirective):
 
         # records for total
         total = ['-', 'Total'] + [''] * (len(RackItem.desctable) - 2)
-        total[2] = u"%dU" % sum(n.colheight for n in nodes()  if n.colheight)
-        total[3] = u"%.1fA" % sum(n.ampere for n in nodes()  if n.ampere)
-        total[4] = u"%.1fkg" % sum(n.weight for n in nodes()  if n.weight)
+        total[2] = u"%dU" % sum(n.colheight for n in nodes() if n.colheight)
+        total[3] = u"%.1fA" % sum(n.ampere for n in nodes() if n.ampere)
+        total[4] = u"%.1fkg" % sum(n.weight for n in nodes() if n.weight)
         descriptions.append(total)
 
         for i in range(len(headers) - 1, -1, -1):

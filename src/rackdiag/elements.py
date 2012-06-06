@@ -124,13 +124,13 @@ class Rack(blockdiag.elements.NodeGroup):
     def _update_colwidth(self):
         widths = []
         for i in range(self.colheight):
-            nodes = [n for n in self.nodes  if n.xy.y == i]
+            nodes = [n for n in self.nodes if n.xy.y == i]
             if len(nodes) > 1:
                 widths.append(len(nodes))
 
         self.colwidth = lcm(*widths) or 1
         for i in range(self.colheight):
-            nodes = [n for n in self.nodes  if n.xy.y == i]
+            nodes = [n for n in self.nodes if n.xy.y == i]
             if nodes:
                 width = self.colwidth / len(nodes)
                 for i, node in enumerate(nodes):

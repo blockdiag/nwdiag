@@ -67,7 +67,7 @@ class DiagramLayoutManager:
                 else:
                     y = item.number - 1
 
-                nodes = [n for n in rack.nodes  if n.xy.y == y]
+                nodes = [n for n in rack.nodes if n.xy.y == y]
                 if nodes:
                     x = max(n.xy.x for n in nodes) + 1
                 else:
