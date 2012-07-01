@@ -38,8 +38,7 @@ At the moment, the parser builds only a parse tree, not an abstract syntax tree
 import codecs
 from re import MULTILINE, DOTALL
 from funcparserlib.lexer import make_tokenizer, Token, LexerError
-from funcparserlib.parser import (some, a, maybe, many, finished, skip,
-    oneplus, forward_decl, NoParseError)
+from funcparserlib.parser import (some, a, maybe, many, finished, skip)
 
 from blockdiag.utils.namedtuple import namedtuple
 

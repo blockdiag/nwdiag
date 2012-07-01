@@ -16,7 +16,6 @@
 import re
 import blockdiag.elements
 from utils.math import lcm
-from blockdiag import plugins
 from blockdiag.elements import *
 from blockdiag.utils import XY
 

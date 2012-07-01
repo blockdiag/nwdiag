@@ -19,3 +19,6 @@ from rackdiag import command, parser, builder, drawer
 from rackdiag import parser as diagparser
 from rackdiag import drawer as DiagramDraw
 from rackdiag.utils.rst.directives import rackdiag, RackdiagDirective
+
+(collections, FontMap, command, parser, builder, drawer,
+ diagparser, DiagramDraw, rackdiag, RackdiagDirective)

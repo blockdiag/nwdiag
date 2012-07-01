@@ -19,3 +19,6 @@ from nwdiag import command, parser, builder, drawer
 from nwdiag import parser as diagparser
 from nwdiag import drawer as DiagramDraw
 from nwdiag.utils.rst.directives import nwdiag, NwdiagDirective
+
+(collections, FontMap, command, parser, builder, drawer,
+ diagparser, DiagramDraw, nwdiag, NwdiagDirective)
