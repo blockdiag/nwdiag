@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import tempfile
 from nwdiag.builder import *
 from nwdiag.elements import *
 from nwdiag.parser import *
@@ -19,4 +18,4 @@ def __build_diagram(filename):
 
 @raises(RuntimeError)
 def test_peer_network_in_same_node_diagram():
-    screen = __build_diagram('errors/peer_network_in_same_node.diag')
+    __build_diagram('errors/peer_network_in_same_node.diag')

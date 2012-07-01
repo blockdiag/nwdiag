@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import tempfile
 from nwdiag.builder import *
 from nwdiag.elements import *
 from nwdiag.parser import *
@@ -50,7 +49,7 @@ def test_node_address_attribute():
 def test_node_including_hyphen_diagram():
     screen = __build_diagram('node_including_hyphen.diag')
 
-    network = screen.networks[0]
+    screen.networks[0]
     assert screen.nodes[0].id == 'web-01'
     assert screen.nodes[1].id == 'web-02'
 

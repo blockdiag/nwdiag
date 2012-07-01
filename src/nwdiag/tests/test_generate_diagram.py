@@ -60,6 +60,7 @@ def test_generator():
     formats = ['svg', 'png']
     try:
         import reportlab.pdfgen.canvas
+        reportlab.pdfgen.canvas
         formats.append('pdf')
     except ImportError:
         sys.stderr.write("Skip testing about pdf exporting.\n")
