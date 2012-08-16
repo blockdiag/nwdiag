@@ -56,6 +56,7 @@ setup(
         [console_scripts]
         nwdiag = nwdiag.command:main
         rackdiag = rackdiag.command:main
+        packetdiag = packetdiag.command:main
      """,
 )
 
