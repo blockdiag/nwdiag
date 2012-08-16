@@ -31,6 +31,10 @@ class FieldItem(blockdiag.elements.DiagramNode):
         if matched:
             self.number = int(matched.group(1))
             self.colwidth = int(matched.group(2)) - self.number + 1
+
+            if self.colwidth <= 0:
+                msg = "Invalid field size definition: %s: %s\n" % (number, label)
+                raise AttributeError(msg)
         else:
             self.number = int(number)
             self.colwidth = 1
