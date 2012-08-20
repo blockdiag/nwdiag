@@ -23,4 +23,13 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
 
     def _draw_background(self):
         # do not call blockdiag.DiagramDraw#_draw_background()
-        pass
+
+        # draw measure lines and labels
+        font = self.metrics.font_for(None)
+        for i in range(self.diagram.colwidth + 1):
+            line = self.metrics.measure_line(i)
+            self.drawer.line(line, fill=self.diagram.linecolor)
+
+            if (i == 0) or (i * 2.0 % self.diagram.colwidth == 0):
+                box = self.metrics.measure_label(i)
+                self.drawer.textarea(box, unicode(i), font, fill=self.diagram.textcolor)

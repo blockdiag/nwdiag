@@ -15,7 +15,7 @@
 
 import blockdiag.DiagramMetrics
 from blockdiag.utils import Box, XY
-from blockdiag.utils.collections import defaultdict
+from blockdiag.utils.collections import defaultdict, namedtuple
 import elements
 
 
@@ -26,12 +26,38 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         self.span_height = 0
         self.span_width = 0
         self.node_width = self.cellsize * 6
+        self.colwidth = diagram.colwidth
         super(DiagramMetrics, self).__init__(diagram, **kwargs)
 
         # reset node_width FORCE
         self.spreadsheet.node_width = defaultdict(lambda: self.node_width)
 
-        self.spreadsheet.set_span_height(0, span_height)
+        self.spreadsheet.set_span_height(0, span_height * 2)
         self.spreadsheet.set_span_height(diagram.colheight, span_height)
         self.spreadsheet.set_span_width(0, span_width)
         self.spreadsheet.set_span_width(diagram.colwidth, span_width)
+
+    def measure_line(self, n):
+        _Node = namedtuple('Node', 'xy')
+
+        if n == self.colwidth:
+            node = _Node(XY(n - 1, 0))
+            pt = self.spreadsheet._node_topleft(node, use_padding=False)
+            pt.x += self.node_width
+        else:
+            node = _Node(XY(n, 0))
+            pt = self.spreadsheet._node_topleft(node, use_padding=False)
+
+        if n * 2.0 % self.colwidth == 0:
+            return (XY(pt.x, pt.y - self.cellsize * 4), pt)
+        elif n * 4.0 % self.colwidth == 0:
+            return (XY(pt.x, pt.y - self.cellsize * 4), pt)
+        else:
+            return (XY(pt.x, pt.y - self.cellsize * 2), pt)
+
+    def measure_label(self, n):
+        top, bottom = self.measure_line(n)
+        cellsize = self.cellsize
+
+        return Box(top.x - cellsize * 4, top.y - cellsize * 3,
+                   top.x + cellsize * 4, top.y)
