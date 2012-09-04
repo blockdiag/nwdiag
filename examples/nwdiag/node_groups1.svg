@@ -7,6 +7,31 @@
     </filter>
   </defs>
   <title>blockdiag</title>
+  <desc>diagram {
+  network Sample_front {
+    address = "192.168.10.0/24";
+
+    // define group
+    group web {
+      web01 [address = ".1"];
+      web02 [address = ".2"];
+    }
+  }
+  network Sample_back {
+    address = "192.168.20.0/24";
+    web01 [address = ".1"];
+    web02 [address = ".2"];
+    db01 [address = ".101"];
+    db02 [address = ".102"];
+
+    // define network using defined nodes
+    group db {
+      db01;
+      db02;
+    }
+  }
+}
+</desc>
   <rect fill="rgb(243,152,0)" height="92" style="filter:url(#filter_blur)" width="268" x="146" y="130" />
   <rect fill="rgb(243,152,0)" height="92" style="filter:url(#filter_blur)" width="268" x="450" y="274" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="104" x="155" y="162" />
@@ -22,28 +47,28 @@
   <path d="M 128 244 L 736 244 A2,4 0 0 1 736 252 L 128 252 A2,4 0 0 1 128 244" fill="rgb(185,203,228)" stroke="rgb(0,0,0)" />
   <path d="M 736 252 A2,4 0 0 1 736 244" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 128 244 L 736 244" fill="none" stroke="none" />
-  <text fill="rgb(0,0,0)" font-size="11" x="47" y="103">Sample_front</text>
-  <text fill="rgb(0,0,0)" font-size="11" x="24" y="116">192.168.10.0/24</text>
-  <text fill="rgb(0,0,0)" font-size="11" x="47" y="247">Sample_back</text>
-  <text fill="rgb(0,0,0)" font-size="11" x="24" y="260">192.168.20.0/24</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="48" y="103">Sample_front</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="28" y="116">192.168.10.0/24</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="48" y="247">Sample_back</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="28" y="260">192.168.20.0/24</text>
   <path d="M 204 108 L 204 156" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-size="11" x="208" y="136">.1</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="216" y="136">.1</text>
   <path d="M 204 196 L 204 244" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-size="11" x="208" y="224">.1</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="216" y="224">.1</text>
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="152" y="156" />
-  <text fill="rgb(0,0,0)" font-size="11" x="187" y="182">web01</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="186" y="182">web01</text>
   <path d="M 356 108 L 356 156" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-size="11" x="360" y="136">.2</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="368" y="136">.2</text>
   <path d="M 356 196 L 356 244" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-size="11" x="360" y="224">.2</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="368" y="224">.2</text>
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="304" y="156" />
-  <text fill="rgb(0,0,0)" font-size="11" x="339" y="182">web02</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="338" y="182">web02</text>
   <path d="M 508 252 L 508 300" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-size="11" x="512" y="280">.101</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="520" y="280">.101</text>
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="456" y="300" />
-  <text fill="rgb(0,0,0)" font-size="11" x="494" y="326">db01</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="494" y="326">db01</text>
   <path d="M 660 252 L 660 300" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-size="11" x="664" y="280">.102</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="672" y="280">.102</text>
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="608" y="300" />
-  <text fill="rgb(0,0,0)" font-size="11" x="646" y="326">db02</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="646" y="326">db02</text>
 </svg>

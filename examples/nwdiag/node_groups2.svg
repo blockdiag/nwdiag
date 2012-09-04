@@ -7,6 +7,27 @@
     </filter>
   </defs>
   <title>blockdiag</title>
+  <desc>diagram {
+  // define group at outside network definitions
+  group {
+    color = "#FF7777";
+
+    web01;
+    web02;
+    db01;
+  }
+
+  network dmz {
+    web01;
+    web02;
+  }
+  network internal {
+    web01;
+    web02;
+    db01;
+  }
+}
+</desc>
   <rect fill="rgb(255,119,119)" height="236" style="filter:url(#filter_blur)" width="420" x="146" y="130" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="104" x="155" y="162" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="104" x="307" y="162" />
@@ -20,17 +41,17 @@
   <path d="M 128 244 L 584 244 A2,4 0 0 1 584 252 L 128 252 A2,4 0 0 1 128 244" fill="rgb(185,203,228)" stroke="rgb(0,0,0)" />
   <path d="M 584 252 A2,4 0 0 1 584 244" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 128 244 L 584 244" fill="none" stroke="none" />
-  <text fill="rgb(0,0,0)" font-size="11" x="94" y="110">dmz</text>
-  <text fill="rgb(0,0,0)" font-size="11" x="76" y="254">internal</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="98" y="110">dmz</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="78" y="254">internal</text>
   <path d="M 204 108 L 204 156" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 204 196 L 204 244" fill="none" stroke="rgb(0,0,0)" />
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="152" y="156" />
-  <text fill="rgb(0,0,0)" font-size="11" x="187" y="182">web01</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="186" y="182">web01</text>
   <path d="M 356 108 L 356 156" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 356 196 L 356 244" fill="none" stroke="rgb(0,0,0)" />
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="304" y="156" />
-  <text fill="rgb(0,0,0)" font-size="11" x="339" y="182">web02</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="338" y="182">web02</text>
   <path d="M 508 252 L 508 300" fill="none" stroke="rgb(0,0,0)" />
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="456" y="300" />
-  <text fill="rgb(0,0,0)" font-size="11" x="494" y="326">db01</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="494" y="326">db01</text>
 </svg>
