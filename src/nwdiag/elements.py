@@ -133,9 +133,18 @@ class Diagram(blockdiag.elements.Diagram):
         super(Diagram, self).__init__()
 
         self.orientation = 'portrait'
+        self.external_connector = True
         self.groups = []
         self.networks = []
         self.routes = []
+
+    def set_external_connector(self, value):
+        value = value.lower()
+        if value == 'none':
+            self.external_connector = False
+        else:
+            msg = "WARNING: unknown external connector: %s\n" % value
+            raise AttributeError(msg)
 
     def fixiate(self):
         self.colwidth = max(n.xy.x + n.colwidth for n in self.nodes)

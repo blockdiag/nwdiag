@@ -51,8 +51,7 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
             if network.hidden is False:
                 self.trunkline(network)
 
-                # FIXME: first network links to global network
-                if network == self.diagram.networks[0]:
+                if self.diagram.external_connector and network == self.diagram.networks[0]:
                     r = metrics.trunk_diameter / 2
 
                     pt = metrics.network(network).top
