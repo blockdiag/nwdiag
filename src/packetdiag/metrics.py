@@ -25,7 +25,7 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         span_width = self.span_width
         self.span_height = 0
         self.span_width = 0
-        self.node_width = self.cellsize * 6
+        self.node_width = self.cellsize * 3
         self.colwidth = diagram.colwidth
         super(DiagramMetrics, self).__init__(diagram, **kwargs)
 
