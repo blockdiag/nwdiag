@@ -75,6 +75,14 @@ Apache License 2.0
 History
 =======
 
+0.8.0 (2011-11-19)
+------------------
+* Add packetdiag which supports generating packet-header diaagram
+* [nwdiag] Add diagram attribute: external_connector
+* Update to new package structure (blockdiag >= 1.1.2)
+* Allow # to comment syntax
+* Fix bugs
+
 0.7.0 (2011-11-19)
 ------------------
 * Accept N/A rack-unit
