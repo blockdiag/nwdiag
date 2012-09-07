@@ -75,7 +75,11 @@ Apache License 2.0
 History
 =======
 
-0.8.0 (2011-11-19)
+0.8.1 (2012-09-08)
+------------------
+* Add packetdiag_sphinxhelper
+
+0.8.0 (2012-09-06)
 ------------------
 * Add packetdiag which supports generating packet-header diaagram
 * [nwdiag] Add diagram attribute: external_connector
