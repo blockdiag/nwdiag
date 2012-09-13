@@ -22,7 +22,7 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
     MetricsClass = DiagramMetrics
 
     def _draw_elements(self, **kwargs):
-        default_font = self.metrics.font_for(None)
+        default_font = self.metrics.font_for(self.diagram)
 
         for rack in self.diagram.racks:
             frame = self.metrics.cell(rack, use_padding=False).box
