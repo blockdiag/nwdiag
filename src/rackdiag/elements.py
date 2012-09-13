@@ -106,6 +106,9 @@ class Rack(blockdiag.elements.NodeGroup):
         self.description = None
         self.descending = True
 
+    def set_default_fontsize(self, value):
+        raise AttributeError()  # Ignore and pass-through to Diagram
+
     @property
     def display_label(self):
         attrs = []
@@ -165,6 +168,10 @@ class Diagram(blockdiag.elements.Diagram):
         super(Diagram, self).__init__()
 
         self.racks = [Rack()]
+
+    def set_default_fontsize(self, value):
+        super(Diagram, self).set_default_fontsize(value)
+        self.fontsize = int(value)
 
     def set_rackheight(self, value):
         self.racks[0].colheight = int(value)
