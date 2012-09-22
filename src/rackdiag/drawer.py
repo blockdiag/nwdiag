@@ -44,7 +44,9 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
         super(DiagramDraw, self)._draw_elements(**kwargs)
 
     def _draw_background(self):
-        # do not call blockdiag.DiagramDraw#_draw_background()
+        # do not draw shadow of nodes on super()
+        self.diagram.shadow_style = 'none'
+        super(DiagramDraw, self)._draw_background()
 
         # draw shadow of frame
         dx, dy = self.metrics.shadow_offset
