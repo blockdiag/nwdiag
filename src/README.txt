@@ -75,6 +75,10 @@ Apache License 2.0
 History
 =======
 
+0.8.2 (2012-09-29)
+------------------
+* Fix bugs
+
 0.8.1 (2012-09-08)
 ------------------
 * Add packetdiag_sphinxhelper
