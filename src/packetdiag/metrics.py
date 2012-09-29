@@ -13,13 +13,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import blockdiag.DiagramMetrics
+import blockdiag.metrics
 from blockdiag.utils import Box, XY
 from blockdiag.utils.collections import defaultdict, namedtuple
 import elements
 
 
-class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
+class DiagramMetrics(blockdiag.metrics.DiagramMetrics):
     def __init__(self, diagram, **kwargs):
         span_height = self.span_height
         span_width = self.span_width
