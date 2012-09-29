@@ -14,15 +14,15 @@
 #  limitations under the License.
 
 import math
-import blockdiag.DiagramMetrics
+import blockdiag.metrics
 import elements
 from blockdiag.utils import XY
 from blockdiag.utils.collections import namedtuple
 
-cellsize = blockdiag.DiagramMetrics.DiagramMetrics.cellsize
+cellsize = blockdiag.metrics.DiagramMetrics.cellsize
 
 
-class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
+class DiagramMetrics(blockdiag.metrics.DiagramMetrics):
     node_width = cellsize * 13
     span_width = cellsize * 6
     span_height = cellsize * 13
@@ -62,7 +62,7 @@ class DiagramMetrics(blockdiag.DiagramMetrics.DiagramMetrics):
         return NetworkMetrics(self, n.x1, n.y1, n.x2, n.y2)
 
 
-class NetworkMetrics(blockdiag.DiagramMetrics.NodeMetrics):
+class NetworkMetrics(blockdiag.metrics.NodeMetrics):
     @property
     def trunkline(self):
         x0 = self.left.x
@@ -97,7 +97,7 @@ class NetworkMetrics(blockdiag.DiagramMetrics.NodeMetrics):
         return (x - width, y - height / 2, x, y + height / 2)
 
 
-class NodeMetrics(blockdiag.DiagramMetrics.NodeMetrics):
+class NodeMetrics(blockdiag.metrics.NodeMetrics):
     def __init__(self, node, metrics, x1, y1, x2, y2):
         super(NodeMetrics, self).__init__(metrics, x1, y1, x2, y2)
         self.node = node
@@ -147,7 +147,7 @@ class NodeMetrics(blockdiag.DiagramMetrics.NodeMetrics):
         return connectors
 
 
-class GroupMetrics(blockdiag.DiagramMetrics.NodeMetrics):
+class GroupMetrics(blockdiag.metrics.NodeMetrics):
     def __init__(self, group, metrics, x1, y1, x2, y2):
         super(GroupMetrics, self).__init__(metrics, x1, y1, x2, y2)
 
