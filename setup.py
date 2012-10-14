@@ -29,6 +29,7 @@ setup(
      author='Takeshi Komiya',
      author_email='i.tkomiya at gmail.com',
      url='http://blockdiag.com/',
+     download_url='http://pypi.python.org/pypi/nwdiag',
      license='Apache License 2.0',
      py_modules=['nwdiag_sphinxhelper', 'rackdiag_sphinxhelper', 'packetdiag_sphinxhelper'],
      packages=find_packages('src'),
