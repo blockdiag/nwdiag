@@ -87,8 +87,8 @@ def parse(seq):
     n = lambda s: a(Token('Name', s)) >> tokval
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
-    id = some(lambda t:
-        t.type in ['Name', 'IPAddr', 'Number', 'String']).named('id') >> tokval
+    id = some(lambda t: t.type in ['Name', 'IPAddr', 'Number', 'String']
+              ).named('id') >> tokval
     make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
     make_edge = lambda x, x2, xs, attrs: Edge([x, x2] + xs, attrs)
     make_route = lambda x, x2, xs, attrs: Route([x, x2] + xs, attrs)
@@ -160,7 +160,7 @@ def parse(seq):
         attr_list
         >> unarg(AttrPlugin))
     stmt = (
-          network
+        network
         | class_stmt
         | plugin_stmt
         | group

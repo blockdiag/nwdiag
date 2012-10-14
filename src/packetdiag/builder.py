@@ -71,7 +71,8 @@ class DiagramLayoutManager:
 
             for rx in range(x, x + field.colwidth):
                 if filled[y].get(rx):
-                    msg = "Field '%s' is conflicted to other field\n" % field.label
+                    msg = ("Field '%s' is conflicted to other field\n" %
+                           field.label)
                     raise AttributeError(msg)
                 filled[y][rx] = True
 

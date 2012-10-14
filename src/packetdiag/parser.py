@@ -83,15 +83,16 @@ def parse(seq):
     n = lambda s: a(Token('Name', s)) >> tokval
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
-    id = some(lambda t:
-        t.type in ['Name', 'Number', 'String', 'Units']).named('id') >> tokval
+    id = some(lambda t: t.type in ['Name', 'Number', 'String', 'Units']
+              ).named('id') >> tokval
     number = some(lambda t: t.type == 'Number').named('numbrer') >> tokval
     range = some(lambda t: t.type == 'Range').named('range') >> tokval
     deflabel = some(lambda t: t.type == 'DefLabel').named('deflabel') >> tokval
     make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
 
     field_label = lambda text: re.sub("^:\s*(.*?)\s*;?$", "\\1", text)
-    make_field_item = lambda no, text, attr: FieldItem(no, field_label(text), attr)
+    make_field_item = (lambda no, text, attr:
+                       FieldItem(no, field_label(text), attr))
 
     a_list = (
         id +
@@ -103,7 +104,7 @@ def parse(seq):
         >> flatten)
     graph_attr = id + op_('=') + id >> make_graph_attr
     field_item_stmt = (
-        (number | range)+
+        (number | range) +
         deflabel +
         attr_list
         >> unarg(make_field_item))
