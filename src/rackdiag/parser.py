@@ -84,8 +84,8 @@ def parse(seq):
     n = lambda s: a(Token('Name', s)) >> tokval
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
-    id = some(lambda t:
-        t.type in ['Name', 'Number', 'String', 'Units']).named('id') >> tokval
+    id = some(lambda t: t.type in ['Name', 'Number', 'String', 'Units']
+              ).named('id') >> tokval
     number = some(lambda t: t.type == 'Number').named('number') >> tokval
     rackitem = some(lambda t: t.type == 'RackItem').named('rackitem') >> tokval
     make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
@@ -110,7 +110,7 @@ def parse(seq):
 
     # rack definition
     rack_stmt = (
-          rackitem_stmt
+        rackitem_stmt
         | a_list
         | graph_attr
     )
@@ -131,7 +131,7 @@ def parse(seq):
         >> unarg(AttrPlugin))
 
     stmt = (
-          rack
+        rack
         | rackitem_stmt
         | plugin_stmt
         | a_list

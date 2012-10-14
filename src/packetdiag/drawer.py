@@ -32,4 +32,5 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
 
             if (i == 0) or (i * 2.0 % self.diagram.colwidth == 0):
                 box = self.metrics.measure_label(i)
-                self.drawer.textarea(box, unicode(i), font, fill=self.diagram.textcolor)
+                self.drawer.textarea(box, unicode(i), font,
+                                     fill=self.diagram.textcolor)

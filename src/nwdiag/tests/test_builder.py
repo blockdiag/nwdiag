@@ -43,7 +43,7 @@ def test_node_address_attribute():
     network = screen.networks[0]
     assert screen.nodes[0].address[network] == '192.168.0.1'
     assert screen.nodes[1].address[network] == \
-           '2001:0db8:bd05:01d2:288a:1fc0:0001:10ee'
+        '2001:0db8:bd05:01d2:288a:1fc0:0001:10ee'
 
 
 def test_node_including_hyphen_diagram():

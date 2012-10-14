@@ -70,8 +70,8 @@ class DiagramTreeBuilder:
                 node.set_attributes(network, stmt.attrs)
 
                 if group:
-                    if node.group and node.group != self.diagram and \
-                       group != node.group:
+                    if (node.group and node.group != self.diagram and
+                       (group != node.group)):
                         msg = "DiagramNode could not belong to two groups"
                         raise RuntimeError(msg)
                     node.group = group
@@ -204,8 +204,7 @@ class DiagramLayoutManager:
 
                     if basenode.xy.y == y1:
                         starts = basenode.xy.x + 1
-                    elif commonnw and \
-                         list(commonnw)[0].hidden is True:
+                    elif commonnw and list(commonnw)[0].hidden is True:
                         starts = basenode.xy.x
                     else:
                         starts = basenode.xy.x + 1 - len(nodes)
