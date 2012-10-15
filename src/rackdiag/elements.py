@@ -93,6 +93,8 @@ class RackItem(blockdiag.elements.DiagramNode):
                 value = getattr(self, name)
                 if value is None:
                     attrs.append(u"")
+                elif isinstance(value, int):
+                    attrs.append(str(value))
                 else:
                     attrs.append(getattr(self, name))
 
