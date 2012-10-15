@@ -85,7 +85,7 @@ def parse(seq):
     op_ = lambda s: skip(op(s))
     id = some(lambda t: t.type in ['Name', 'Number', 'String', 'Units']
               ).named('id') >> tokval
-    number = some(lambda t: t.type == 'Number').named('numbrer') >> tokval
+    number = some(lambda t: t.type == 'Number').named('number') >> tokval
     range = some(lambda t: t.type == 'Range').named('range') >> tokval
     deflabel = some(lambda t: t.type == 'DefLabel').named('deflabel') >> tokval
     make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])

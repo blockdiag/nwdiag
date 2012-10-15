@@ -20,8 +20,8 @@ from blockdiag.utils import XY
 
 
 class FieldItem(blockdiag.elements.DiagramNode):
-    desctable = []
-    attrname = {}
+    desctable = ['number', 'label', 'description']
+    attrname = dict(number='Seq', label='Name', description='Description')
 
     def __init__(self, number, label):
         super(FieldItem, self).__init__(None)

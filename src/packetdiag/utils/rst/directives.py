@@ -23,9 +23,13 @@ from packetdiag.drawer import DiagramDraw
 from blockdiag.utils.rst import directives
 
 
-format = 'PNG'
-antialias = False
-fontpath = None
+directive_options = dict(format='PNG',
+                         antialias=False,
+                         fontpath=None,
+                         outputdir=None,
+                         nodoctype=False,
+                         noviewbox=False,
+                         inline_svg=False)
 
 
 class packetdiag(nodes.General, nodes.Element):
@@ -42,19 +46,30 @@ class PacketdiagDirective(directives.BlockdiagDirective):
     name = "packetdiag"
     node_class = packetdiag
 
+    @property
+    def global_options(self):
+        return directive_options
+
     def node2diagram(self, node):
         tree = parser.parse_string(node['code'])
         return ScreenNodeBuilder.build(tree)
 
     def node2image(self, node, diagram):
-        filename = self._filename(node)
+        filename = self.image_filename(node)
         fontpath = self.detectfont()
-        drawer = DiagramDraw(format, diagram, filename,
-                             font=fontpath, antialias=antialias)
+        format = self.global_options['format'].lower()
+
+        kwargs = dict(self.global_options)
+        del kwargs['format']
+        drawer = DiagramDraw(format, diagram, filename, **kwargs)
 
         if not os.path.isfile(filename):
             drawer.draw()
-            drawer.save()
+            if format == 'svg' and self.global_options['inline_svg'] is True:
+                content = drawer.save(None)
+                return nodes.raw('', content, format='html')
+            else:
+                drawer.save()
 
         size = drawer.pagesize()
         options = node['options']
@@ -62,7 +77,7 @@ class PacketdiagDirective(directives.BlockdiagDirective):
             ratio = float(options['maxwidth']) / size[0]
             thumb_size = (options['maxwidth'], size[1] * ratio)
 
-            thumb_filename = self._filename(node, prefix='_thumb')
+            thumb_filename = self.image_filename(node, prefix='_thumb')
             if not os.path.isfile(thumb_filename):
                 drawer.filename = thumb_filename
                 drawer.draw()
@@ -98,9 +113,14 @@ class PacketdiagDirective(directives.BlockdiagDirective):
 
 
 def setup(**kwargs):
-    global format, antialias, fontpath
-    format = kwargs.get('format', 'PNG')
-    antialias = kwargs.get('antialias', False)
-    fontpath = kwargs.get('fontpath', None)
+    global directive_options
+
+    directive_options['format'] = kwargs.get('format', 'PNG')
+    directive_options['antialias'] = kwargs.get('antialias', False)
+    directive_options['fontpath'] = kwargs.get('fontpath', None)
+    directive_options['outputdir'] = kwargs.get('outputdir', None)
+    directive_options['nodoctype'] = kwargs.get('nodoctype', False)
+    directive_options['noviewbox'] = kwargs.get('noviewbox', False)
+    directive_options['inline_svg'] = kwargs.get('inline_svg', False)
 
     rst.directives.register_directive("packetdiag", PacketdiagDirective)
