@@ -50,6 +50,9 @@ setup(
          pdf=[
              'reportlab',
          ],
+         rst=[
+             'docutils',
+         ],
      ),
      test_suite='nose.collector',
      tests_require=['Nose','pep8'],
