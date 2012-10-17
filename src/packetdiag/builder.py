@@ -53,10 +53,12 @@ class DiagramLayoutManager:
 
                     splitted = field.duplicate()
                     splitted.colwidth = colwidth
+                    splitted.separated_right = True
                     self.diagram.fields.append(splitted)
 
                     field.number += colwidth
                     field.colwidth -= colwidth
+                    field.separated_left = True
 
             yield field
 
