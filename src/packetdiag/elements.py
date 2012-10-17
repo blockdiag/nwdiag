@@ -20,12 +20,15 @@ from blockdiag.utils import XY
 
 
 class FieldItem(blockdiag.elements.DiagramNode):
+    shape = '_packet_node'
     desctable = ['number', 'label', 'description']
     attrname = dict(number='Seq', label='Name', description='Description')
 
     def __init__(self, number, label):
         super(FieldItem, self).__init__(None)
         self.label = label
+        self.separated_right = False
+        self.separated_left = False
 
         matched = re.match('^(\d+)-(\d+)$', number)
         if matched:
