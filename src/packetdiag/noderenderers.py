@@ -45,7 +45,6 @@ class PacketNode(NodeShape):
             style = self.node.style
 
         drawer.line((_from, _to), fill=self.node.linecolor, style=style)
-         
 
 
 def setup(self):
