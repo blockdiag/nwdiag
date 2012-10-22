@@ -30,7 +30,7 @@ class DiagramMetrics(blockdiag.metrics.DiagramMetrics):
         labelsize = [self.textsize(r.display_label, font=self.font_for(r))
                      for r in diagram.racks if r.display_label]
         if labelsize:
-            labelheight = (max(size.y for size in labelsize) +
+            labelheight = (max(size.height for size in labelsize) +
                            self.line_spacing * 2)
         else:
             labelheight = 0
@@ -54,7 +54,7 @@ class DiagramMetrics(blockdiag.metrics.DiagramMetrics):
     def racklabel(self, rack):
         cell = self.cell(rack)
         textsize = self.textsize(rack.display_label, font=self.font_for(rack))
-        y1 = cell.y1 - textsize.y - self.line_spacing * 2
+        y1 = cell.y1 - textsize.height - self.line_spacing * 2
         return Box(cell.x1, y1, cell.x2, cell.y1)
 
     def racknumber(self, rack, number):

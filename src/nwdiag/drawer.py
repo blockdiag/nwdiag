@@ -15,7 +15,7 @@
 
 import blockdiag.drawer
 from metrics import DiagramMetrics
-from blockdiag.utils import XY
+from blockdiag.utils import Box, XY
 
 
 class DiagramDraw(blockdiag.drawer.DiagramDraw):
@@ -67,14 +67,14 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
         r = metrics.trunk_diameter / 2
 
         pt1, pt2 = m.trunkline
-        box = (pt1.x, pt1.y - r, pt2.x, pt2.y + r)
+        box = Box(pt1.x, pt1.y - r, pt2.x, pt2.y + r)
 
         if shadow:
             xdiff = self.metrics.shadow_offset.x
             ydiff = self.metrics.shadow_offset.y / 2
 
-            box = (pt1.x + xdiff, pt1.y - r + ydiff,
-                   pt2.x + xdiff, pt2.y + r + ydiff)
+            box = Box(pt1.x + xdiff, pt1.y - r + ydiff,
+                      pt2.x + xdiff, pt2.y + r + ydiff)
 
         if self.format == 'SVG':
             from blockdiag.imagedraw.simplesvg import pathdata
@@ -99,18 +99,23 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
                 line = (XY(box[0], box[1]), XY(box[2], box[1]))
                 self.drawer.line(line, fill='none', jump=True)
         else:
-            lsection = (box[0] - r / 2, box[1], box[0] + r / 2, box[3])
-            rsection = (box[2] - r / 2, box[1], box[2] + r / 2, box[3])
+            lsection = Box(box[0] - r / 2, box[1], box[0] + r / 2, box[3])
+            rsection = Box(box[2] - r / 2, box[1], box[2] + r / 2, box[3])
 
             if shadow:
                 color = self.shadow
+                filter = 'blur'
             else:
                 color = network.color
+                filter = None
 
             # fill background
-            self.drawer.rectangle(box, outline=color, fill=color)
-            self.drawer.ellipse(lsection, outline=color, fill=color)
-            self.drawer.ellipse(rsection, outline=color, fill=color)
+            self.drawer.rectangle(box, outline=color,
+                                  fill=color, filter=filter)
+            self.drawer.ellipse(lsection, outline=color,
+                                fill=color, filter=filter)
+            self.drawer.ellipse(rsection, outline=color,
+                                fill=color, filter=filter)
 
             if not shadow:
                 upper = (XY(box[0], box[1]), XY(box[2], box[1]))
