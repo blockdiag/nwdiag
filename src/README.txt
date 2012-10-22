@@ -75,6 +75,13 @@ Apache License 2.0
 History
 =======
 
+0.9.0 (2012-10-22)
+------------------
+* Optimize algorithm for rendering shadow
+* Add options to docutils directive
+* [packetdiag] represent splitted packets with dashed-line
+* Fix bugs
+
 0.8.2 (2012-09-29)
 ------------------
 * Fix bugs
