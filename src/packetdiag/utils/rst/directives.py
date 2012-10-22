@@ -73,7 +73,7 @@ class PacketdiagDirective(directives.BlockdiagDirective):
             content = drawer.save(None)
 
             if format == 'svg' and self.global_options['inline_svg'] is True:
-                return nodes.raw('', content.encode('utf-8'), format='html')
+                return nodes.raw('', content.decode('utf-8'), format='html')
 
         size = drawer.pagesize()
         options = node['options']
