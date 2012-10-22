@@ -22,14 +22,15 @@ from nwdiag.drawer import DiagramDraw
 from blockdiag.utils.rst import directives
 
 
-directive_options = dict(format='PNG',
-                         antialias=False,
-                         fontpath=None,
-                         outputdir=None,
-                         nodoctype=False,
-                         noviewbox=False,
-                         inline_svg=False,
-                         ignore_pil=False)
+directive_options_default = dict(format='PNG',
+                                 antialias=False,
+                                 fontpath=None,
+                                 outputdir=None,
+                                 nodoctype=False,
+                                 noviewbox=False,
+                                 inline_svg=False,
+                                 ignore_pil=False)
+directive_options = {}
 
 
 class nwdiag(nodes.General, nodes.Element):
@@ -96,15 +97,9 @@ class NwdiagDirective(directives.BlockdiagDirective):
 
 
 def setup(**kwargs):
-    global directive_options
+    global directive_options, directive_options_default
 
-    directive_options['format'] = kwargs.get('format', 'PNG')
-    directive_options['antialias'] = kwargs.get('antialias', False)
-    directive_options['fontpath'] = kwargs.get('fontpath', None)
-    directive_options['outputdir'] = kwargs.get('outputdir', None)
-    directive_options['nodoctype'] = kwargs.get('nodoctype', False)
-    directive_options['noviewbox'] = kwargs.get('noviewbox', False)
-    directive_options['inline_svg'] = kwargs.get('inline_svg', False)
-    directive_options['ignore_pil'] = kwargs.get('ignore_pil', False)
+    for key, value in directive_options_default.items():
+        directive_options[key] = kwargs.get(key, value)
 
     rst.directives.register_directive("nwdiag", NwdiagDirective)
