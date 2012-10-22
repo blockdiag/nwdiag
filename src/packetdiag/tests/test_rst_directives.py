@@ -52,10 +52,12 @@ class TestRstDirectives(unittest2.TestCase):
         self.assertEqual(False, options['nodoctype'])
         self.assertEqual(False, options['noviewbox'])
         self.assertEqual(False, options['inline_svg'])
+        self.assertEqual(False, options['ignore_pil'])
 
     def test_setup_with_args(self):
         directives.setup(format='SVG', antialias=True, fontpath='/dev/null',
-                         nodoctype=True, noviewbox=True, inline_svg=True)
+                         nodoctype=True, noviewbox=True, inline_svg=True,
+                         ignore_pil=True)
         options = directives.directive_options
 
         self.assertIn('packetdiag', docutils._directives)
@@ -67,6 +69,7 @@ class TestRstDirectives(unittest2.TestCase):
         self.assertEqual(True, options['nodoctype'])
         self.assertEqual(True, options['noviewbox'])
         self.assertEqual(True, options['inline_svg'])
+        self.assertEqual(True, options['ignore_pil'])
 
     @stderr_wrapper
     @setup_directive_base
@@ -280,6 +283,24 @@ class TestRstDirectives(unittest2.TestCase):
         doctree = publish_doctree(text)
         self.assertEqual(1, len(doctree))
         self.assertEqual(nodes.image, type(doctree[0]))
+
+    @use_tmpdir
+    def test_block_ignore_pil_false(self, path):
+        directives.setup(format='SVG', outputdir=path, ignore_pil=False)
+        text = ".. packetdiag::\n   :alt: hello world\n\n" + \
+               "   { 1: server\n    2: database\n   }"
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+
+    @use_tmpdir
+    def test_block_ignore_pil_true(self, path):
+        directives.setup(format='SVG', outputdir=path, ignore_pil=True)
+        text = ".. packetdiag::\n   :alt: hello world\n\n" + \
+               "   { 1: server\n    2: database\n   }"
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[-1]))
 
     @use_tmpdir
     def test_desctable_without_description(self, path):
