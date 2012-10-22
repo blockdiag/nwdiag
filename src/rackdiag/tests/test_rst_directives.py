@@ -5,7 +5,7 @@ import tempfile
 import unittest2
 from blockdiag.tests.utils import stderr_wrapper, assertRaises
 from docutils import nodes
-from docutils.core import publish_doctree
+from docutils.core import publish_doctree, publish_parts
 from docutils.parsers.rst import directives as docutils
 from rackdiag.utils.rst import directives
 
@@ -283,6 +283,14 @@ class TestRstDirectives(unittest2.TestCase):
         doctree = publish_doctree(text)
         self.assertEqual(1, len(doctree))
         self.assertEqual(nodes.image, type(doctree[0]))
+
+    @use_tmpdir
+    def test_block_inline_svg_true_with_multibytes(self, path):
+        directives.setup(format='SVG', outputdir=path,
+                         inline_svg=True, ignore_pil=True)
+        text = ".. rackdiag::\n   :alt: hello world\n\n" + \
+               "   { 1: サーバ\n    2: データベース\n   }"
+        publish_parts(text)
 
     @use_tmpdir
     def test_block_ignore_pil_false(self, path):
