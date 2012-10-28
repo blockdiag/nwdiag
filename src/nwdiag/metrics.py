@@ -16,7 +16,7 @@
 import math
 import blockdiag.metrics
 import elements
-from blockdiag.utils import XY
+from blockdiag.utils import Box, XY
 from blockdiag.utils.collections import namedtuple
 
 cellsize = blockdiag.metrics.DiagramMetrics.cellsize
@@ -94,7 +94,7 @@ class NetworkMetrics(blockdiag.metrics.NodeMetrics):
         width = self.metrics.node_width * 3 / 2
         height = self.metrics.node_height
 
-        return (x - width, y - height / 2, x, y + height / 2)
+        return Box(x - width, y - height / 2, x, y + height / 2)
 
 
 class NodeMetrics(blockdiag.metrics.NodeMetrics):
@@ -137,8 +137,10 @@ class NodeMetrics(blockdiag.metrics.NodeMetrics):
                     dx = int(math.floor(base_x * m.cellsize * 2))
 
                 width = m.node_width + m.span_width
-                textbox = [x + dx + m.cellsize / 2, y2 - m.span_height / 2,
-                           x + width - m.cellsize / 2, y2]
+                textbox = Box(x + dx + m.cellsize / 2,
+                              y2 - m.span_height / 2,
+                              x + width - m.cellsize / 2,
+                              y2)
                 line = [XY(x + dx, y1), XY(x + dx, y2)]
 
                 cn = Connector(network, line, textbox)
@@ -163,11 +165,11 @@ class GroupMetrics(blockdiag.metrics.NodeMetrics):
     def grouplabelbox(self):
         box = super(GroupMetrics, self).grouplabelbox
         span = self.metrics.cellsize
-        box = (box[0], box[1] + span, box[2], box[3] + span)
+        box = Box(box[0], box[1] + span, box[2], box[3] + span)
 
         if self.is_root_group:
             width = (self.metrics.node_width + self.metrics.span_width) / 2
-            box = (box[0] + width, box[1], box[2] + width, box[3])
+            box = Box(box[0] + width, box[1], box[2] + width, box[3])
 
         return box
 
@@ -176,5 +178,5 @@ class GroupMetrics(blockdiag.metrics.NodeMetrics):
         box = super(GroupMetrics, self).box
         margin_x = self.metrics.span_height / 2 - self.metrics.cellsize
         margin_y = self.metrics.cellsize
-        return (box[0] - margin_y, box[1] - margin_x,
-                box[2] + margin_y, box[3] + margin_x)
+        return Box(box[0] - margin_y, box[1] - margin_x,
+                   box[2] + margin_y, box[3] + margin_x)
