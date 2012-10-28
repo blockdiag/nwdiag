@@ -75,6 +75,10 @@ Apache License 2.0
 History
 =======
 
+0.9.1 (2012-10-28)
+------------------
+* Fix bugs
+
 0.9.0 (2012-10-22)
 ------------------
 * Optimize algorithm for rendering shadow
