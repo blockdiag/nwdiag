@@ -60,7 +60,7 @@ class ParseException(Exception):
     pass
 
 
-def tokenize(str):
+def tokenize(string):
     'str -> Sequence(Token)'
     specs = [
         ('Comment', (r'/\*(.|[\r\n])*?\*/', MULTILINE)),
@@ -76,7 +76,7 @@ def tokenize(str):
     ]
     useless = ['Comment', 'NL', 'Space']
     t = make_tokenizer(specs)
-    return [x for x in t(str) if x.type not in useless]
+    return [x for x in t(string) if x.type not in useless]
 
 
 def parse(seq):
@@ -87,16 +87,16 @@ def parse(seq):
     n = lambda s: a(Token('Name', s)) >> tokval
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
-    id = some(lambda t: t.type in ['Name', 'IPAddr', 'Number', 'String']
-              ).named('id') >> tokval
+    _id = some(lambda t: t.type in ['Name', 'IPAddr', 'Number', 'String']
+               ).named('id') >> tokval
     make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
     make_edge = lambda x, x2, xs, attrs: Edge([x, x2] + xs, attrs)
     make_route = lambda x, x2, xs, attrs: Route([x, x2] + xs, attrs)
 
-    node_id = id  # + maybe(port)
+    node_id = _id  # + maybe(port)
     a_list = (
-        id +
-        maybe(op_('=') + id) +
+        _id +
+        maybe(op_('=') + _id) +
         skip(maybe(op(',')))
         >> unarg(Attr))
     attr_list = (
@@ -109,7 +109,7 @@ def parse(seq):
         many(edge_rhs) +
         attr_list
         >> unarg(make_edge))
-    graph_attr = id + op_('=') + id >> make_graph_attr
+    graph_attr = _id + op_('=') + _id >> make_graph_attr
     node_stmt = node_id + attr_list >> unarg(Node)
     # We use a forward_decl becaue of circular definitions like (stmt_list ->
     # stmt -> subgraph -> stmt_list)
@@ -120,7 +120,7 @@ def parse(seq):
     group_stmt_list = many(group_stmt + skip(maybe(op(';'))))
     group = (
         skip(n('group')) +
-        maybe(id) +
+        maybe(_id) +
         op_('{') +
         group_stmt_list +
         op_('}')
@@ -133,7 +133,7 @@ def parse(seq):
     network_stmt_list = many(network_stmt + skip(maybe(op(';'))))
     network = (
         skip(n('network')) +
-        maybe(id) +
+        maybe(_id) +
         op_('{') +
         network_stmt_list +
         op_('}')
@@ -156,7 +156,7 @@ def parse(seq):
         >> unarg(AttrClass))
     plugin_stmt = (
         skip(n('plugin')) +
-        id +
+        _id +
         attr_list
         >> unarg(AttrPlugin))
     stmt = (
@@ -172,7 +172,7 @@ def parse(seq):
     stmt_list = many(stmt + skip(maybe(op(';'))))
     graph = (
         maybe(n('diagram') | n('nwdiag')) +
-        maybe(id) +
+        maybe(_id) +
         op_('{') +
         stmt_list +
         op_('}')
@@ -189,8 +189,8 @@ def sort_tree(tree):
         else:
             return 2
 
-    def compare(a, b):
-        return cmp(weight(a), weight(b))
+    def compare(node1, node2):
+        return cmp(weight(node1), weight(node2))
 
     if hasattr(tree, 'stmts'):
         tree.stmts.sort(compare)
@@ -212,5 +212,5 @@ def parse_string(string):
 
 
 def parse_file(path):
-    input = codecs.open(path, 'r', 'utf-8').read()
-    return parse_string(input)
+    code = codecs.open(path, 'r', 'utf-8').read()
+    return parse_string(code)

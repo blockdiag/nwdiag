@@ -15,13 +15,13 @@
 
 import re
 import blockdiag.elements
-from blockdiag.elements import *
+from blockdiag.elements import DiagramEdge, NodeGroup, unquote
 from blockdiag.utils import images
 
 
 class DiagramNode(blockdiag.elements.DiagramNode):
-    def __init__(self, id):
-        super(DiagramNode, self).__init__(id)
+    def __init__(self, _id):
+        super(DiagramNode, self).__init__(_id)
 
         self.address = {}
         self.networks = []
@@ -57,8 +57,8 @@ class Network(blockdiag.elements.NodeGroup):
         cls.basecolor = (185, 203, 228)
         cls.linecolor = (0, 0, 0)
 
-    def __init__(self, id):
-        super(Network, self).__init__(id)
+    def __init__(self, _id):
+        super(Network, self).__init__(_id)
 
         self.address = None
         self.hidden = False
@@ -66,7 +66,7 @@ class Network(blockdiag.elements.NodeGroup):
         self.colheight = 1
 
     @classmethod
-    def create_anonymous(klass, nodes, attrs=[]):
+    def create_anonymous(cls, nodes, attrs=None):
         if len(set(nodes)) != len(nodes):
             msg = "Do not connect same node to peer network: %s"
             raise RuntimeError(msg % nodes[0].id)
@@ -76,7 +76,7 @@ class Network(blockdiag.elements.NodeGroup):
         if [nw for nw in nodes[0].networks if nw.hidden and is_same(nw)]:
             return None
 
-        network = klass(None)
+        network = cls(None)
         network.hidden = True
         for node in nodes:
             node.networks.append(network)

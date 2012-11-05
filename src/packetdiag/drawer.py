@@ -14,8 +14,7 @@
 #  limitations under the License.
 
 import blockdiag.drawer
-from metrics import DiagramMetrics
-from blockdiag.utils import Box
+from packetdiag.metrics import DiagramMetrics
 
 
 class DiagramDraw(blockdiag.drawer.DiagramDraw):

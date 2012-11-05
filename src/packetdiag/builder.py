@@ -13,10 +13,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from elements import *
-import parser
+from packetdiag import parser
+from packetdiag.elements import Diagram, FieldItem, DiagramNode
 from blockdiag.utils import XY
-from blockdiag.utils.collections import defaultdict
 
 
 class DiagramTreeBuilder:
@@ -87,8 +86,6 @@ class ScreenNodeBuilder:
     @classmethod
     def build(cls, tree):
         DiagramNode.clear()
-        DiagramEdge.clear()
-        NodeGroup.clear()
         Diagram.clear()
 
         return cls(tree).run()

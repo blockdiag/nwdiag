@@ -58,20 +58,20 @@ class NwdiagDirective(directives.BlockdiagDirective):
     def node2image(self, node, diagram):
         filename = self.image_filename(node)
         fontpath = self.detectfont()
-        format = self.global_options['format'].lower()
+        _format = self.global_options['format'].lower()
 
-        if format == 'svg' and self.global_options['inline_svg'] is True:
+        if _format == 'svg' and self.global_options['inline_svg'] is True:
             filename = None
 
         kwargs = dict(self.global_options)
         del kwargs['format']
-        drawer = DiagramDraw(format, diagram, filename, **kwargs)
+        drawer = DiagramDraw(_format, diagram, filename, **kwargs)
 
         if filename is None or not os.path.isfile(filename):
             drawer.draw()
             content = drawer.save(None)
 
-            if format == 'svg' and self.global_options['inline_svg'] is True:
+            if _format == 'svg' and self.global_options['inline_svg'] is True:
                 return nodes.raw('', content.decode('utf-8'), format='html')
 
         size = drawer.pagesize()
@@ -97,8 +97,6 @@ class NwdiagDirective(directives.BlockdiagDirective):
 
 
 def setup(**kwargs):
-    global directive_options, directive_options_default
-
     for key, value in directive_options_default.items():
         directive_options[key] = kwargs.get(key, value)
 

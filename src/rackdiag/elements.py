@@ -15,8 +15,8 @@
 
 import re
 import blockdiag.elements
-from utils.math import lcm
-from blockdiag.elements import *
+from rackdiag.utils.math import lcm
+from blockdiag.elements import DiagramNode
 from blockdiag.utils import XY
 
 

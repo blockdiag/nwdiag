@@ -14,15 +14,15 @@
 #  limitations under the License.
 
 import blockdiag.drawer
-from metrics import DiagramMetrics
+from nwdiag.metrics import DiagramMetrics
 from blockdiag.utils import Box, XY
 
 
 class DiagramDraw(blockdiag.drawer.DiagramDraw):
     MetricsClass = DiagramMetrics
 
-    def __init__(self, format, diagram, filename=None, **kwargs):
-        super(DiagramDraw, self).__init__(format, diagram, filename, **kwargs)
+    def __init__(self, _format, diagram, filename=None, **kwargs):
+        super(DiagramDraw, self).__init__(_format, diagram, filename, **kwargs)
         self.drawer.forward = 'vertical'
         self.drawer.jump_radius = self.metrics.jump_radius
         self.drawer.jump_shift = self.metrics.jump_shift
@@ -104,14 +104,14 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
 
             if shadow:
                 color = self.shadow
-                filter = 'blur'
+                _filter = 'blur'
             else:
                 color = network.color
-                filter = None
+                _filter = None
 
             # fill background
             self.drawer.rectangle(box, outline=color,
-                                  fill=color, filter=filter)
+                                  fill=color, filter=_filter)
             self.drawer.ellipse(lsection, outline=color,
                                 fill=color, filter=filter)
             self.drawer.ellipse(rsection, outline=color,

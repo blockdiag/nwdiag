@@ -16,7 +16,6 @@
 import blockdiag.metrics
 from blockdiag.utils import Box, XY
 from blockdiag.utils.collections import defaultdict, namedtuple
-import elements
 
 
 class DiagramMetrics(blockdiag.metrics.DiagramMetrics):
@@ -56,7 +55,7 @@ class DiagramMetrics(blockdiag.metrics.DiagramMetrics):
             return (XY(pt.x, pt.y - self.cellsize * 2), pt)
 
     def measure_label(self, n):
-        top, bottom = self.measure_line(n)
+        top, _ = self.measure_line(n)
         cellsize = self.cellsize
 
         return Box(top.x - cellsize * 4, top.y - cellsize * 3,
