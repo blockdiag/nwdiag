@@ -15,7 +15,7 @@
 
 import math
 import blockdiag.metrics
-import elements
+from nwdiag import elements
 from blockdiag.utils import Box, XY
 from blockdiag.utils.collections import namedtuple
 

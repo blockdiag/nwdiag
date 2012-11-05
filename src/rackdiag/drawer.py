@@ -14,7 +14,7 @@
 #  limitations under the License.
 
 import blockdiag.drawer
-from metrics import DiagramMetrics
+from rackdiag.metrics import DiagramMetrics
 from blockdiag.utils import Box
 
 

@@ -16,9 +16,7 @@
 from blockdiag.utils import collections
 from blockdiag.utils.fontmap import FontMap
 from packetdiag import command, parser, builder, drawer
-from packetdiag import parser as diagparser
-from packetdiag import drawer as DiagramDraw
 from packetdiag.utils.rst.directives import packetdiag, PacketdiagDirective
 
 (collections, FontMap, command, parser, builder, drawer,
- diagparser, DiagramDraw, packetdiag, PacketdiagDirective)
+ packetdiag, PacketdiagDirective)

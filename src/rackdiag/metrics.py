@@ -16,7 +16,7 @@
 import blockdiag.metrics
 from blockdiag.utils import Box, XY
 from blockdiag.utils.collections import defaultdict
-import elements
+from rackdiag import elements
 
 
 class DiagramMetrics(blockdiag.metrics.DiagramMetrics):

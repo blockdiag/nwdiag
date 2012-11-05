@@ -13,8 +13,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from elements import *
-import parser
+from rackdiag import parser
+from rackdiag.elements import Diagram, Rack, RackItem
 from blockdiag.utils import XY
 
 
@@ -102,9 +102,8 @@ class DiagramLayoutManager:
 class ScreenNodeBuilder:
     @classmethod
     def build(cls, tree):
-        DiagramNode.clear()
-        DiagramEdge.clear()
-        NodeGroup.clear()
+        Rack.clear()
+        RackItem.clear()
         Diagram.clear()
 
         return cls(tree).run()

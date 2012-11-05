@@ -55,7 +55,7 @@ class ParseException(Exception):
     pass
 
 
-def tokenize(str):
+def tokenize(string):
     'str -> Sequence(Token)'
     specs = [
         ('Comment', (r'/\*(.|[\r\n])*?\*/', MULTILINE)),
@@ -72,7 +72,7 @@ def tokenize(str):
     ]
     useless = ['Comment', 'NL', 'Space']
     t = make_tokenizer(specs)
-    return [x for x in t(str) if x.type not in useless]
+    return [x for x in t(string) if x.type not in useless]
 
 
 def parse(seq):
@@ -83,28 +83,26 @@ def parse(seq):
     n = lambda s: a(Token('Name', s)) >> tokval
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
-    id = some(lambda t: t.type in ['Name', 'Number', 'String', 'Units']
-              ).named('id') >> tokval
+    _id = some(lambda t: t.type in ['Name', 'Number', 'String', 'Units']
+               ).named('id') >> tokval
     number = some(lambda t: t.type == 'Number').named('number') >> tokval
-    range = some(lambda t: t.type == 'Range').named('range') >> tokval
+    _range = some(lambda t: t.type == 'Range').named('range') >> tokval
     deflabel = some(lambda t: t.type == 'DefLabel').named('deflabel') >> tokval
-    make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
 
     field_label = lambda text: re.sub("^:\s*(.*?)\s*;?$", "\\1", text)
     make_field_item = (lambda no, text, attr:
                        FieldItem(no, field_label(text), attr))
 
     a_list = (
-        id +
-        maybe(op_('=') + id) +
+        _id +
+        maybe(op_('=') + _id) +
         skip(maybe(op(',')))
         >> unarg(Attr))
     attr_list = (
         many(op_('[') + many(a_list) + op_(']'))
         >> flatten)
-    graph_attr = id + op_('=') + id >> make_graph_attr
     field_item_stmt = (
-        (number | range) +
+        (number | _range) +
         deflabel +
         attr_list
         >> unarg(make_field_item))
@@ -112,7 +110,7 @@ def parse(seq):
     # plugin definition
     plugin_stmt = (
         skip(n('plugin')) +
-        id +
+        _id +
         attr_list
         >> unarg(AttrPlugin))
 
@@ -124,7 +122,7 @@ def parse(seq):
     stmt_list = many(stmt + skip(maybe(op(';'))))
     graph = (
         maybe(n('diagram') | n('pktdiag')) +
-        maybe(id) +
+        maybe(_id) +
         op_('{') +
         stmt_list +
         op_('}')
@@ -164,5 +162,5 @@ def parse_string(string):
 
 
 def parse_file(path):
-    input = codecs.open(path, 'r', 'utf-8').read()
-    return parse_string(input)
+    code = codecs.open(path, 'r', 'utf-8').read()
+    return parse_string(code)

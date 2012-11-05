@@ -13,8 +13,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from elements import *
-import parser
+from nwdiag import parser
+from nwdiag.elements import (Diagram, DiagramNode, DiagramEdge,
+                             Network, Route, NodeGroup, unquote)
 from blockdiag.utils import XY
 from blockdiag.utils.collections import namedtuple
 
@@ -38,7 +39,7 @@ class DiagramTreeBuilder:
         for node in self.diagram.nodes:
             if len(node.networks) == 0:
                 msg = "DiagramNode %s does not belong to any networks"
-                raise RuntimeError(msg % msg.id)
+                raise RuntimeError(msg % node.id)
 
         # show networks including same nodes
         for nw in self.diagram.networks:
@@ -56,7 +57,7 @@ class DiagramTreeBuilder:
             if nw.hidden and len(nw.nodes) == 2:
                 nodes.append(nw.nodes[0])  # parent node (FROM node)
 
-        for node in [node for node in set(nodes) if nodes.count(node) > 1]:
+        for node in [n for n in set(nodes) if nodes.count(n) > 1]:
             for network in node.networks:
                 if len(network.nodes) == 2:
                     network.hidden = False
@@ -261,7 +262,7 @@ class DiagramLayoutManager:
 
 class ScreenNodeBuilder:
     @classmethod
-    def build(klass, tree):
+    def build(cls, tree):
         DiagramNode.clear()
         DiagramEdge.clear()
         NodeGroup.clear()
@@ -269,12 +270,12 @@ class ScreenNodeBuilder:
 
         diagram = DiagramTreeBuilder().build(tree)
         DiagramLayoutManager(diagram).run()
-        diagram = klass.update_network_status(diagram)
+        diagram = cls.update_network_status(diagram)
 
         return diagram
 
     @classmethod
-    def update_network_status(klass, diagram):
+    def update_network_status(cls, diagram):
         for node in diagram.nodes:
             above = [nw for nw in node.networks if nw.xy.y <= node.xy.y]
             if len(above) > 1 and [nw for nw in above if nw.hidden]:

@@ -15,8 +15,7 @@
 
 import re
 import blockdiag.elements
-from blockdiag.elements import *
-from blockdiag.utils import XY
+from blockdiag.elements import DiagramNode
 
 
 class FieldItem(blockdiag.elements.DiagramNode):
