@@ -68,5 +68,5 @@ class DiagramMetrics(blockdiag.metrics.DiagramMetrics):
         dummy.colwidth = 1
         dummy.colheight = 1
 
-        box = self.cell(dummy, use_padding=False)
+        box = self.cell(dummy, use_padding=False).box
         return Box(0, box[1], box[0], box[3])
