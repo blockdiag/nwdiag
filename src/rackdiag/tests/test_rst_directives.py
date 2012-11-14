@@ -293,6 +293,19 @@ class TestRstDirectives(unittest2.TestCase):
         publish_parts(text)
 
     @use_tmpdir
+    def test_block_max_width_inline_svg(self, path):
+        directives.setup(format='SVG', outputdir=path,
+                         nodoctype=True, noviewbox=True, inline_svg=True)
+        text = ".. rackdiag::\n   :maxwidth: 100\n\n" + \
+               "   { 1: server\n    2: database\n   }"
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.raw, type(doctree[0]))
+        self.assertEqual(nodes.Text, type(doctree[0][0]))
+        self.assertRegexpMatches(doctree[0][0],
+                                 '<svg height="\d+" width="100" ')
+
+    @use_tmpdir
     def test_block_ignore_pil_false(self, path):
         directives.setup(format='SVG', outputdir=path, ignore_pil=False)
         text = ".. rackdiag::\n   :alt: hello world\n\n" + \

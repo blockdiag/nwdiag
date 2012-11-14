@@ -56,6 +56,7 @@ class NwdiagDirective(directives.BlockdiagDirective):
         return ScreenNodeBuilder.build(tree)
 
     def node2image(self, node, diagram):
+        options = node['options']
         filename = self.image_filename(node)
         fontpath = self.detectfont()
         _format = self.global_options['format'].lower()
@@ -72,10 +73,15 @@ class NwdiagDirective(directives.BlockdiagDirective):
             content = drawer.save(None)
 
             if _format == 'svg' and self.global_options['inline_svg'] is True:
+                size = drawer.pagesize()
+                if 'maxwidth' in options and options['maxwidth'] < size[0]:
+                    ratio = float(options['maxwidth']) / size[0]
+                    new_size = (options['maxwidth'], int(size[1] * ratio))
+                    content = drawer.save(new_size)
+
                 return nodes.raw('', content.decode('utf-8'), format='html')
 
         size = drawer.pagesize()
-        options = node['options']
         if 'maxwidth' in options and options['maxwidth'] < size[0]:
             ratio = float(options['maxwidth']) / size[0]
             thumb_size = (options['maxwidth'], size[1] * ratio)
