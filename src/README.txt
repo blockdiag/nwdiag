@@ -75,6 +75,11 @@ Apache License 2.0
 History
 =======
 
+0.9.2 (2012-11-17)
+------------------
+* [rackdiag] Add auto-numbering feature
+* Fix bugs
+
 0.9.1 (2012-10-28)
 ------------------
 * Fix bugs
