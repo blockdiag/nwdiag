@@ -113,9 +113,9 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
             self.drawer.rectangle(box, outline=color,
                                   fill=color, filter=_filter)
             self.drawer.ellipse(lsection, outline=color,
-                                fill=color, filter=filter)
+                                fill=color, filter=_filter)
             self.drawer.ellipse(rsection, outline=color,
-                                fill=color, filter=filter)
+                                fill=color, filter=_filter)
 
             if not shadow:
                 upper = (XY(box[0], box[1]), XY(box[2], box[1]))
