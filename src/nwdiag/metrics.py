@@ -73,17 +73,17 @@ class NetworkMetrics(blockdiag.metrics.NodeMetrics):
 
     @property
     def top(self):
-        pt = super(NetworkMetrics, self).top
+        pt = self.box.top
         return XY(pt.x, pt.y - self.metrics.span_height / 2)
 
     @property
     def left(self):
-        pt = super(NetworkMetrics, self).left
+        pt = self.box.left
         return XY(pt.x - self.metrics.span_width / 2, pt.y)
 
     @property
     def right(self):
-        pt = super(NetworkMetrics, self).right
+        pt = self.box.right
         return XY(pt.x + self.metrics.span_width / 2, pt.y)
 
     @property
