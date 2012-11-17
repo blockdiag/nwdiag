@@ -64,6 +64,7 @@ def tokenize(string):
         ('NL',      (r'[\r\n]+',)),
         ('Space',   (r'[ \t\r\n]+',)),
         ('RackItem', (r':[^\r\n\[]+',)),
+        ('NonnumRackItem', (r'[\*\-]\s*[^\r\n\[]+',)),
         ('Units',   (r'([0-9]+U|[0-9]+(?:\.[0-9]+)?(A|kg))',)),
         ('Number',  (r'[0-9]+',)),
         ('Name',    (ur'[A-Za-z_0-9\u0080-\uffff]'
@@ -88,10 +89,13 @@ def parse(seq):
                ).named('id') >> tokval
     number = some(lambda t: t.type == 'Number').named('number') >> tokval
     rackitem = some(lambda t: t.type == 'RackItem').named('rackitem') >> tokval
+    nonnum_rackitem = (some(lambda t: t.type == 'NonnumRackItem').
+                       named('nonnum_rackitem') >> tokval)
     make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
 
-    racklabel = lambda text: re.sub("^:\s*(.*?)\s*;?$", "\\1", text)
+    racklabel = lambda text: re.sub("^.\s*(.*?)\s*;?$", "\\1", text)
     make_rackitem = lambda no, text, attr: RackItem(no, racklabel(text), attr)
+    make_rackitem2 = lambda text, attr: RackItem(None, racklabel(text), attr)
 
     a_list = (
         _id +
@@ -102,11 +106,18 @@ def parse(seq):
         many(op_('[') + many(a_list) + op_(']'))
         >> flatten)
     graph_attr = _id + op_('=') + _id >> make_graph_attr
-    rackitem_stmt = (
+    numbered_rackitem_stmt = (
         number +
         rackitem +
         attr_list
         >> unarg(make_rackitem))
+    nonnumbered_rackitem_stmt = (
+        nonnum_rackitem +
+        attr_list
+        >> unarg(make_rackitem2))
+    rackitem_stmt = (
+        numbered_rackitem_stmt
+        | nonnumbered_rackitem_stmt)
 
     # rack definition
     rack_stmt = (
