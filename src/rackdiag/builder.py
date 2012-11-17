@@ -37,7 +37,16 @@ class DiagramTreeBuilder:
                 except AttributeError:
                     self.diagram.set_attribute(stmt)
             elif isinstance(stmt, parser.RackItem):
-                item = RackItem(stmt.number, stmt.label)
+                if stmt.number is None:
+                    if len(rack.nodes) > 0:
+                        item = rack.nodes[-1]
+                        number = item.number + item.colheight
+                    else:
+                        number = 1
+                else:
+                    number = stmt.number
+
+                item = RackItem(number, stmt.label)
                 item.set_attributes(stmt.attrs)
                 rack.nodes.append(item)
             elif isinstance(stmt, parser.Rack):
