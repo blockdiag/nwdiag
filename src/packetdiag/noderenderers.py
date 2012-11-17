@@ -26,7 +26,8 @@ class PacketNode(NodeShape):
         if kwargs.get('shadow'):
             pass
         else:
-            drawer.rectangle(box, fill=fill, outline=fill)
+            drawer.rectangle(box, fill=self.node.color,
+                             outline=self.node.color)
             if self.node.background:
                 drawer.loadImage(self.node.background, self.textbox)
 
