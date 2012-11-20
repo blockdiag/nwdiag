@@ -92,10 +92,13 @@ class DiagramLayoutManager:
                 x = 0
 
             item.xy = XY(x, y)
-            self.validate_rack(item)
+            self.validate_rack(rack, item)
 
-    def validate_rack(self, item):
+    def validate_rack(self, rack, item):
         if item.xy.y < 0:
+            msg = "Rack %d is layouted to underground!\n" % item.number
+            raise AttributeError(msg)
+        elif rack.colheight < item.xy.y + item.colheight:
             msg = "Rack %d is oversized to rack-height\n" % item.number
             raise AttributeError(msg)
 
