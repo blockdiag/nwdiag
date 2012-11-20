@@ -63,33 +63,36 @@ class DiagramLayoutManager:
         self.rack_usage = {}
 
     def run(self):
-        rack_x = 0
+        x = 0
         for rack in self.diagram.racks:
-            self.rack_usage = {}
-
-            for item in rack.nodes:
-                item.xy = XY(-1, -1)
-
-            for item in rack.nodes:
-                if rack.descending:
-                    y = rack.colheight - item.number - item.colheight + 1
-                else:
-                    y = item.number - 1
-
-                nodes = [n for n in rack.nodes if n.xy.y == y]
-                if nodes:
-                    x = max(n.xy.x for n in nodes) + 1
-                else:
-                    x = 0
-
-                item.xy = XY(x, y)
-                self.validate_rack(item)
-            rack.xy = XY(rack_x, 0)
+            self.layout_rack(rack)
+            rack.xy = XY(x, 0)
             rack.fixiate()
 
-            rack_x += rack.colwidth
+            x += rack.colwidth
 
         self.diagram.fixiate()
+
+    def layout_rack(self, rack):
+        self.rack_usage = {}
+
+        for item in rack.nodes:
+            item.xy = XY(-1, -1)
+
+        for item in rack.nodes:
+            if rack.descending:
+                y = rack.colheight - item.number - item.colheight + 1
+            else:
+                y = item.number - 1
+
+            nodes = [n for n in rack.nodes if n.xy.y == y]
+            if nodes:
+                x = max(n.xy.x for n in nodes) + 1
+            else:
+                x = 0
+
+            item.xy = XY(x, y)
+            self.validate_rack(item)
 
     def validate_rack(self, item):
         if item.xy.y < 0:
