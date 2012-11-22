@@ -19,6 +19,7 @@ from docutils.parsers import rst
 from nwdiag import parser
 from nwdiag.builder import ScreenNodeBuilder
 from nwdiag.drawer import DiagramDraw
+from nwdiag.utils.rst.nodes import nwdiag
 from blockdiag.utils.rst import directives
 
 
@@ -31,10 +32,6 @@ directive_options_default = dict(format='PNG',
                                  inline_svg=False,
                                  ignore_pil=False)
 directive_options = {}
-
-
-class nwdiag(nodes.General, nodes.Element):
-    pass
 
 
 class NwdiagDirectiveBase(directives.BlockdiagDirectiveBase):

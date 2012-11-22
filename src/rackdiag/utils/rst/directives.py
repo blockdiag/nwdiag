@@ -20,6 +20,7 @@ from rackdiag import parser
 from rackdiag.elements import RackItem
 from rackdiag.builder import ScreenNodeBuilder
 from rackdiag.drawer import DiagramDraw
+from rackdiag.utils.rst.nodes import rackdiag
 from blockdiag.utils.rst import directives
 
 
@@ -32,10 +33,6 @@ directive_options_default = dict(format='PNG',
                                  inline_svg=False,
                                  ignore_pil=False)
 directive_options = {}
-
-
-class rackdiag(nodes.General, nodes.Element):
-    pass
 
 
 class RackdiagDirectiveBase(directives.BlockdiagDirectiveBase):
