@@ -20,6 +20,7 @@ from packetdiag import parser
 from packetdiag.elements import FieldItem
 from packetdiag.builder import ScreenNodeBuilder
 from packetdiag.drawer import DiagramDraw
+from packetdiag.utils.rst.nodes import packetdiag
 from blockdiag.utils.rst import directives
 
 
@@ -32,10 +33,6 @@ directive_options_default = dict(format='PNG',
                                  inline_svg=False,
                                  ignore_pil=False)
 directive_options = {}
-
-
-class packetdiag(nodes.General, nodes.Element):
-    pass
 
 
 class PacketdiagDirectiveBase(directives.BlockdiagDirectiveBase):
