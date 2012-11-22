@@ -15,8 +15,8 @@
 
 import re
 import blockdiag.elements
-from blockdiag.elements import DiagramEdge, NodeGroup, unquote
-from blockdiag.utils import images
+from blockdiag.elements import DiagramEdge, NodeGroup
+from blockdiag.utils import images, unquote
 
 
 class DiagramNode(blockdiag.elements.DiagramNode):

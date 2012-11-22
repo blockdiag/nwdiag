@@ -15,8 +15,8 @@
 
 from nwdiag import parser
 from nwdiag.elements import (Diagram, DiagramNode, DiagramEdge,
-                             Network, Route, NodeGroup, unquote)
-from blockdiag.utils import XY
+                             Network, Route, NodeGroup)
+from blockdiag.utils import unquote, XY
 from blockdiag.utils.collections import namedtuple
 
 

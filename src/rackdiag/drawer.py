@@ -19,7 +19,8 @@ from blockdiag.utils import Box
 
 
 class DiagramDraw(blockdiag.drawer.DiagramDraw):
-    MetricsClass = DiagramMetrics
+    def create_metrics(self, *args, **kwargs):
+        return DiagramMetrics(*args, **kwargs)
 
     def _draw_elements(self, **kwargs):
         default_font = self.metrics.font_for(self.diagram)
