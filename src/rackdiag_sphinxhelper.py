@@ -13,6 +13,20 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import rackdiag.parser
+import rackdiag.builder
+import rackdiag.drawer
+core = rackdiag
+
+import blockdiag.utils.bootstrap
+import blockdiag.utils.collections
+import blockdiag.utils.fontmap
+utils = blockdiag.utils
+
+from rackdiag.utils.rst import nodes
+from rackdiag.utils.rst import directives
+
+# FIXME: obsoleted interface (keep for compatibility)
 from blockdiag.utils import collections
 from blockdiag.utils.fontmap import FontMap
 from rackdiag import command, parser, builder, drawer
