@@ -18,7 +18,8 @@ from packetdiag.metrics import DiagramMetrics
 
 
 class DiagramDraw(blockdiag.drawer.DiagramDraw):
-    MetricsClass = DiagramMetrics
+    def create_metrics(self, *args, **kwargs):
+        return DiagramMetrics(*args, **kwargs)
 
     def _draw_background(self):
         # do not call blockdiag.DiagramDraw#_draw_background()

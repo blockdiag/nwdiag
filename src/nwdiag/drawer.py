@@ -19,13 +19,14 @@ from blockdiag.utils import Box, XY
 
 
 class DiagramDraw(blockdiag.drawer.DiagramDraw):
-    MetricsClass = DiagramMetrics
+    def create_metrics(self, *args, **kwargs):
+        return DiagramMetrics(*args, **kwargs)
 
     def __init__(self, _format, diagram, filename=None, **kwargs):
         super(DiagramDraw, self).__init__(_format, diagram, filename, **kwargs)
-        self.drawer.forward = 'vertical'
-        self.drawer.jump_radius = self.metrics.jump_radius
-        self.drawer.jump_shift = self.metrics.jump_shift
+        self.drawer.set_options(jump_forward='vertical',
+                                jump_radius=self.metrics.jump_radius,
+                                jump_shift=self.metrics.jump_shift)
 
     @property
     def groups(self):
