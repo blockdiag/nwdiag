@@ -16,6 +16,7 @@
 from rackdiag import parser
 from rackdiag.elements import Diagram, Rack, RackItem
 from blockdiag.utils import XY
+from blockdiag.utils.collections import defaultdict
 
 
 class DiagramTreeBuilder:
@@ -60,7 +61,6 @@ class DiagramTreeBuilder:
 class DiagramLayoutManager:
     def __init__(self, diagram):
         self.diagram = diagram
-        self.rack_usage = {}
 
     def run(self):
         x = 0
@@ -74,7 +74,7 @@ class DiagramLayoutManager:
         self.diagram.fixiate()
 
     def layout_rack(self, rack):
-        self.rack_usage = {}
+        usage = defaultdict(bool)
 
         for item in rack.nodes:
             item.xy = XY(-1, -1)
@@ -85,13 +85,14 @@ class DiagramLayoutManager:
             else:
                 y = item.number - 1
 
-            nodes = [n for n in rack.nodes if n.xy.y == y]
-            if nodes:
-                x = max(n.xy.x for n in nodes) + 1
-            else:
-                x = 0
+            for x in range(255):
+                r = range(y, y + item.colheight)
+                if len([_ for _ in r if usage[(x, _)]]) == 0:
+                    break
 
             item.xy = XY(x, y)
+            for dy in range(y, y + item.colheight):
+                usage[(x, dy)] = 1
             self.validate_rack(rack, item)
 
     def validate_rack(self, rack, item):
@@ -101,17 +102,6 @@ class DiagramLayoutManager:
         elif rack.colheight < item.xy.y + item.colheight:
             msg = "Rack %d is oversized to rack-height\n" % item.number
             raise AttributeError(msg)
-
-        for i in range(item.xy.y, item.xy.y + item.colheight):
-            if i in self.rack_usage:
-                if self.rack_usage[i].colheight == item.colheight == 1:
-                    pass
-                else:
-                    used = self.rack_usage[i].label.encode('utf-8')
-                    msg = "Rack %d is already used: %s\n" % (item.number, used)
-                    raise AttributeError(msg)
-            else:
-                self.rack_usage[i] = item
 
 
 class ScreenNodeBuilder:
