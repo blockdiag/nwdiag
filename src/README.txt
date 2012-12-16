@@ -75,6 +75,11 @@ Apache License 2.0
 History
 =======
 
+0.9.3 (2012-11-17)
+------------------
+* [rackdiag] Allow multiple rackitems in same level
+* Fix bugs
+
 0.9.2 (2012-11-17)
 ------------------
 * [rackdiag] Add auto-numbering feature
