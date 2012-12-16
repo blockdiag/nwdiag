@@ -125,28 +125,64 @@ class Rack(blockdiag.elements.NodeGroup):
 
         return u"\n".join(labels)
 
-    def _update_colwidth(self):
-        widths = []
-        for i in range(self.colheight):
-            nodes = [n for n in self.nodes if n.xy.y == i]
-            if len(nodes) > 1:
-                widths.append(len(nodes))
+    def items(self, levels):
+        if isinstance(levels, int):
+            levels = [levels]
 
-        self.colwidth = lcm(*widths) or 1
-        for i in range(self.colheight):
-            nodes = [n for n in self.nodes if n.xy.y == i]
-            if nodes:
-                width = self.colwidth / len(nodes)
-                for i, node in enumerate(nodes):
-                    node.xy = XY(i * width, node.xy.y)
-                    node.colwidth = width
+        return [node for node in self.nodes if node.xy.y in levels]
+
+    def get_linked_levels(self, level):
+        def get_max_height(self, y):
+            try:
+                return max(n.colheight for n in self.items(y))
+            except:
+                return 0
+
+        height = get_max_height(self, level)
+        for dy in range(1, self.colheight - level + 1):
+            if dy < height:
+                height = max(height, get_max_height(self, level + dy) + dy)
+
+        return range(level, level + height)
 
     def fixiate(self):
-        self._update_colwidth()
+        i = 0
+        linked_widths = {}
+        widths = []
+        while i < self.colheight:
+            levels = self.get_linked_levels(i)
 
-        for node in self.nodes:
-            node.xy = XY(self.xy.x + node.xy.x,
-                         self.xy.y + node.xy.y)
+            if levels:
+                linked_widths[i] = []
+                for level in levels:
+                    nodes = self.items(level)
+                    if nodes:
+                        width = max(n.xy.x for n in nodes) + 1
+                        widths.append(width)
+                        linked_widths[i].append(width)
+
+                i += len(levels)
+            else:
+                i += 1
+
+        i = 0
+        self.colwidth = lcm(*widths) or 1
+        while i < self.colheight:
+            levels = self.get_linked_levels(i)
+
+            if levels:
+                colwidth = max(linked_widths[i]) or 1
+                for level in levels:
+                    nodes = self.items(level)
+                    if nodes:
+                        width = self.colwidth / colwidth
+                        for node in nodes:
+                            node.xy = XY(node.xy.x * width, node.xy.y)
+                            node.colwidth = width
+
+                i += len(levels)
+            else:
+                i += 1
 
     def set_ascending(self, attr):
         self.descending = False

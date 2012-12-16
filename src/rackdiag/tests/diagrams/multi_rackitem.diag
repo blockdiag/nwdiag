@@ -1,0 +1,15 @@
+{
+  rackheight = 12;
+
+  1: UPS [3U];
+  1: UPS [3U];
+  4: Server;
+  4: Server [2U];
+  5: Server [2U];
+  6: Server [2U];
+  6: Server [2U];
+  6: Server [2U];
+  8: Server [3U];
+  9: Server;
+  9: Server;
+}
