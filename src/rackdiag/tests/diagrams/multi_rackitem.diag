@@ -1,15 +1,15 @@
 {
   rackheight = 12;
 
-  1: UPS [3U];
-  1: UPS [3U];
-  4: Server;
-  4: Server [2U];
-  5: Server [2U];
-  6: Server [2U];
-  6: Server [2U];
-  6: Server [2U];
-  8: Server [3U];
-  9: Server;
-  9: Server;
+  1: UPS 1[3U];
+  1: UPS 2[3U];
+  4: server 1;
+  4: server 2 [2U];
+  5: server 3 [2U];
+  6: server 4 [2U];
+  6: server 5 [2U];
+  6: server 6 [2U];
+  8: server 7 [3U];
+  9: server 8;
+  9: server 9;
 }
