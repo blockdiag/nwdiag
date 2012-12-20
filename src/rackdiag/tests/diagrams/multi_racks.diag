@@ -1,0 +1,15 @@
+{
+  rack {
+    * server 1;
+    * server 2;
+    * server 3;
+    * server 4;
+  }
+
+  rack {
+    * server 5;
+    * server 6;
+    * server 7;
+    * server 8;
+  }
+}

@@ -145,7 +145,7 @@ class Rack(blockdiag.elements.NodeGroup):
 
         return range(level, level + height)
 
-    def fixiate(self):
+    def adjust_node_widths(self):
         i = 0
         linked_widths = {}
         widths = []
@@ -183,6 +183,12 @@ class Rack(blockdiag.elements.NodeGroup):
                 i += len(levels)
             else:
                 i += 1
+
+    def fixiate(self):
+        self.adjust_node_widths()
+
+        for node in self.nodes:
+            node.xy = node.xy.shift(x=self.xy.x)
 
     def set_ascending(self, attr):
         self.descending = False

@@ -68,3 +68,12 @@ class TestBuildDiagram(unittest2.TestCase):
                       'server 9': 1}
 
         self.assertAttributes(xy=positions, colheight=colheights)
+
+    @build('multi_racks.diag')
+    def test_multi_racks(self):
+        positions = {'server 1': (0, 41), 'server 2': (0, 40),
+                     'server 3': (0, 39), 'server 4': (0, 38),
+                     'server 5': (1, 41), 'server 6': (1, 40),
+                     'server 7': (1, 39), 'server 8': (1, 38)}
+
+        self.assertAttributes(xy=positions)
