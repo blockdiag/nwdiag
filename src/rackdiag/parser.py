@@ -40,7 +40,7 @@ import codecs
 from re import MULTILINE, DOTALL
 from funcparserlib.lexer import make_tokenizer, Token, LexerError
 from funcparserlib.parser import (some, a, maybe, many, finished, skip)
-from blockdiag.utils.namedtuple import namedtuple
+from blockdiag.utils.collections import namedtuple
 
 ENCODING = 'utf-8'
 
