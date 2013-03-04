@@ -52,12 +52,19 @@ class DiagramLayoutManager:
 
                     splitted = field.duplicate()
                     splitted.colwidth = colwidth
-                    splitted.separated_right = True
+                    if self.diagram.scale_direction == "left_to_right":
+                        splitted.separated_right = True
+                    else:
+                        splitted.separated_left = True
+
                     self.diagram.fields.append(splitted)
 
                     field.number += colwidth
                     field.colwidth -= colwidth
-                    field.separated_left = True
+                    if self.diagram.scale_direction == "left_to_right":
+                        field.separated_left = True
+                    else:
+                        field.separated_right = True
 
             yield field
 
@@ -76,6 +83,9 @@ class DiagramLayoutManager:
                            field.label)
                     raise AttributeError(msg)
                 filled[y][rx] = True
+
+            if self.diagram.scale_direction == "right_to_left":
+                x = self.diagram.colwidth - x - field.colwidth
 
             field.xy = XY(x, y)
 
