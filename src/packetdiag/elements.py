@@ -52,7 +52,18 @@ class Diagram(blockdiag.elements.Diagram):
     def __init__(self):
         super(Diagram, self).__init__()
         self.colwidth = 16
+        self.scale_direction = "left_to_right"
 
     @property
     def fields(self):
         return self.nodes
+
+    def set_scale_direction(self, value):
+        value = value.lower()
+        if value in ('ltr', 'left_to_right'):
+            self.scale_direction = 'left_to_right'
+        elif value in ('rtl', 'right_to_left'):
+            self.scale_direction = 'right_to_left'
+        else:
+            msg = "WARNING: unknown scale_direction: %s\n" % value
+            raise AttributeError(msg)
