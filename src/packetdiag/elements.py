@@ -52,7 +52,10 @@ class Diagram(blockdiag.elements.Diagram):
     def __init__(self):
         super(Diagram, self).__init__()
         self.colwidth = 16
+        self.scale_interval = None
         self.scale_direction = "left_to_right"
+
+        self.int_attrs.append('scale_interval')
 
     @property
     def fields(self):

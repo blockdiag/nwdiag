@@ -24,13 +24,17 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
     def _draw_background(self):
         # do not call blockdiag.DiagramDraw#_draw_background()
 
+        scale_interval = self.diagram.scale_interval
+        if scale_interval is None:
+            scale_interval = self.diagram.colwidth / 2
+
         # draw measure lines and labels
         font = self.metrics.font_for(None)
         for i in range(self.diagram.colwidth + 1):
             line = self.metrics.measure_line(i)
             self.drawer.line(line, fill=self.diagram.linecolor)
 
-            if (i == 0) or (i * 2.0 % self.diagram.colwidth == 0):
+            if (i % scale_interval) == 0:
                 box = self.metrics.measure_label(i)
 
                 if self.diagram.scale_direction == "left_to_right":
