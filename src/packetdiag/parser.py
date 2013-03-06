@@ -65,6 +65,7 @@ def tokenize(string):
         ('DefLabel', (r':[^\r\n\[]+',)),
         ('Range',  (r'[0-9]+-[0-9]+',)),
         ('Number',  (r'[0-9]+',)),
+        ('FieldListItem', (r'[\*\-]\s*[^\r\n\[]+',)),
         ('Name',    (ur'[A-Za-z_0-9\u0080-\uffff]'
                      ur'[A-Za-z_\-.0-9\u0080-\uffff]*',)),
         ('Op',      (r'[{}:;,=\[\]]',)),
@@ -87,11 +88,15 @@ def parse(seq):
                ).named('id') >> tokval
     number = some(lambda t: t.type == 'Number').named('number') >> tokval
     _range = some(lambda t: t.type == 'Range').named('range') >> tokval
+    field_list_item = some(lambda t: t.type == 'FieldListItem'
+                           ).named('itemize') >> tokval
     deflabel = some(lambda t: t.type == 'DefLabel').named('deflabel') >> tokval
 
     field_label = lambda text: re.sub("^:\s*(.*?)\s*;?$", "\\1", text)
     make_field_item = (lambda no, text, attr:
                        FieldItem(no, field_label(text), attr))
+    make_field_list_item = (lambda text, attr:
+                            FieldItem(None, re.sub("^.\s*", "", text), attr))
 
     a_list = (
         _id +
@@ -101,11 +106,19 @@ def parse(seq):
     attr_list = (
         many(op_('[') + many(a_list) + op_(']'))
         >> flatten)
-    field_item_stmt = (
+    numbered_field_item_stmt = (
         (number | _range) +
         deflabel +
         attr_list
         >> unarg(make_field_item))
+    nonnumbered_field_item_stmt = (
+        field_list_item +
+        attr_list
+        >> unarg(make_field_list_item))
+    field_item_stmt = (
+        numbered_field_item_stmt
+        | nonnumbered_field_item_stmt
+    )
 
     # plugin definition
     plugin_stmt = (
