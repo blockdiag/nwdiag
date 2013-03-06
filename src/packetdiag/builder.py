@@ -32,7 +32,16 @@ class DiagramTreeBuilder:
             elif isinstance(stmt, parser.FieldItem):
                 item = FieldItem(stmt.number, stmt.label)
                 item.set_attributes(stmt.attrs)
+
+                if item.number is None:
+                    if len(self.diagram.fields) == 0:
+                        item.number = 0
+                    else:
+                        last_item = self.diagram.fields[-1]
+                        item.number = last_item.number + last_item.colwidth
+
                 self.diagram.fields.append(item)
+
             elif isinstance(stmt, parser.AttrPlugin):
                 self.diagram.set_plugin(stmt.name, stmt.attrs)
 

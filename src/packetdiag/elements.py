@@ -29,21 +29,28 @@ class FieldItem(blockdiag.elements.DiagramNode):
         self.separated_right = False
         self.separated_left = False
 
-        matched = re.match('^(\d+)-(\d+)$', number)
-        if matched:
-            self.number = int(matched.group(1))
-            self.colwidth = int(matched.group(2)) - self.number + 1
-
-            if self.colwidth <= 0:
-                msg = ("Invalid field size definition: %s: %s\n" %
-                       (number, label))
-                raise AttributeError(msg)
-        else:
-            self.number = int(number)
+        if number is None:
+            self.number = None
             self.colwidth = 1
+        else:
+            matched = re.match('^(\d+)-(\d+)$', number)
+            if matched:
+                self.number = int(matched.group(1))
+                self.colwidth = int(matched.group(2)) - self.number + 1
+
+                if self.colwidth <= 0:
+                    msg = ("Invalid field size definition: %s: %s\n" %
+                           (number, label))
+                    raise AttributeError(msg)
+            else:
+                self.number = int(number)
+                self.colwidth = 1
 
     def set_height(self, value):
         self.colheight = int(value)
+
+    def set_len(self, value):
+        self.colwidth = int(value)
 
 
 class Diagram(blockdiag.elements.Diagram):
