@@ -42,7 +42,7 @@ class DiagramMetrics(blockdiag.metrics.DiagramMetrics):
         if n == self.colwidth:
             node = _Node(XY(n - 1, 0))
             pt = self.spreadsheet._node_topleft(node, use_padding=False)
-            pt.x += self.node_width
+            pt = pt.shift(x=self.node_width)
         else:
             node = _Node(XY(n, 0))
             pt = self.spreadsheet._node_topleft(node, use_padding=False)
