@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 from nwdiag.builder import *
 from nwdiag.elements import *
 from nwdiag.parser import *
@@ -68,7 +69,7 @@ def test_two_networks_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (0, 1)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -77,7 +78,7 @@ def test_node_belongs_to_multiple_networks_diagram():
 
     assert_pos = {'A': (0, 0)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -86,7 +87,7 @@ def test_connected_networks_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (1, 1)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -96,7 +97,7 @@ def test_connected_networks2_diagram():
     assert_pos = {'A': (0, 0), 'B': (1, 0), 'C': (2, 0), 'D': (3, 0),
                   'E': (4, 0), 'Z': (3, 1)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -107,7 +108,7 @@ def test_connected_networks3_diagram():
                   'E': (4, 0), 'F': (5, 0), 'G': (6, 0), 'H': (1, 1),
                   'I': (2, 1), 'J': (4, 2), 'K': (5, 2)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -116,7 +117,7 @@ def test_group_inner_network_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (1, 0)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
     assert len(screen.groups[0].nodes) == 2
@@ -129,7 +130,7 @@ def test_group_outer_network_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (1, 0)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
     assert len(screen.groups[0].nodes) == 2
@@ -142,7 +143,7 @@ def test_group_across_network_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (1, 0), 'C': (2, 1)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
     assert len(screen.groups[0].nodes) == 3
@@ -156,7 +157,7 @@ def test_group_network_diagram():
     assert_pos = {'A': (0, 0), 'B': (1, 0), 'C': (0, 1),
                   'D': (2, 1), 'E': (3, 1)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -166,7 +167,7 @@ def test_split_group_diagram():
     assert_pos = {'A': (0, 0), 'B': (1, 0), 'C': (3, 0),
                   'D': (2, 0), 'E': (4, 0)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -175,7 +176,7 @@ def test_peer_network_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (0, 1), 'C': (1, 2)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -184,7 +185,7 @@ def test_peer_network2_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (1, 0), 'C': (1, 1)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -193,7 +194,7 @@ def test_peer_network3_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (1, 0), 'C': (1, 1), 'D': (1, 2)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -202,7 +203,7 @@ def test_peer_network4_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (1, 1), 'C': (1, 2)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -211,7 +212,7 @@ def test_peer_network5_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (1, 0), 'C': (2, 0), 'D': (2, 1)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -220,7 +221,7 @@ def test_peer_network_branched_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (0, 1), 'C': (1, 2), 'D': (1, 3)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -229,7 +230,7 @@ def test_same_peer_network_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (0, 1), 'C': (1, 2), 'D': (0, 3)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
 
 
@@ -238,5 +239,5 @@ def test_group_and_peer_network_diagram():
 
     assert_pos = {'A': (0, 0), 'B': (0, 1), 'C': (1, 2)}
     for node in screen.nodes:
-        print assert_pos[node.id], node.xy
+        print(assert_pos[node.id], node.xy)
         assert node.xy == assert_pos[node.id]
