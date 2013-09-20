@@ -105,10 +105,10 @@ class NodeMetrics(blockdiag.metrics.NodeMetrics):
     @property
     def connectors(self):
         above = [n for n in self.node.networks if n.xy.y <= self.node.xy.y]
-        above.sort(lambda a, b: -cmp(a.xy.y, b.xy.y))
+        above.sort(key=lambda a: a.xy.y, reverse=True)
 
         bottom = [n for n in self.node.networks if n.xy.y > self.node.xy.y]
-        bottom.sort(lambda a, b: cmp(a.xy.y, b.xy.y))
+        bottom.sort(key=lambda a: a.xy.y)
 
         Connector = namedtuple('Connector', 'network line textbox')
 
@@ -154,7 +154,7 @@ class GroupMetrics(blockdiag.metrics.NodeMetrics):
         self.is_root_group = False
         if group.nodes:
             networks = group.nodes[0].networks[:]
-            networks.sort(lambda a, b: cmp(a.xy.y, b.xy.y))
+            networks.sort(key=lambda a: a.xy.y)
             network = min(networks)
             if self.top.x == metrics.network(network).top.x:
                 self.is_root_group = True

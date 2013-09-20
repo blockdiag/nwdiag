@@ -22,6 +22,7 @@ from packetdiag.builder import ScreenNodeBuilder
 from packetdiag.drawer import DiagramDraw
 from packetdiag.utils.rst.nodes import packetdiag
 from blockdiag.utils.rst import directives
+from functools import cmp_to_key
 
 
 directive_options_default = dict(format='PNG',
@@ -105,7 +106,7 @@ class PacketdiagDirective(directives.BlockdiagDirective):
         headers = [FieldItem.attrname[name] for name in FieldItem.desctable]
 
         descriptions = [n.to_desctable() for n in nodes()]
-        descriptions.sort(directives.cmp_node_number)
+        descriptions.sort(key=cmp_to_key(directives.cmp_node_number))
 
         for i in range(len(headers) - 1, -1, -1):
             if any(desc[i] for desc in descriptions):
