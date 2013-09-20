@@ -13,6 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from __future__ import division
 import blockdiag.metrics
 from blockdiag.utils import Box, XY
 from blockdiag.utils.collections import defaultdict
@@ -47,7 +48,7 @@ class DiagramMetrics(blockdiag.metrics.DiagramMetrics):
             self.spreadsheet.set_span_width(x, span_width)
 
             if rack.colwidth > 1:
-                node_width = self.node_width / rack.colwidth
+                node_width = self.node_width // rack.colwidth
                 for i in range(rack.colwidth):
                     self.spreadsheet.set_node_width(rack.xy.x + i, node_width)
 
