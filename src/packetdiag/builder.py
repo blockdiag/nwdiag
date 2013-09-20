@@ -13,6 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from __future__ import division
 from packetdiag import parser
 from packetdiag.elements import Diagram, FieldItem, DiagramNode
 from blockdiag.utils import XY
@@ -81,7 +82,7 @@ class DiagramLayoutManager:
         filled = {}
         for field in self.split_field_by_column():
             x = field.number % self.diagram.colwidth
-            y = field.number / self.diagram.colwidth
+            y = field.number // self.diagram.colwidth
 
             if filled.get(y) is None:
                 filled[y] = {}

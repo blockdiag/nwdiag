@@ -13,6 +13,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from __future__ import division
+
 
 def gcd(*args):
     if len(args) == 0:
@@ -34,6 +36,6 @@ def lcm(*args):
     elif len(args) == 1:
         return args[0]
     elif len(args) == 2:
-        return args[0] * args[1] / gcd(*args)
+        return args[0] * args[1] // gcd(*args)
     else:
         return lcm(lcm(*args[:-1]), args[-1])

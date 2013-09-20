@@ -13,6 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from __future__ import division
 import re
 import blockdiag.elements
 from rackdiag.utils.math import lcm
@@ -175,7 +176,7 @@ class Rack(blockdiag.elements.NodeGroup):
                 for level in levels:
                     nodes = self.items(level)
                     if nodes:
-                        width = self.colwidth / colwidth
+                        width = self.colwidth // colwidth
                         for node in nodes:
                             node.xy = XY(node.xy.x * width, node.xy.y)
                             node.colwidth = width

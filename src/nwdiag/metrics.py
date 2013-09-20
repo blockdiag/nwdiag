@@ -13,6 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from __future__ import division
 import math
 import blockdiag.metrics
 from nwdiag import elements
@@ -32,9 +33,9 @@ class DiagramMetrics(blockdiag.metrics.DiagramMetrics):
 
         self.networks = diagram.networks
         self.trunk_diameter = self.cellsize
-        self.jump_shift = self.trunk_diameter / 2
+        self.jump_shift = self.trunk_diameter // 2
         self.jump_radius = self.trunk_diameter
-        self.page_padding = [self.span_height / 2, 0, 0, self.node_width]
+        self.page_padding = [self.span_height // 2, 0, 0, self.node_width]
 
         for node in diagram.nodes:
             bottom = [n for n in node.networks if n.xy.y > node.xy.y]
@@ -74,27 +75,27 @@ class NetworkMetrics(blockdiag.metrics.NodeMetrics):
     @property
     def top(self):
         pt = self.box.top
-        return XY(pt.x, pt.y - self.span_height / 2)
+        return XY(pt.x, pt.y - self.span_height // 2)
 
     @property
     def left(self):
         pt = self.box.left
-        return XY(pt.x - self.span_width / 2, pt.y)
+        return XY(pt.x - self.span_width // 2, pt.y)
 
     @property
     def right(self):
         pt = self.box.right
-        return XY(pt.x + self.span_width / 2, pt.y)
+        return XY(pt.x + self.span_width // 2, pt.y)
 
     @property
     def textbox(self):
         x = self.left.x
         y = self.top.y
 
-        width = self.node_width * 3 / 2
+        width = self.node_width * 3 // 2
         height = self.node_height
 
-        return Box(x - width, y - height / 2, x, y + height / 2)
+        return Box(x - width, y - height // 2, x, y + height // 2)
 
 
 class NodeMetrics(blockdiag.metrics.NodeMetrics):
@@ -118,7 +119,7 @@ class NodeMetrics(blockdiag.metrics.NodeMetrics):
                 if network.hidden:
                     span = 0
                 else:
-                    span = self.trunk_diameter / 2
+                    span = self.trunk_diameter // 2
 
                 if network.xy.y <= self.node.xy.y:
                     x, y2 = self.top
@@ -135,9 +136,9 @@ class NodeMetrics(blockdiag.metrics.NodeMetrics):
                     dx = int(math.floor(base_x * self.cellsize * 2))
 
                 width = self.node_width + self.span_width
-                textbox = Box(x + dx + self.cellsize / 2,
-                              y2 - self.span_height / 2,
-                              x + width - self.cellsize / 2,
+                textbox = Box(x + dx + self.cellsize // 2,
+                              y2 - self.span_height // 2,
+                              x + width - self.cellsize // 2,
                               y2)
                 line = [XY(x + dx, y1), XY(x + dx, y2)]
 
@@ -166,7 +167,7 @@ class GroupMetrics(blockdiag.metrics.NodeMetrics):
         box = Box(box[0], box[1] + span, box[2], box[3] + span)
 
         if self.is_root_group:
-            width = (self.node_width + self.span_width) / 2
+            width = (self.node_width + self.span_width) // 2
             box = Box(box[0] + width, box[1], box[2] + width, box[3])
 
         return box
@@ -174,7 +175,7 @@ class GroupMetrics(blockdiag.metrics.NodeMetrics):
     @property
     def marginbox(self):
         box = super(GroupMetrics, self).box
-        margin_x = self.span_height / 2 - self.cellsize
+        margin_x = self.span_height // 2 - self.cellsize
         margin_y = self.cellsize
         return Box(box[0] - margin_y, box[1] - margin_x,
                    box[2] + margin_y, box[3] + margin_x)

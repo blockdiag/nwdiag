@@ -13,6 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from __future__ import division
 import blockdiag.drawer
 from nwdiag.metrics import DiagramMetrics
 from blockdiag.utils import Box, XY
@@ -54,10 +55,10 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
 
                 if (self.diagram.external_connector and
                    (network == self.diagram.networks[0])):
-                    r = metrics.trunk_diameter / 2
+                    r = metrics.trunk_diameter // 2
 
                     pt = metrics.network(network).top
-                    pt0 = XY(pt.x, pt.y - metrics.span_height * 2 / 3)
+                    pt0 = XY(pt.x, pt.y - metrics.span_height * 2 // 3)
                     pt1 = XY(pt.x, pt.y - r)
 
                     self.drawer.line([pt0, pt1], fill=network.linecolor)
@@ -65,14 +66,14 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
     def trunkline(self, network, shadow=False):
         metrics = self.metrics
         m = metrics.network(network)
-        r = metrics.trunk_diameter / 2
+        r = metrics.trunk_diameter // 2
 
         pt1, pt2 = m.trunkline
         box = Box(pt1.x, pt1.y - r, pt2.x, pt2.y + r)
 
         if shadow:
             xdiff = self.metrics.shadow_offset.x
-            ydiff = self.metrics.shadow_offset.y / 2
+            ydiff = self.metrics.shadow_offset.y // 2
 
             box = Box(pt1.x + xdiff, pt1.y - r + ydiff,
                       pt2.x + xdiff, pt2.y + r + ydiff)
@@ -82,9 +83,9 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
 
             path = pathdata(box[0], box[1])
             path.line(box[2], box[1])
-            path.ellarc(r / 2, r, 0, 0, 1, box[2], box[3])
+            path.ellarc(r // 2, r, 0, 0, 1, box[2], box[3])
             path.line(box[0], box[3])
-            path.ellarc(r / 2, r, 0, 0, 1, box[0], box[1])
+            path.ellarc(r // 2, r, 0, 0, 1, box[0], box[1])
 
             if shadow:
                 self.drawer.path(path, fill=self.shadow, filter='blur')
@@ -93,15 +94,15 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
                                  outline=network.linecolor)
 
                 path = pathdata(box[2], box[3])
-                path.ellarc(r / 2, r, 0, 0, 1, box[2], box[1])
+                path.ellarc(r // 2, r, 0, 0, 1, box[2], box[1])
                 self.drawer.path(path, fill='none', outline=network.linecolor)
 
                 # for edge jumping
                 line = (XY(box[0], box[1]), XY(box[2], box[1]))
                 self.drawer.line(line, fill='none', jump=True)
         else:
-            lsection = Box(box[0] - r / 2, box[1], box[0] + r / 2, box[3])
-            rsection = Box(box[2] - r / 2, box[1], box[2] + r / 2, box[3])
+            lsection = Box(box[0] - r // 2, box[1], box[0] + r // 2, box[3])
+            rsection = Box(box[2] - r // 2, box[1], box[2] + r // 2, box[3])
 
             if shadow:
                 color = self.shadow
