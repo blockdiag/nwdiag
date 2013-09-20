@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 import os
 import unittest2
 from rackdiag.builder import ScreenNodeBuilder
@@ -28,7 +29,7 @@ class TestBuildDiagram(unittest2.TestCase):
     def assertAttributes(self, **attributes):
         for rack in self.diagram.racks:
             for node in rack.nodes:
-                print node, node.label
+                print(node, node.label)
 
                 for key, attribute in attributes.items():
                     value = attribute.get(node.label)
