@@ -22,6 +22,7 @@ from rackdiag.builder import ScreenNodeBuilder
 from rackdiag.drawer import DiagramDraw
 from rackdiag.utils.rst.nodes import rackdiag
 from blockdiag.utils.rst import directives
+from functools import cmp_to_key
 
 
 directive_options_default = dict(format='PNG',
@@ -105,7 +106,7 @@ class RackdiagDirective(directives.BlockdiagDirective):
         headers = [RackItem.attrname[name] for name in RackItem.desctable]
 
         descriptions = [n.to_desctable() for n in nodes()]
-        descriptions.sort(directives.cmp_node_number)
+        descriptions.sort(key=cmp_to_key(directives.cmp_node_number))
 
         # records for total
         total = ['-', 'Total'] + [''] * (len(RackItem.desctable) - 2)

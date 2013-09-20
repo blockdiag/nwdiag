@@ -199,7 +199,7 @@ class DiagramLayoutManager:
 
                 starts = 0
                 if layouted:
-                    layouted.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
+                    layouted.sort(key=lambda a: a.xy.x)
                     basenode = layouted[0]
                     commonnw = set(basenode.networks) & set(node.networks)
 
@@ -238,7 +238,7 @@ class DiagramLayoutManager:
     def set_network_size(self):
         for network in self.diagram.networks:
             nodes = [n for n in self.diagram.nodes if network in n.networks]
-            nodes.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
+            nodes.sort(key=lambda a: a.xy.x)
 
             x0 = min(n.xy.x for n in nodes)
             network.xy = XY(x0, network.xy.y)
@@ -248,7 +248,7 @@ class DiagramLayoutManager:
 
     def set_group_size(self, group):
         nodes = list(group.nodes)
-        nodes.sort(lambda a, b: cmp(a.xy.x, b.xy.x))
+        nodes.sort(key=lambda a: a.xy.x)
 
         x0 = min(n.xy.x for n in nodes)
         y0 = min(n.xy.y for n in nodes)
