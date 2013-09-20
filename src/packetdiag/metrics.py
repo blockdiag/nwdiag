@@ -14,8 +14,8 @@
 #  limitations under the License.
 
 import blockdiag.metrics
+from collections import defaultdict, namedtuple
 from blockdiag.utils import Box, XY
-from blockdiag.utils.collections import defaultdict, namedtuple
 
 
 class DiagramMetrics(blockdiag.metrics.DiagramMetrics):

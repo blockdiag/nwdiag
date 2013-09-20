@@ -13,11 +13,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from collections import namedtuple
 from nwdiag import parser
 from nwdiag.elements import (Diagram, DiagramNode, DiagramEdge,
                              Network, Route, NodeGroup)
 from blockdiag.utils import unquote, XY
-from blockdiag.utils.collections import namedtuple
 
 
 class DiagramTreeBuilder:

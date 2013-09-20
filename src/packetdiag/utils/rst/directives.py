@@ -22,7 +22,7 @@ from packetdiag.builder import ScreenNodeBuilder
 from packetdiag.drawer import DiagramDraw
 from packetdiag.utils.rst.nodes import packetdiag
 from blockdiag.utils.rst import directives
-from functools import cmp_to_key
+from blockdiag.utils.compat import cmp_to_key
 
 
 directive_options_default = dict(format='PNG',

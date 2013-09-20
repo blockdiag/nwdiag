@@ -16,6 +16,7 @@
 import blockdiag.drawer
 from rackdiag.metrics import DiagramMetrics
 from blockdiag.utils import Box
+from blockdiag.utils.compat import u
 
 
 class DiagramDraw(blockdiag.drawer.DiagramDraw):
@@ -32,7 +33,7 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
 
             for i in range(rack.colheight):
                 box = self.metrics.racknumber(rack, i)
-                number = u"%d" % (i + 1)
+                number = u("%d") % (i + 1)
                 self.drawer.textarea(box, number, default_font, halign='right',
                                      fill=self.diagram.textcolor)
 

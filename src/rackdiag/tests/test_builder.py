@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+
+import sys
+if sys.version_info < (2, 7):
+    import unittest2 as unittest
+else:
+    import unittest
+
 import os
-import unittest2
 from rackdiag.builder import ScreenNodeBuilder
 from rackdiag.parser import parse_string
 
@@ -25,7 +31,7 @@ def build(filename):
     return decorator
 
 
-class TestBuildDiagram(unittest2.TestCase):
+class TestBuildDiagram(unittest.TestCase):
     def assertAttributes(self, **attributes):
         for rack in self.diagram.racks:
             for node in rack.nodes:
