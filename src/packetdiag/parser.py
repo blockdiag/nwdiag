@@ -66,8 +66,8 @@ def tokenize(string):
         ('Range',  (r'[0-9]+-[0-9]+',)),
         ('Number',  (r'[0-9]+',)),
         ('FieldListItem', (r'[\*\-]\s*[^\r\n\[]+',)),
-        ('Name',    (ur'[A-Za-z_0-9\u0080-\uffff]'
-                     ur'[A-Za-z_\-.0-9\u0080-\uffff]*',)),
+        ('Name',    (u'[A-Za-z_0-9\u0080-\uffff]'
+                     u'[A-Za-z_\\-.0-9\u0080-\uffff]*',)),
         ('Op',      (r'[{}:;,=\[\]]',)),
         ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),
     ]

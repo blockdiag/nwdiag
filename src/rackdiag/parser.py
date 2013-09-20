@@ -67,8 +67,8 @@ def tokenize(string):
         ('NonnumRackItem', (r'[\*\-]\s*[^\r\n\[]+',)),
         ('Units',   (r'([0-9]+U|[0-9]+(?:\.[0-9]+)?(A|kg))',)),
         ('Number',  (r'[0-9]+',)),
-        ('Name',    (ur'[A-Za-z_0-9\u0080-\uffff]'
-                     ur'[A-Za-z_\-.0-9\u0080-\uffff]*',)),
+        ('Name',    (u'[A-Za-z_0-9\u0080-\uffff]'
+                     u'[A-Za-z_\\-.0-9\u0080-\uffff]*',)),
         ('Op',      (r'[{}:;,=\[\]]',)),
         ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),
     ]
