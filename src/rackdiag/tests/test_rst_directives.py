@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import sys
+if sys.version_info < (2, 7):
+    import unittest2 as unittest
+else:
+    import unittest
+
 import os
 import io
 import tempfile
-import unittest2
 from blockdiag.tests.utils import stderr_wrapper, assertRaises
 from docutils import nodes
 from docutils.core import publish_doctree, publish_parts
@@ -35,7 +40,7 @@ def use_tmpdir(func):
     return _
 
 
-class TestRstDirectives(unittest2.TestCase):
+class TestRstDirectives(unittest.TestCase):
     def tearDown(self):
         if 'rackdiag' in docutils._directives:
             del docutils._directives['rackdiag']

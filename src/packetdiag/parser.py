@@ -38,9 +38,10 @@ At the moment, the parser builds only a parse tree, not an abstract syntax tree
 import re
 import io
 from re import MULTILINE, DOTALL
+from collections import namedtuple
 from funcparserlib.lexer import make_tokenizer, Token, LexerError
 from funcparserlib.parser import (some, a, maybe, many, finished, skip)
-from blockdiag.utils.collections import namedtuple
+from blockdiag.utils.compat import u
 
 ENCODING = 'utf-8'
 
@@ -66,8 +67,8 @@ def tokenize(string):
         ('Range',  (r'[0-9]+-[0-9]+',)),
         ('Number',  (r'[0-9]+',)),
         ('FieldListItem', (r'[\*\-]\s*[^\r\n\[]+',)),
-        ('Name',    (u'[A-Za-z_0-9\u0080-\uffff]'
-                     u'[A-Za-z_\\-.0-9\u0080-\uffff]*',)),
+        ('Name',    (u('[A-Za-z_0-9\u0080-\uffff]') +
+                     u('[A-Za-z_\\-.0-9\u0080-\uffff]*'),)),
         ('Op',      (r'[{}:;,=\[\]]',)),
         ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),
     ]

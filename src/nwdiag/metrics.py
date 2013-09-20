@@ -15,10 +15,10 @@
 
 from __future__ import division
 import math
+from collections import namedtuple
 import blockdiag.metrics
 from nwdiag import elements
 from blockdiag.utils import Box, XY
-from blockdiag.utils.collections import namedtuple
 
 cellsize = blockdiag.metrics.DiagramMetrics.cellsize
 

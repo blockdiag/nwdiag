@@ -13,10 +13,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from collections import defaultdict
 from rackdiag import parser
 from rackdiag.elements import Diagram, Rack, RackItem
 from blockdiag.utils import XY
-from blockdiag.utils.collections import defaultdict
 
 
 class DiagramTreeBuilder:

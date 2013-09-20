@@ -18,6 +18,13 @@ classifiers = [
     "Topic :: Software Development :: Documentation",
     "Topic :: Text Processing :: Markup",
 ]
+test_requires = [
+             'Nose',
+             'pep8>=1.3',]
+
+# only for Python2.6
+if sys.version_info > (2, 6) and sys.version_info < (2, 7):
+    test_requires.append('unittest2')
 
 setup(
      name='nwdiag',
@@ -42,11 +49,7 @@ setup(
          # -*- Extra requirements: -*-
      ],
      extras_require=dict(
-         test=[
-             'Nose',
-             'pep8>=1.3',
-             'unittest2',
-         ],
+         test=test_requires,
          pdf=[
              'reportlab',
          ],
@@ -55,7 +58,7 @@ setup(
          ],
      ),
      test_suite='nose.collector',
-     tests_require=['Nose','pep8'],
+     tests_require=test_requires,
      entry_points="""
         [console_scripts]
         nwdiag = nwdiag.command:main

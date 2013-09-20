@@ -38,9 +38,10 @@ At the moment, the parser builds only a parse tree, not an abstract syntax tree
 import re
 import io
 from re import MULTILINE, DOTALL
+from collections import namedtuple
 from funcparserlib.lexer import make_tokenizer, Token, LexerError
 from funcparserlib.parser import (some, a, maybe, many, finished, skip)
-from blockdiag.utils.collections import namedtuple
+from blockdiag.utils.compat import u
 
 ENCODING = 'utf-8'
 
@@ -67,8 +68,8 @@ def tokenize(string):
         ('NonnumRackItem', (r'[\*\-]\s*[^\r\n\[]+',)),
         ('Units',   (r'([0-9]+U|[0-9]+(?:\.[0-9]+)?(A|kg))',)),
         ('Number',  (r'[0-9]+',)),
-        ('Name',    (u'[A-Za-z_0-9\u0080-\uffff]'
-                     u'[A-Za-z_\\-.0-9\u0080-\uffff]*',)),
+        ('Name',    (u('[A-Za-z_0-9\u0080-\uffff]') +
+                     u('[A-Za-z_\\-.0-9\u0080-\uffff]*'),)),
         ('Op',      (r'[{}:;,=\[\]]',)),
         ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),
     ]
@@ -91,7 +92,7 @@ def parse(seq):
     rackitem = some(lambda t: t.type == 'RackItem').named('rackitem') >> tokval
     nonnum_rackitem = (some(lambda t: t.type == 'NonnumRackItem').
                        named('nonnum_rackitem') >> tokval)
-    make_graph_attr = lambda args: DefAttrs(u'graph', [Attr(*args)])
+    make_graph_attr = lambda args: DefAttrs(u('graph'), [Attr(*args)])
 
     racklabel = lambda text: re.sub("^.\s*(.*?)\s*;?$", "\\1", text)
     make_rackitem = lambda no, text, attr: RackItem(no, racklabel(text), attr)
