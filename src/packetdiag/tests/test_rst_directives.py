@@ -9,7 +9,7 @@ else:
 import os
 import io
 import tempfile
-from blockdiag.tests.utils import stderr_wrapper, assertRaises
+from blockdiag.tests.utils import stderr_wrapper
 from docutils import nodes
 from docutils.core import publish_doctree, publish_parts
 from docutils.parsers.rst import directives as docutils
@@ -167,22 +167,22 @@ class TestRstDirectives(unittest.TestCase):
         self.assertFalse('target' in doctree[0])
 
     @use_tmpdir
-    @assertRaises(RuntimeError)
     def test_block_fontpath1(self, path):
-        directives.setup(format='SVG', fontpath=['dummy.ttf'],
-                         outputdir=path)
-        text = ".. packetdiag::\n   :alt: hello world\n\n" + \
-               "   { 1: server\n    2: database\n   }"
-        publish_doctree(text)
+        with self.assertRaises(RuntimeError):
+            directives.setup(format='SVG', fontpath=['dummy.ttf'],
+                             outputdir=path)
+            text = ".. packetdiag::\n   :alt: hello world\n\n" + \
+                   "   { 1: server\n    2: database\n   }"
+            publish_doctree(text)
 
     @use_tmpdir
-    @assertRaises(RuntimeError)
     def test_block_fontpath2(self, path):
-        directives.setup(format='SVG', fontpath='dummy.ttf',
-                         outputdir=path)
-        text = ".. packetdiag::\n   :alt: hello world\n\n" + \
-               "   { 1: server\n    2: database\n   }"
-        publish_doctree(text)
+        with self.assertRaises(RuntimeError):
+            directives.setup(format='SVG', fontpath='dummy.ttf',
+                             outputdir=path)
+            text = ".. packetdiag::\n   :alt: hello world\n\n" + \
+                   "   { 1: server\n    2: database\n   }"
+            publish_doctree(text)
 
     @use_tmpdir
     def test_caption(self, path):
