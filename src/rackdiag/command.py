@@ -24,5 +24,5 @@ class RackdiagApp(Application):
     module = rackdiag
 
 
-def main():
-    return RackdiagApp().run()
+def main(args=sys.argv[1:]):
+    return RackdiagApp().run(args)

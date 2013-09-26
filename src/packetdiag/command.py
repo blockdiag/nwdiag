@@ -24,5 +24,5 @@ class PacketdiagApp(Application):
     module = packetdiag
 
 
-def main():
-    return PacketdiagApp().run()
+def main(args=sys.argv[1:]):
+    return PacketdiagApp().run(args)

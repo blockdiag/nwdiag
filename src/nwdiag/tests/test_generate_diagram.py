@@ -20,7 +20,7 @@ def extra_case(func):
     return func
 
 
-def __build_diagram(filename, format, *args):
+def __build_diagram(filename, format, *additional_args):
     testdir = os.path.dirname(__file__)
     diagpath = "%s/diagrams/%s" % (testdir, filename)
 
@@ -28,20 +28,17 @@ def __build_diagram(filename, format, *args):
     fontpath = "%s/truetype/%s" % (testdir, fontfile)
 
     try:
-        argv = sys.argv
         tmpfile = tempfile.mkstemp()[1]
-        sys.argv = ['nwdiag.py', '-T', format, '-f', fontpath,
-                    '-o', tmpfile, diagpath]
-        if args:
-            sys.argv += args
+        args = ['-T', format, '-f', fontpath, '-o', tmpfile, diagpath]
+        if additional_args:
+            args += additional_args
 
         DiagramNode.clear()
         DiagramEdge.clear()
         NodeGroup.clear()
 
-        nwdiag.command.main()
+        nwdiag.command.main(args)
     finally:
-        sys.argv = argv
         os.unlink(tmpfile)
 
 
