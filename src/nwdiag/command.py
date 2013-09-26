@@ -13,6 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import sys
 import nwdiag
 import nwdiag.builder
 import nwdiag.drawer
@@ -24,5 +25,5 @@ class NwdiagApp(Application):
     module = nwdiag
 
 
-def main():
-    return NwdiagApp().run()
+def main(args=sys.argv[1:]):
+    return NwdiagApp().run(args)
