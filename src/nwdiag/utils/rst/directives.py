@@ -55,7 +55,7 @@ class NwdiagDirective(directives.BlockdiagDirective):
     def node2image(self, node, diagram):
         options = node['options']
         filename = self.image_filename(node)
-        fontpath = self.detectfont()
+        fontmap = self.create_fontmap()
         _format = self.global_options['format'].lower()
 
         if _format == 'svg' and self.global_options['inline_svg'] is True:
@@ -63,7 +63,8 @@ class NwdiagDirective(directives.BlockdiagDirective):
 
         kwargs = dict(self.global_options)
         del kwargs['format']
-        drawer = DiagramDraw(_format, diagram, filename, **kwargs)
+        drawer = DiagramDraw(_format, diagram, filename,
+                             fontmap=fontmap, **kwargs)
 
         if filename is None or not os.path.isfile(filename):
             drawer.draw()
