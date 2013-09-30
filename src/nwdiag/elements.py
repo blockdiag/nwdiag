@@ -15,8 +15,11 @@
 
 import re
 import blockdiag.elements
-from blockdiag.elements import DiagramEdge, NodeGroup
 from blockdiag.utils import images, unquote
+
+
+class NodeGroup(blockdiag.elements.NodeGroup):
+    pass
 
 
 class DiagramNode(blockdiag.elements.DiagramNode):
@@ -37,6 +40,10 @@ class DiagramNode(blockdiag.elements.DiagramNode):
                 self.address[network] = address
             else:
                 self.set_attribute(attr)
+
+
+class DiagramEdge(blockdiag.elements.DiagramEdge):
+    pass
 
 
 class Network(blockdiag.elements.NodeGroup):

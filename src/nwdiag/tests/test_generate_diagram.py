@@ -4,7 +4,6 @@ import os
 import sys
 import tempfile
 import nwdiag.command
-from nwdiag.elements import *
 
 
 def extra_case(func):
