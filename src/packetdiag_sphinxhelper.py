@@ -33,4 +33,4 @@ from packetdiag import command, parser, builder, drawer
 from packetdiag.utils.rst.directives import packetdiag, PacketdiagDirective
 
 (collections, FontMap, command, parser, builder, drawer,
- packetdiag, PacketdiagDirective)
+ nodes, directives, packetdiag, PacketdiagDirective)

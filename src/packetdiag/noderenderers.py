@@ -19,8 +19,6 @@ from blockdiag.noderenderer import install_renderer
 
 class PacketNode(NodeShape):
     def render_shape(self, drawer, _, **kwargs):
-        fill = kwargs.get('fill')
-
         # draw outline
         box = self.metrics.cell(self.node).box
         if kwargs.get('shadow'):

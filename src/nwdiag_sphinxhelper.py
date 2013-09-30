@@ -33,4 +33,4 @@ from nwdiag import command, parser, builder, drawer
 from nwdiag.utils.rst.directives import nwdiag, NwdiagDirective
 
 (collections, FontMap, command, parser, builder, drawer,
- nwdiag, NwdiagDirective)
+ nodes, directives, nwdiag, NwdiagDirective)
