@@ -17,9 +17,12 @@ from __future__ import division
 import re
 import blockdiag.elements
 from rackdiag.utils.math import lcm
-from blockdiag.elements import DiagramNode
 from blockdiag.utils import XY
 from blockdiag.utils.compat import u
+
+
+class DiagramNode(blockdiag.elements.DiagramNode):
+    pass
 
 
 class RackItem(blockdiag.elements.DiagramNode):

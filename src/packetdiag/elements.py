@@ -15,7 +15,10 @@
 
 import re
 import blockdiag.elements
-from blockdiag.elements import DiagramNode
+
+
+class DiagramNode(blockdiag.elements.DiagramNode):
+    pass
 
 
 class FieldItem(blockdiag.elements.DiagramNode):
