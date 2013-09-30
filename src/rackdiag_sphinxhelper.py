@@ -33,4 +33,4 @@ from rackdiag import command, parser, builder, drawer
 from rackdiag.utils.rst.directives import rackdiag, RackdiagDirective
 
 (collections, FontMap, command, parser, builder, drawer,
- rackdiag, RackdiagDirective)
+ nodes, directives, rackdiag, RackdiagDirective)
