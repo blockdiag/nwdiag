@@ -4,6 +4,7 @@ import os
 import sys
 import tempfile
 import nwdiag.command
+from nwdiag.elements import NodeGroup, DiagramNode, DiagramEdge
 
 
 def extra_case(func):
