@@ -13,24 +13,21 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+__all__ = [
+    'core', 'utils'
+]
+
 import packetdiag.parser
 import packetdiag.builder
 import packetdiag.drawer
 core = packetdiag
 
+import packetdiag.utils.rst.nodes
+import packetdiag.utils.rst.directives
+utils = packetdiag.utils
+
 import blockdiag.utils.bootstrap
-import blockdiag.utils.collections
+utils.bootstrap = blockdiag.utils.bootstrap
+
 import blockdiag.utils.fontmap
-utils = blockdiag.utils
-
-from packetdiag.utils.rst import nodes
-from packetdiag.utils.rst import directives
-
-# FIXME: obsoleted interface (keep for compatibility)
-from blockdiag.utils import collections
-from blockdiag.utils.fontmap import FontMap
-from packetdiag import command, parser, builder, drawer
-from packetdiag.utils.rst.directives import packetdiag, PacketdiagDirective
-
-(collections, FontMap, command, parser, builder, drawer,
- nodes, directives, packetdiag, PacketdiagDirective)
+utils.fontmap = blockdiag.utils.fontmap

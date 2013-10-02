@@ -13,24 +13,21 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+__all__ = [
+    'core', 'utils'
+]
+
 import nwdiag.parser
 import nwdiag.builder
 import nwdiag.drawer
 core = nwdiag
 
+import nwdiag.utils.rst.nodes
+import nwdiag.utils.rst.directives
+utils = nwdiag.utils
+
 import blockdiag.utils.bootstrap
-import blockdiag.utils.collections
+utils.bootstrap = blockdiag.utils.bootstrap
+
 import blockdiag.utils.fontmap
-utils = blockdiag.utils
-
-from nwdiag.utils.rst import nodes
-from nwdiag.utils.rst import directives
-
-# FIXME: obsoleted interface (keep for compatibility)
-from blockdiag.utils import collections
-from blockdiag.utils.fontmap import FontMap
-from nwdiag import command, parser, builder, drawer
-from nwdiag.utils.rst.directives import nwdiag, NwdiagDirective
-
-(collections, FontMap, command, parser, builder, drawer,
- nodes, directives, nwdiag, NwdiagDirective)
+utils.fontmap = blockdiag.utils.fontmap
