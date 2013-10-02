@@ -13,24 +13,21 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+__all__ = [
+    'core', 'utils'
+]
+
 import rackdiag.parser
 import rackdiag.builder
 import rackdiag.drawer
 core = rackdiag
 
+import rackdiag.utils.rst.nodes
+import rackdiag.utils.rst.directives
+utils = rackdiag.utils
+
 import blockdiag.utils.bootstrap
-import blockdiag.utils.collections
+utils.bootstrap = blockdiag.utils.bootstrap
+
 import blockdiag.utils.fontmap
-utils = blockdiag.utils
-
-from rackdiag.utils.rst import nodes
-from rackdiag.utils.rst import directives
-
-# FIXME: obsoleted interface (keep for compatibility)
-from blockdiag.utils import collections
-from blockdiag.utils.fontmap import FontMap
-from rackdiag import command, parser, builder, drawer
-from rackdiag.utils.rst.directives import rackdiag, RackdiagDirective
-
-(collections, FontMap, command, parser, builder, drawer,
- nodes, directives, rackdiag, RackdiagDirective)
+utils.fontmap = blockdiag.utils.fontmap
