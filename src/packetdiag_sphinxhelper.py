@@ -29,5 +29,8 @@ utils = packetdiag.utils
 import blockdiag.utils.bootstrap
 utils.bootstrap = blockdiag.utils.bootstrap
 
+import blockdiag.utils.compat
+utils.compat = blockdiag.utils.compat
+
 import blockdiag.utils.fontmap
 utils.fontmap = blockdiag.utils.fontmap
