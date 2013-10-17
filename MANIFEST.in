@@ -1,9 +1,9 @@
 include buildout.cfg
 include bootstrap.py
 include MANIFEST.in
+include README.rst
 include LICENSE
 include nwdiag.1
 include rackdiag.1
 recursive-include examples *.diag *.png *svg
-recursive-include src *.py *.txt
-
+recursive-include src *.py *.diag
