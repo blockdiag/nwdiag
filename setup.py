@@ -6,8 +6,6 @@ from setuptools import setup, find_packages
 sys.path.insert(0, 'src')
 import nwdiag
 
-long_description = open(os.path.join("src", "README.txt")).read()
-
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: System Administrators",
@@ -27,7 +25,7 @@ setup(
     name='nwdiag',
     version=nwdiag.__version__,
     description='nwdiag generates network-diagram image from text',
-    long_description=long_description,
+    long_description=open("README.txt").read(),
     classifiers=classifiers,
     keywords=['diagram', 'generator'],
     author='Takeshi Komiya',
