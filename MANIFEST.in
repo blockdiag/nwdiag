@@ -5,5 +5,7 @@ include README.rst
 include LICENSE
 include nwdiag.1
 include rackdiag.1
-recursive-include examples *.diag *.png *svg
-recursive-include src *.py *.diag
+include packetdiag.1
+include tox.ini
+recursive-include examples *.diag *.png *.svg
+recursive-include src *.py *.diag *.gif
