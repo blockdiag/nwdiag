@@ -31,7 +31,7 @@ class DiagramTreeBuilder:
             if isinstance(stmt, parser.Attr):
                 self.diagram.set_attribute(stmt)
             elif isinstance(stmt, parser.FieldItem):
-                item = FieldItem(stmt.number, stmt.label)
+                item = FieldItem(stmt.begin, stmt.end, stmt.label)
                 item.set_attributes(stmt.attrs)
 
                 if item.number is None:

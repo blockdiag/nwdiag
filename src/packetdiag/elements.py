@@ -26,28 +26,26 @@ class FieldItem(blockdiag.elements.DiagramNode):
     desctable = ['number', 'label', 'description']
     attrname = dict(number='Seq', label='Name', description='Description')
 
-    def __init__(self, number, label):
+    def __init__(self, begin, end, label):
         super(FieldItem, self).__init__(None)
         self.label = label
         self.separated_right = False
         self.separated_left = False
 
-        if number is None:
+        if begin is None:
             self.number = None
             self.colwidth = 1
+        elif end is None:
+            self.number = int(begin)
+            self.colwidth = 1
         else:
-            matched = re.match('^(\d+)-(\d+)$', number)
-            if matched:
-                self.number = int(matched.group(1))
-                self.colwidth = int(matched.group(2)) - self.number + 1
+            self.number = int(begin)
+            self.colwidth = int(end) - int(begin) + 1
 
-                if self.colwidth <= 0:
-                    msg = ("Invalid field size definition: %s: %s\n" %
-                           (number, label))
-                    raise AttributeError(msg)
-            else:
-                self.number = int(number)
-                self.colwidth = 1
+            if self.colwidth <= 0:
+                msg = ("Invalid field size definition: %d-%d: %s\n" %
+                       (begin, end, label))
+                raise AttributeError(msg)
 
     def set_height(self, value):
         self.colheight = int(value)
