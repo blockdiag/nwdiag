@@ -9,7 +9,7 @@ else:
 import os
 import io
 import tempfile
-from blockdiag.tests.utils import stderr_wrapper, with_pil
+from blockdiag.tests.utils import capture_stderr, with_pil
 from docutils import nodes
 from docutils.core import publish_doctree, publish_parts
 from docutils.parsers.rst import directives as docutils
@@ -59,7 +59,7 @@ class TestRstDirectives(unittest.TestCase):
         self.assertEqual(True, options['noviewbox'])
         self.assertEqual(True, options['inline_svg'])
 
-    @stderr_wrapper
+    @capture_stderr
     def test_base_noargs(self):
         text = ".. rackdiag::"
         doctree = publish_doctree(text)
@@ -75,7 +75,7 @@ class TestRstDirectives(unittest.TestCase):
         self.assertEqual(None, doctree[0]['alt'])
         self.assertEqual({}, doctree[0]['options'])
 
-    @stderr_wrapper
+    @capture_stderr
     def test_base_with_emptyblock(self):
         text = ".. rackdiag::\n\n   \n"
         doctree = publish_doctree(text)
@@ -94,13 +94,13 @@ class TestRstDirectives(unittest.TestCase):
         self.assertEqual(None, doctree[0]['alt'])
         self.assertEqual({}, doctree[0]['options'])
 
-    @stderr_wrapper
+    @capture_stderr
     def test_base_with_filename_not_exists(self):
         text = ".. rackdiag:: unknown.diag"
         doctree = publish_doctree(text)
         self.assertEqual(nodes.system_message, type(doctree[0]))
 
-    @stderr_wrapper
+    @capture_stderr
     def test_base_with_block_and_filename(self):
         text = ".. rackdiag:: unknown.diag\n\n   { 1: server\n 2: database }"
         doctree = publish_doctree(text)

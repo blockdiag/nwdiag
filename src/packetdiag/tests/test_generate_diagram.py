@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import os
-import nwdiag.command
+import packetdiag.command
 from blockdiag.tests.test_generate_diagram import (
     get_diagram_files, testcase_generator
 )
 
 
 def test_generate():
-    mainfunc = nwdiag.command.main
+    mainfunc = packetdiag.command.main
     basepath = os.path.dirname(__file__)
     files = get_diagram_files(basepath)
     options = []
