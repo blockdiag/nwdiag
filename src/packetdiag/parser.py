@@ -41,15 +41,14 @@ from re import MULTILINE, DOTALL
 from collections import namedtuple
 from funcparserlib.lexer import make_tokenizer, Token, LexerError
 from funcparserlib.parser import (some, a, maybe, many, finished, skip)
+from blockdiag.parser import create_mapper, oneplus_to_list
 from blockdiag.utils.compat import u
 
-ENCODING = 'utf-8'
 
-Graph = namedtuple('Graph', 'type id stmts')
-FieldItem = namedtuple('FieldItem', 'number label attrs')
+Diagram = namedtuple('Diagram', 'type id stmts')
+FieldItem = namedtuple('FieldItem', 'begin end label attrs')
 Attr = namedtuple('Attr', 'name value')
-DefAttrs = namedtuple('DefAttrs', 'object attrs')
-AttrPlugin = namedtuple('AttrPlugin', 'name attrs')
+Extension = namedtuple('Extension', 'type name attrs')
 
 
 class ParseException(Exception):
@@ -59,19 +58,17 @@ class ParseException(Exception):
 def tokenize(string):
     """str -> Sequence(Token)"""
     # flake8: NOQA
-    specs = [                                                                 # NOQA
-        ('Comment',       (r'/\*(.|[\r\n])*?\*/', MULTILINE)),                # NOQA
-        ('Comment',       (r'(//|#).*',)),                                    # NOQA
-        ('NL',            (r'[\r\n]+',)),                                     # NOQA
-        ('Space',         (r'[ \t\r\n]+',)),                                  # NOQA
-        ('DefLabel',      (r':[^\r\n\[]+',)),                                 # NOQA
-        ('Range',         (r'[0-9]+-[0-9]+',)),                               # NOQA
-        ('Number',        (r'[0-9]+',)),                                      # NOQA
-        ('FieldListItem', (r'[\*\-]\s*[^\r\n\[]+',)),                         # NOQA
-        ('Name',          (u('[A-Za-z_0-9\u0080-\uffff]') +                   # NOQA
-                           u('[A-Za-z_\\-.0-9\u0080-\uffff]*'),)),            # NOQA
-        ('Op',            (r'[{}:;,=\[\]]',)),                                # NOQA
-        ('String',        (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),  # NOQA
+    specs = [                                                             # NOQA
+        ('Comment',   (r'/\*(.|[\r\n])*?\*/', MULTILINE)),                # NOQA
+        ('Comment',   (r'(//|#).*',)),                                    # NOQA
+        ('NL',        (r'[\r\n]+',)),                                     # NOQA
+        ('Number',    (r'[0-9]+',)),                                      # NOQA
+        ('FieldItem', (r'(?<=[:*\-])\s*[^\r\n\[;]+',)),                   # NOQA
+        ('Space',     (r'[ \t\r\n]+',)),                                  # NOQA
+        ('Name',      (u('[A-Za-z_0-9\u0080-\uffff]') +                   # NOQA
+                       u('[A-Za-z_\\-.0-9\u0080-\uffff]*'),)),            # NOQA
+        ('Op',        (r'[{}:;,*\-=\[\]]',)),                             # NOQA
+        ('String',    (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),  # NOQA
     ]
     useless = ['Comment', 'NL', 'Space']
     t = make_tokenizer(specs)
@@ -80,76 +77,107 @@ def tokenize(string):
 
 def parse(seq):
     """Sequence(Token) -> object"""
-    unarg = lambda f: lambda args: f(*args)
     tokval = lambda x: x.value
-    flatten = lambda list: sum(list, [])
-    n = lambda s: a(Token('Name', s)) >> tokval
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
-    _id = some(lambda t: t.type in ['Name', 'Number', 'String', 'Units']
-               ).named('id') >> tokval
+    _id = some(lambda t: t.type in ['Name', 'Number', 'String']) >> tokval
+    keyword = lambda s: a(Token('Name', s)) >> tokval
     number = some(lambda t: t.type == 'Number').named('number') >> tokval
-    _range = some(lambda t: t.type == 'Range').named('range') >> tokval
-    field_list_item = some(lambda t: t.type == 'FieldListItem'
-                           ).named('itemize') >> tokval
-    deflabel = some(lambda t: t.type == 'DefLabel').named('deflabel') >> tokval
+    field_item = some(lambda t: t.type == 'FieldItem') >> tokval
 
-    field_label = lambda text: re.sub("^:\s*(.*?)\s*;?$", "\\1", text)
-    make_field_item = (lambda no, text, attr:
-                       FieldItem(no, field_label(text), attr))
-    make_field_list_item = (lambda text, attr:
-                            FieldItem(None, re.sub("^.\s*", "", text), attr))
+    def make_num_field_item(_from, to, text, attr):
+        return FieldItem(_from, to, text.strip(), attr)
 
-    a_list = (
+    def make_nonnum_field_item(text, attr):
+        return FieldItem(None, None, text.strip(), attr)
+
+    #
+    # parts of syntax
+    #
+    option_stmt = (
         _id +
-        maybe(op_('=') + _id) +
-        skip(maybe(op(',')))
-        >> unarg(Attr))
-    attr_list = (
-        many(op_('[') + many(a_list) + op_(']'))
-        >> flatten)
+        maybe(op_('=') + _id)
+        >> create_mapper(Attr)
+    )
+    option_list = (
+        maybe(op_('[') + option_stmt + many(op_(',') + option_stmt) + op_(']'))
+        >> create_mapper(oneplus_to_list, default_value=[])
+    )
+
+    #  field statement::
+    #     1: A
+    #     2-3: B [attr = value, attr = value];
+    #     * C [attr = value, attr = value];
+    #     * D [attr = value, attr = value];
+    #
     numbered_field_item_stmt = (
-        (number | _range) +
-        deflabel +
-        attr_list
-        >> unarg(make_field_item))
+        number +
+        maybe(op_('-') + number) +
+        op_(':') +
+        field_item +
+        option_list
+        >> create_mapper(make_num_field_item)
+    )
     nonnumbered_field_item_stmt = (
-        field_list_item +
-        attr_list
-        >> unarg(make_field_list_item))
+        (op_('-') | op_('*')) +
+        field_item +
+        option_list
+        >> create_mapper(make_nonnum_field_item)
+    )
     field_item_stmt = (
-        numbered_field_item_stmt
-        | nonnumbered_field_item_stmt
+        numbered_field_item_stmt |
+        nonnumbered_field_item_stmt
     )
 
-    # plugin definition
-    plugin_stmt = (
-        skip(n('plugin')) +
+    #  attributes statement::
+    #     default_shape = box;
+    #     default_fontsize = 16;
+    #
+    attribute_stmt = (
+        _id + op_('=') + _id
+        >> create_mapper(Attr)
+    )
+
+    #  extension statement (plugin)::
+    #     plugin attributes [name = Name];
+    #
+    extension_stmt = (
+        keyword('plugin') +
         _id +
-        attr_list
-        >> unarg(AttrPlugin))
-
-    stmt = (
-        field_item_stmt
-        | plugin_stmt
-        | a_list
+        option_list
+        >> create_mapper(Extension)
     )
-    stmt_list = many(stmt + skip(maybe(op(';'))))
-    graph = (
-        maybe(n('diagram') | n('pktdiag')) +
+
+    #
+    # diagram statement::
+    #     packetdiag {
+    #        A;
+    #     }
+    #
+    diagram_inline_stmt = (
+        extension_stmt |
+        field_item_stmt |
+        attribute_stmt
+    )
+    diagram_inline_stmt_list = (
+        many(diagram_inline_stmt + skip(maybe(op(';'))))
+    )
+    diagram = (
+        maybe(keyword('diagram') | keyword('packetdiag')) +
         maybe(_id) +
         op_('{') +
-        stmt_list +
+        diagram_inline_stmt_list +
         op_('}')
-        >> unarg(Graph))
-    dotfile = graph + skip(finished)
+        >> create_mapper(Diagram)
+    )
+    dotfile = diagram + skip(finished)
 
     return dotfile.parse(seq)
 
 
 def sort_tree(tree):
     def weight(node):
-        if isinstance(node, (Attr, DefAttrs, AttrPlugin)):
+        if isinstance(node, (Attr, Extension)):
             return 1
         else:
             return 2
