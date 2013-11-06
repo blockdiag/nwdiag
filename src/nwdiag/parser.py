@@ -40,20 +40,20 @@ from re import MULTILINE, DOTALL
 from collections import namedtuple
 from funcparserlib.lexer import make_tokenizer, Token, LexerError
 from funcparserlib.parser import (some, a, maybe, many, finished, skip)
+from blockdiag.parser import create_mapper, oneplus_to_list
 from blockdiag.utils.compat import u
 
-ENCODING = 'utf-8'
 
-Graph = namedtuple('Graph', 'type id stmts')
+Diagram = namedtuple('Diagram', 'type id stmts')
 Network = namedtuple('Network', 'id stmts')
-SubGraph = namedtuple('SubGraph', 'id stmts')
+Group = namedtuple('Group', 'id stmts')
 Node = namedtuple('Node', 'id attrs')
 Attr = namedtuple('Attr', 'name value')
-Edge = namedtuple('Edge', 'nodes attrs')
-Route = namedtuple('Route', 'nodes attrs')
-AttrPlugin = namedtuple('AttrPlugin', 'name attrs')
-AttrClass = namedtuple('AttrClass', 'name attrs')
-DefAttrs = namedtuple('DefAttrs', 'object attrs')
+Edge = namedtuple('Edge', 'from_node edge_type to_node attrs')
+Peer = namedtuple('Peer', 'edges')
+Route = namedtuple('Route', 'edges')
+Extension = namedtuple('Extension', 'type name attrs')
+Statements = namedtuple('Statements', 'stmts')
 
 
 class ParseException(Exception):
@@ -82,110 +82,192 @@ def tokenize(string):
 
 def parse(seq):
     """Sequence(Token) -> object"""
-    unarg = lambda f: lambda args: f(*args)
+    id_tokens = ['Name', 'IPAddr', 'Number', 'String']
+
     tokval = lambda x: x.value
-    flatten = lambda list: sum(list, [])
-    n = lambda s: a(Token('Name', s)) >> tokval
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
-    _id = some(lambda t: t.type in ['Name', 'IPAddr', 'Number', 'String']
-               ).named('id') >> tokval
-    make_graph_attr = lambda args: DefAttrs(u('graph'), [Attr(*args)])
-    make_edge = lambda x, x2, xs, attrs: Edge([x, x2] + xs, attrs)
-    make_route = lambda x, x2, xs, attrs: Route([x, x2] + xs, attrs)
+    _id = some(lambda t: t.type in id_tokens) >> tokval
+    keyword = lambda s: a(Token('Name', s)) >> tokval
 
-    node_id = _id  # + maybe(port)
-    a_list = (
+    def make_peer(first, edge_type, second, followers, attrs):
+        edges = [Edge(first, edge_type, second, attrs)]
+
+        from_node = second
+        for edge_type, to_node in followers:
+            edges.append(Edge(from_node, edge_type, to_node, attrs))
+            from_node = to_node
+
+        return Peer(edges)
+
+    def make_route(first, edge_type, second, followers, attrs):
+        edges = [Edge(first, edge_type, second, attrs)]
+
+        from_node = second
+        for edge_type, to_node in followers:
+            edges.append(Edge(from_node, edge_type, to_node, attrs))
+            from_node = to_node
+
+        return Route(edges)
+
+    #
+    # parts of syntax
+    #
+    node_list = (
         _id +
-        maybe(op_('=') + _id) +
-        skip(maybe(op(',')))
-        >> unarg(Attr))
-    attr_list = (
-        many(op_('[') + many(a_list) + op_(']'))
-        >> flatten)
-    edge_rhs = op_('--') + node_id
+        many(op_(',') + _id)
+        >> create_mapper(oneplus_to_list)
+    )
+    option_stmt = (
+        _id +
+        maybe(op_('=') + _id)
+        >> create_mapper(Attr)
+    )
+    option_list = (
+        maybe(op_('[') + option_stmt + many(op_(',') + option_stmt) + op_(']'))
+        >> create_mapper(oneplus_to_list, default_value=[])
+    )
+
+    #  node statement::
+    #     A;
+    #     B [attr = value, attr = value];
+    #
+    node_stmt = (
+        _id + option_list
+        >> create_mapper(Node)
+    )
+
+    #  peer network statement::
+    #     A -- B;
+    #
     edge_stmt = (
-        node_id +
-        edge_rhs +
-        many(edge_rhs) +
-        attr_list
-        >> unarg(make_edge))
-    graph_attr = _id + op_('=') + _id >> make_graph_attr
-    node_stmt = node_id + attr_list >> unarg(Node)
-    # We use a forward_decl becaue of circular definitions like (stmt_list ->
-    # stmt -> subgraph -> stmt_list)
-    group_stmt = (
-        graph_attr
-        | node_stmt
-    )
-    group_stmt_list = many(group_stmt + skip(maybe(op(';'))))
-    group = (
-        skip(n('group')) +
-        maybe(_id) +
-        op_('{') +
-        group_stmt_list +
-        op_('}')
-        >> unarg(SubGraph))
-    network_stmt = (
-        graph_attr
-        | group
-        | node_stmt
-    )
-    network_stmt_list = many(network_stmt + skip(maybe(op(';'))))
-    network = (
-        skip(n('network')) +
-        maybe(_id) +
-        op_('{') +
-        network_stmt_list +
-        op_('}')
-        >> unarg(Network))
-    route_rhs = op_('->') + node_id
-    route = (
-        skip(n('route')) +
-        op_('{') +
-        node_id +
-        route_rhs +
-        many(route_rhs) +
-        attr_list +
-        skip(maybe(op(';'))) +
-        op_('}')
-        >> unarg(make_route))
-    class_stmt = (
-        skip(n('class')) +
-        node_id +
-        attr_list
-        >> unarg(AttrClass))
-    plugin_stmt = (
-        skip(n('plugin')) +
         _id +
-        attr_list
-        >> unarg(AttrPlugin))
-    stmt = (
-        network
-        | class_stmt
-        | plugin_stmt
-        | group
-        | graph_attr
-        | route
-        | edge_stmt
-        | node_stmt
+        op('--') +
+        _id +
+        many(op('--') + _id) +
+        option_list
+        >> create_mapper(make_peer)
     )
-    stmt_list = many(stmt + skip(maybe(op(';'))))
-    graph = (
-        maybe(n('diagram') | n('nwdiag')) +
+
+    #  attributes statement::
+    #     default_shape = box;
+    #     default_fontsize = 16;
+    #
+    attribute_stmt = (
+        _id + op_('=') + _id
+        >> create_mapper(Attr)
+    )
+
+    #  extension statement (class, plugin)::
+    #     class red [color = red];
+    #     plugin attributes [name = Name];
+    #
+    extension_stmt = (
+        (keyword('class') | keyword('plugin')) +
+        _id +
+        option_list
+        >> create_mapper(Extension)
+    )
+
+    #  group statement::
+    #     group {
+    #        A;
+    #     }
+    #
+    group_inline_stmt = (
+        attribute_stmt |
+        node_stmt
+    )
+    group_inline_stmt_list = (
+        many(group_inline_stmt + skip(maybe(op(';'))))
+    )
+    group_stmt = (
+        skip(keyword('group')) +
         maybe(_id) +
         op_('{') +
-        stmt_list +
+        group_inline_stmt_list +
         op_('}')
-        >> unarg(Graph))
-    dotfile = graph + skip(finished)
+        >> create_mapper(Group)
+    )
+
+    #  network statement::
+    #     network {
+    #        A;
+    #     }
+    #
+    network_inline_stmt = (
+        attribute_stmt |
+        group_stmt |
+        node_stmt
+    )
+    network_inline_stmt_list = (
+        many(network_inline_stmt + skip(maybe(op(';'))))
+    )
+    network_stmt = (
+        skip(keyword('network')) +
+        maybe(_id) +
+        op_('{') +
+        network_inline_stmt_list +
+        op_('}')
+        >> create_mapper(Network)
+    )
+
+    #  route statement::
+    #     route {
+    #       A -> B -> C;
+    #     }
+    #
+    route_inline_stmt = (
+        _id +
+        op_('->') +
+        _id +
+        many(op_('->') + _id) +
+        option_list
+        >> create_mapper(make_route)
+    )
+    route_stmt = (
+        skip(keyword('route')) +
+        maybe(_id) +
+        op_('{') +
+        network_inline_stmt_list +
+        op_('}')
+        >> create_mapper(Network)
+    )
+
+    #
+    # diagram statement::
+    #     nwdiag {
+    #        A;
+    #     }
+    #
+    diagram_inline_stmt = (
+        extension_stmt |
+        network_stmt |
+        group_stmt |
+        attribute_stmt |
+        route_stmt |
+        edge_stmt |
+        node_stmt
+    )
+    diagram_inline_stmt_list = (
+        many(diagram_inline_stmt + skip(maybe(op(';'))))
+    )
+    diagram = (
+        maybe(keyword('diagram') | keyword('nwdiag')) +
+        maybe(_id) +
+        op_('{') +
+        diagram_inline_stmt_list +
+        op_('}')
+        >> create_mapper(Diagram)
+    )
+    dotfile = diagram + skip(finished)
 
     return dotfile.parse(seq)
 
 
 def sort_tree(tree):
     def weight(node):
-        if isinstance(node, (Attr, DefAttrs, AttrPlugin, AttrClass)):
+        if isinstance(node, (Attr, Extension)):
             return 1
         else:
             return 2

@@ -97,14 +97,14 @@ class DiagramTreeBuilder:
 
                 substmt = namedtuple('Statements', 'stmts')([])
                 for s in stmt.stmts:
-                    if isinstance(s, parser.DefAttrs):
-                        subnetwork.set_attributes(s.attrs)
+                    if isinstance(s, parser.Attr):
+                        subnetwork.set_attribute(s)
                     else:
                         substmt.stmts.append(s)
 
                 self.instantiate(subnetwork, group, substmt)
 
-            elif isinstance(stmt, parser.SubGraph):
+            elif isinstance(stmt, parser.Group):
                 subgroup = NodeGroup.get(stmt.id)
 
                 if subgroup not in self.diagram.groups:
@@ -112,15 +112,19 @@ class DiagramTreeBuilder:
 
                 substmt = namedtuple('Statements', 'stmts')([])
                 for s in stmt.stmts:
-                    if isinstance(s, parser.DefAttrs):
-                        subgroup.set_attributes(s.attrs)
+                    if isinstance(s, parser.Attr):
+                        subgroup.set_attribute(s)
                     else:
                         substmt.stmts.append(s)
 
                 self.instantiate(network, subgroup, substmt)
 
-            elif isinstance(stmt, parser.Edge):
-                nodes = [DiagramNode.get(n) for n in stmt.nodes]
+            elif isinstance(stmt, parser.Peer):
+                nodes = []
+                for edge in stmt.edges:
+                    nodes.append(DiagramNode.get(edge.from_node))
+                    nodes.append(DiagramNode.get(edge.to_node))
+
                 for node in nodes:
                     if node.group is None:
                         node.group = self.diagram
@@ -132,8 +136,12 @@ class DiagramTreeBuilder:
                     if nw:
                         self.diagram.networks.append(nw)
 
-                for i in range(len(nodes) - 1):
-                    nw = Network.create_anonymous(nodes[i:i + 2], stmt.attrs)
+                for edge in stmt.edges:
+                    from_node = DiagramNode.get(edge.from_node)
+                    to_node = DiagramNode.get(edge.to_node)
+
+                    _nodes = [from_node, to_node]
+                    nw = Network.create_anonymous(_nodes, edge.attrs)
                     if nw:
                         self.diagram.networks.append(nw)
 
@@ -144,15 +152,18 @@ class DiagramTreeBuilder:
                     route.set_attributes(stmt.attrs)
                     self.diagram.routes.append(route)
 
-            elif isinstance(stmt, parser.DefAttrs):
-                self.diagram.set_attributes(stmt.attrs)
+            elif isinstance(stmt, parser.Attr):
+                self.diagram.set_attribute(stmt)
 
-            elif isinstance(stmt, parser.AttrPlugin):
-                self.diagram.set_plugin(stmt.name, stmt.attrs)
+            elif isinstance(stmt, parser.Extension):
+                if stmt.type == 'class':
+                    name = unquote(stmt.name)
+                    Diagram.classes[name] = stmt
+                elif stmt.type == 'plugin':
+                    self.diagram.set_plugin(stmt.name, stmt.attrs)
 
-            elif isinstance(stmt, parser.AttrClass):
-                name = unquote(stmt.name)
-                Diagram.classes[name] = stmt
+            elif isinstance(stmt, parser.Statements):
+                self.instantiate(network, group, stmt)
 
         return network
 
