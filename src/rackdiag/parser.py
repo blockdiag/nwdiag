@@ -59,18 +59,19 @@ class ParseException(Exception):
 def tokenize(string):
     """str -> Sequence(Token)"""
     # flake8: NOQA
-    specs = [                                                            # NOQA
-        ('Comment',  (r'/\*(.|[\r\n])*?\*/', MULTILINE)),                # NOQA
-        ('Comment',  (r'(//|#).*',)),                                    # NOQA
-        ('NL',       (r'[\r\n]+',)),                                     # NOQA
-        ('RackItem', (r'(?<=[:*\-])[^\r\n\[;]+',)),                      # NOQA
-        ('Space',    (r'[ \t\r\n]+',)),                                  # NOQA
-        ('Units',    (r'([0-9]+U|[0-9]+(?:\.[0-9]+)?(A|kg))',)),         # NOQA
-        ('Number',   (r'[0-9]+',)),                                      # NOQA
-        ('Name',     (u('[A-Za-z_0-9\u0080-\uffff]') +                   # NOQA
-                      u('[A-Za-z_\\-.0-9\u0080-\uffff]*'),)),            # NOQA
-        ('Op',       (r'[{}:;,*\-=\[\]]',)),                             # NOQA
-        ('String',   (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),  # NOQA
+    specs = [                                                                                # NOQA
+        ('Comment',        (r'/\*(.|[\r\n])*?\*/', MULTILINE)),                              # NOQA
+        ('Comment',        (r'(//|#).*',)),                                                  # NOQA
+        ('NL',             (r'[\r\n]+',)),                                                   # NOQA
+        ('QuotedRackItem', (r'(?<=[:*\-])\s*(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),  # NOQA
+        ('RackItem',       (r'(?<=[:*\-])[^\r\n\[;}]+',)),                                   # NOQA
+        ('Space',          (r'[ \t\r\n]+',)),                                                # NOQA
+        ('Units',          (r'([0-9]+U|[0-9]+(?:\.[0-9]+)?(A|kg))',)),                       # NOQA
+        ('Number',         (r'[0-9]+',)),                                                    # NOQA
+        ('Name',           (u('[A-Za-z_0-9\u0080-\uffff]') +                                 # NOQA
+                            u('[A-Za-z_\\-.0-9\u0080-\uffff]*'),)),                          # NOQA
+        ('Op',             (r'[{}:;,*\-=\[\]]',)),                                           # NOQA
+        ('String',         (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),                # NOQA
     ]
     useless = ['Comment', 'NL', 'Space']
     t = make_tokenizer(specs)
@@ -80,6 +81,7 @@ def tokenize(string):
 def parse(seq):
     """Sequence(Token) -> object"""
     id_tokens = ['Name', 'Number', 'String', 'Units']
+    rackitem_tokens = ['QuotedRackItem', 'RackItem']
 
     tokval = lambda x: x.value
     op = lambda s: a(Token('Op', s)) >> tokval
@@ -87,7 +89,7 @@ def parse(seq):
     _id = some(lambda t: t.type in id_tokens) >> tokval
     keyword = lambda s: a(Token('Name', s)) >> tokval
     number = some(lambda t: t.type == 'Number').named('number') >> tokval
-    rackitem = some(lambda t: t.type == 'RackItem').named('rackitem') >> tokval
+    rackitem = some(lambda t: t.type in rackitem_tokens) >> tokval
 
     def make_num_rackitem(num, text, attr):
         return RackItem(num, text.strip(), attr)
