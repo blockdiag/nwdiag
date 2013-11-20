@@ -16,7 +16,7 @@
 from collections import defaultdict
 from rackdiag import parser
 from rackdiag.elements import Diagram, Rack, RackItem
-from blockdiag.utils import XY
+from blockdiag.utils import unquote, XY
 
 
 class DiagramTreeBuilder:
@@ -47,7 +47,7 @@ class DiagramTreeBuilder:
                 else:
                     number = stmt.number
 
-                item = RackItem(number, stmt.label)
+                item = RackItem(number, unquote(stmt.label))
                 item.set_attributes(stmt.attrs)
                 rack.nodes.append(item)
             elif isinstance(stmt, parser.Rack):

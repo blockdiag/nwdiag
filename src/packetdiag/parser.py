@@ -58,17 +58,18 @@ class ParseException(Exception):
 def tokenize(string):
     """str -> Sequence(Token)"""
     # flake8: NOQA
-    specs = [                                                             # NOQA
-        ('Comment',   (r'/\*(.|[\r\n])*?\*/', MULTILINE)),                # NOQA
-        ('Comment',   (r'(//|#).*',)),                                    # NOQA
-        ('NL',        (r'[\r\n]+',)),                                     # NOQA
-        ('Number',    (r'[0-9]+',)),                                      # NOQA
-        ('FieldItem', (r'(?<=[:*\-])\s*[^\r\n\[;]+',)),                   # NOQA
-        ('Space',     (r'[ \t\r\n]+',)),                                  # NOQA
-        ('Name',      (u('[A-Za-z_0-9\u0080-\uffff]') +                   # NOQA
-                       u('[A-Za-z_\\-.0-9\u0080-\uffff]*'),)),            # NOQA
-        ('Op',        (r'[{}:;,*\-=\[\]]',)),                             # NOQA
-        ('String',    (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),  # NOQA
+    specs = [                                                                          # NOQA
+        ('Comment',         (r'/\*(.|[\r\n])*?\*/', MULTILINE)),                       # NOQA
+        ('Comment',         (r'(//|#).*',)),                                           # NOQA
+        ('NL',              (r'[\r\n]+',)),                                            # NOQA
+        ('Number',          (r'[0-9]+',)),                                             # NOQA
+        ('QuotedFieldItem', (r'(?<=[:*\-])\s*(?P<quote>"|\').*?(?<!\\)(?P=quote)',)),  # NOQA
+        ('FieldItem',       (r'(?<=[:*\-])\s*[^\r\n\[;}]+',)),                         # NOQA
+        ('Space',           (r'[ \t\r\n]+',)),                                         # NOQA
+        ('Name',            (u('[A-Za-z_0-9\u0080-\uffff]') +                          # NOQA
+                             u('[A-Za-z_\\-.0-9\u0080-\uffff]*'),)),                   # NOQA
+        ('Op',              (r'[{}:;,*\-=\[\]]',)),                                    # NOQA
+        ('String',          (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),         # NOQA
     ]
     useless = ['Comment', 'NL', 'Space']
     t = make_tokenizer(specs)
@@ -77,13 +78,15 @@ def tokenize(string):
 
 def parse(seq):
     """Sequence(Token) -> object"""
+    fielditem_tokens = ['QuotedFieldItem', 'FieldItem']
+
     tokval = lambda x: x.value
     op = lambda s: a(Token('Op', s)) >> tokval
     op_ = lambda s: skip(op(s))
     _id = some(lambda t: t.type in ['Name', 'Number', 'String']) >> tokval
     keyword = lambda s: a(Token('Name', s)) >> tokval
     number = some(lambda t: t.type == 'Number').named('number') >> tokval
-    field_item = some(lambda t: t.type == 'FieldItem') >> tokval
+    field_item = some(lambda t: t.type in fielditem_tokens) >> tokval
 
     def make_num_field_item(_from, to, text, attr):
         return FieldItem(_from, to, text.strip(), attr)

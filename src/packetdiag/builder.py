@@ -16,7 +16,7 @@
 from __future__ import division
 from packetdiag import parser
 from packetdiag.elements import Diagram, FieldItem, DiagramNode
-from blockdiag.utils import XY
+from blockdiag.utils import unquote, XY
 
 
 class DiagramTreeBuilder:
@@ -31,7 +31,7 @@ class DiagramTreeBuilder:
             if isinstance(stmt, parser.Attr):
                 self.diagram.set_attribute(stmt)
             elif isinstance(stmt, parser.FieldItem):
-                item = FieldItem(stmt.begin, stmt.end, stmt.label)
+                item = FieldItem(stmt.begin, stmt.end, unquote(stmt.label))
                 item.set_attributes(stmt.attrs)
 
                 if item.number is None:
