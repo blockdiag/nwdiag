@@ -11,20 +11,14 @@ You can get some examples and generated images on
 Setup
 =====
 
-by easy_install
-----------------
-Make environment::
+Use easy_install or pip::
 
-   $ easy_install nwdiag
+   $ sudo easy_install nwdiag
 
-by buildout
-------------
-Make environment::
+   Or
 
-   $ hg clone http://bitbucket.org/tk0miya/nwdiag
-   $ cd nwdiag
-   $ python bootstrap.py
-   $ bin/buildout
+   $ sudo pip nwdiag
+
 
 spec-text setting sample
 ========================
