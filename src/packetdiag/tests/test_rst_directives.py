@@ -128,6 +128,16 @@ class TestRstDirectives(unittest.TestCase):
         self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
         self.assertFalse('target' in doctree[0])
 
+    def test_block_without_braces(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = ".. packetdiag::\n\n   1: server\n   2: database\n"
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertFalse('alt' in doctree[0])
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
+        self.assertFalse('target' in doctree[0])
+
     def test_block_alt(self):
         directives.setup(format='SVG', outputdir=self.tmpdir)
         text = ".. packetdiag::\n   :alt: hello world\n\n" + \

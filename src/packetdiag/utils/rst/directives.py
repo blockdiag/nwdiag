@@ -51,7 +51,13 @@ class PacketdiagDirective(directives.BlockdiagDirective):
         return directive_options
 
     def node2diagram(self, node):
-        tree = parser.parse_string(node['code'])
+        try:
+            tree = parser.parse_string(node['code'])
+        except:
+            code = 'packetdiag { %s }' % node['code']
+            tree = parser.parse_string(code)
+            node['code'] = code  # replace if suceeded
+
         return ScreenNodeBuilder.build(tree)
 
     def node2image(self, node, diagram):
