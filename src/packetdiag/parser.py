@@ -45,7 +45,7 @@ from blockdiag.parser import create_mapper, oneplus_to_list
 from blockdiag.utils.compat import u
 
 
-Diagram = namedtuple('Diagram', 'type id stmts')
+Diagram = namedtuple('Diagram', 'id stmts')
 FieldItem = namedtuple('FieldItem', 'begin end label attrs')
 Attr = namedtuple('Attr', 'name value')
 Extension = namedtuple('Extension', 'type name attrs')
@@ -157,6 +157,11 @@ def parse(seq):
     #        A;
     #     }
     #
+    diagram_id = (
+        (keyword('diagram') | keyword('packetdiag')) +
+        maybe(_id)
+        >> list
+    )
     diagram_inline_stmt = (
         extension_stmt |
         field_item_stmt |
@@ -166,8 +171,7 @@ def parse(seq):
         many(diagram_inline_stmt + skip(maybe(op(';'))))
     )
     diagram = (
-        maybe(keyword('diagram') | keyword('packetdiag')) +
-        maybe(_id) +
+        maybe(diagram_id) +
         op_('{') +
         diagram_inline_stmt_list +
         op_('}')
