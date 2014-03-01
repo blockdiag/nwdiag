@@ -14,7 +14,7 @@ classifiers = [
     "Topic :: Software Development :: Documentation",
     "Topic :: Text Processing :: Markup",
 ]
-test_requires = ['Nose', 'pep8>=1.3']
+test_requires = ['nose', 'pep8>=1.3', 'docutils']
 
 # only for Python2.6
 if sys.version_info > (2, 6) and sys.version_info < (2, 7):
@@ -47,7 +47,7 @@ setup(
         # -*- Extra requirements: -*-
     ],
     extras_require=dict(
-        test=test_requires,
+        testing=test_requires,
         pdf=[
             'reportlab',
         ],
