@@ -14,7 +14,10 @@ classifiers = [
     "Topic :: Software Development :: Documentation",
     "Topic :: Text Processing :: Markup",
 ]
-test_requires = ['nose', 'pep8>=1.3', 'docutils']
+test_requires = ['nose',
+                 'pep8>=1.3',
+                 'reportlab',
+                 'docutils']
 
 # only for Python2.6
 if sys.version_info > (2, 6) and sys.version_info < (2, 7):
