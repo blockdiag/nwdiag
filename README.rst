@@ -55,7 +55,7 @@ Execute nwdiag command::
 
 Requirements
 ============
-* Python 2.6, 2.7, 3.2, 3.3
+* Python 2.6, 2.7, 3.2, 3.3, 3.4
 * Pillow 2.2.1
 * funcparserlib 0.3.6
 * setuptools
