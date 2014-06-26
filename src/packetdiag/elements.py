@@ -75,5 +75,5 @@ class Diagram(blockdiag.elements.Diagram):
         elif value in ('rtl', 'right_to_left'):
             self.scale_direction = 'right_to_left'
         else:
-            msg = "WARNING: unknown scale_direction: %s\n" % value
+            msg = "unknown scale_direction: %s\n" % value
             raise AttributeError(msg)
