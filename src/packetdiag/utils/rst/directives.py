@@ -13,14 +13,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import os
-from docutils import nodes
 from docutils.parsers import rst
-from packetdiag import parser
+import packetdiag.parser
+import packetdiag.builder
+import packetdiag.drawer
 from packetdiag.elements import FieldItem
-from packetdiag.builder import ScreenNodeBuilder
-from packetdiag.drawer import DiagramDraw
-from packetdiag.utils.rst.nodes import packetdiag
+from packetdiag.utils.rst.nodes import packetdiag as packetdiag_node
 from blockdiag.utils.rst import directives
 from blockdiag.utils.compat import cmp_to_key
 
@@ -36,76 +34,14 @@ directive_options_default = dict(format='PNG',
 directive_options = {}
 
 
-class PacketdiagDirectiveBase(directives.BlockdiagDirectiveBase):
-    """ Directive to insert arbitrary dot markup. """
-    name = "packetdiag"
-    node_class = packetdiag
-
-
 class PacketdiagDirective(directives.BlockdiagDirective):
     name = "packetdiag"
-    node_class = packetdiag
+    node_class = packetdiag_node
+    processor = packetdiag
 
     @property
     def global_options(self):
         return directive_options
-
-    def node2diagram(self, node):
-        try:
-            tree = parser.parse_string(node['code'])
-        except:
-            code = 'packetdiag { %s }' % node['code']
-            tree = parser.parse_string(code)
-            node['code'] = code  # replace if suceeded
-
-        return ScreenNodeBuilder.build(tree)
-
-    def node2image(self, node, diagram):
-        options = node['options']
-        filename = self.image_filename(node)
-        fontmap = self.create_fontmap()
-        _format = self.global_options['format'].lower()
-
-        if _format == 'svg' and self.global_options['inline_svg'] is True:
-            filename = None
-
-        kwargs = dict(self.global_options)
-        del kwargs['format']
-        drawer = DiagramDraw(_format, diagram, filename,
-                             fontmap=fontmap, **kwargs)
-
-        if filename is None or not os.path.isfile(filename):
-            drawer.draw()
-            content = drawer.save(None)
-
-            if _format == 'svg' and self.global_options['inline_svg'] is True:
-                size = drawer.pagesize()
-                if 'maxwidth' in options and options['maxwidth'] < size[0]:
-                    ratio = float(options['maxwidth']) / size[0]
-                    new_size = (options['maxwidth'], int(size[1] * ratio))
-                    content = drawer.save(new_size)
-
-                return nodes.raw('', content, format='html')
-
-        size = drawer.pagesize()
-        if 'maxwidth' in options and options['maxwidth'] < size[0]:
-            ratio = float(options['maxwidth']) / size[0]
-            thumb_size = (options['maxwidth'], size[1] * ratio)
-
-            thumb_filename = self.image_filename(node, prefix='_thumb')
-            if not os.path.isfile(thumb_filename):
-                drawer.filename = thumb_filename
-                drawer.draw()
-                drawer.save(thumb_size)
-
-            image = nodes.image(uri=thumb_filename, target=filename)
-        else:
-            image = nodes.image(uri=filename)
-
-        if node['alt']:
-            image['alt'] = node['alt']
-
-        return image
 
     def description_table(self, diagram):
         nodes = diagram.traverse_nodes
