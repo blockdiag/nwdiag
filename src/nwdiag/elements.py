@@ -150,7 +150,7 @@ class Diagram(blockdiag.elements.Diagram):
         if value == 'none':
             self.external_connector = False
         else:
-            msg = "WARNING: unknown external connector: %s\n" % value
+            msg = "unknown external connector: %s\n" % value
             raise AttributeError(msg)
 
     def fixiate(self):
