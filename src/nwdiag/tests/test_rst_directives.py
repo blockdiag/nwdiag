@@ -7,28 +7,27 @@ else:
     import unittest
 
 import os
-import io
-import tempfile
-from blockdiag.tests.utils import capture_stderr, with_pil
+from blockdiag.tests.utils import capture_stderr, with_pil, TemporaryDirectory
 from docutils import nodes
-from docutils.core import publish_doctree, publish_parts
+from docutils.core import publish_doctree
 from docutils.parsers.rst import directives as docutils
 from nwdiag.utils.rst import directives
+from blockdiag.utils.compat import u
 
 
 class TestRstDirectives(unittest.TestCase):
     def setUp(self):
-        docutils.register_directive('nwdiag',
-                                    directives.NwdiagDirectiveBase)
-        self.tmpdir = tempfile.mkdtemp()
+        self._tmpdir = TemporaryDirectory()
 
     def tearDown(self):
         if 'nwdiag' in docutils._directives:
             del docutils._directives['nwdiag']
 
-        for file in os.listdir(self.tmpdir):
-            os.unlink(self.tmpdir + "/" + file)
-        os.rmdir(self.tmpdir)
+        self._tmpdir.clean()
+
+    @property
+    def tmpdir(self):
+        return self._tmpdir.name
 
     def test_setup(self):
         directives.setup()
@@ -59,116 +58,344 @@ class TestRstDirectives(unittest.TestCase):
         self.assertEqual(True, options['noviewbox'])
         self.assertEqual(True, options['inline_svg'])
 
-    @capture_stderr
-    def test_base_noargs(self):
-        text = ".. nwdiag::"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.system_message, type(doctree[0]))
-
-    def test_base_with_block(self):
-        text = ".. nwdiag::\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(directives.nwdiag, type(doctree[0]))
-        self.assertEqual('{ network { A; B } }', doctree[0]['code'])
-        self.assertEqual(None, doctree[0]['alt'])
-        self.assertEqual({}, doctree[0]['options'])
-
-    @capture_stderr
-    def test_base_with_emptyblock(self):
-        text = ".. nwdiag::\n\n   \n"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.system_message, type(doctree[0]))
-
-    def test_base_with_filename(self):
-        dirname = os.path.dirname(__file__)
-        filename = os.path.join(dirname, 'diagrams/single_network.diag')
-        text = ".. nwdiag:: %s" % filename
-        doctree = publish_doctree(text)
-
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(directives.nwdiag, type(doctree[0]))
-        self.assertEqual(io.open(filename, encoding='utf-8-sig').read(),
-                         doctree[0]['code'])
-        self.assertEqual(None, doctree[0]['alt'])
-        self.assertEqual({}, doctree[0]['options'])
-
-    @capture_stderr
-    def test_base_with_filename_not_exists(self):
-        text = ".. nwdiag:: unknown.diag"
-        doctree = publish_doctree(text)
-        self.assertEqual(nodes.system_message, type(doctree[0]))
-
-    @capture_stderr
-    def test_base_with_block_and_filename(self):
-        text = ".. nwdiag:: unknown.diag\n\n   { A -> B }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.system_message, type(doctree[0]))
-
-    def test_base_with_options(self):
-        text = ".. nwdiag::\n   :alt: hello world\n   :desctable:\n" + \
-               "   :maxwidth: 100\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(directives.nwdiag, type(doctree[0]))
-        self.assertEqual('{ network { A; B } }', doctree[0]['code'])
-        self.assertEqual('hello world', doctree[0]['alt'])
-        self.assertEqual(None, doctree[0]['options']['desctable'])
-        self.assertEqual(100, doctree[0]['options']['maxwidth'])
-
-    def test_block(self):
-        directives.setup(format='SVG', outputdir=self.tmpdir)
-        text = ".. nwdiag::\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.image, type(doctree[0]))
-        self.assertFalse('alt' in doctree[0])
-        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
-        self.assertFalse('target' in doctree[0])
-
-    def test_block_without_braces(self):
-        directives.setup(format='SVG', outputdir=self.tmpdir)
-        text = ".. nwdiag::\n\n   network { A; B }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.image, type(doctree[0]))
-        self.assertFalse('alt' in doctree[0])
-        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
-        self.assertFalse('target' in doctree[0])
-
-    def test_block_alt(self):
-        directives.setup(format='SVG', outputdir=self.tmpdir)
-        text = ".. nwdiag::\n   :alt: hello world\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.image, type(doctree[0]))
-        self.assertEqual('hello world', doctree[0]['alt'])
-        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
-        self.assertFalse('target' in doctree[0])
-
-    def test_block_fontpath1(self):
+    def test_setup_fontpath1(self):
         with self.assertRaises(RuntimeError):
             directives.setup(format='SVG', fontpath=['dummy.ttf'],
                              outputdir=self.tmpdir)
-            text = ".. nwdiag::\n   :alt: hello world\n\n" + \
-                   "   { network { A; B } }"
+            text = (".. nwdiag::\n"
+                    "\n"
+                    "   network {"
+                    "     A"
+                    "     B"
+                    "   }")
             publish_doctree(text)
 
-    def test_block_fontpath2(self):
+    def test_setup_fontpath2(self):
         with self.assertRaises(RuntimeError):
             directives.setup(format='SVG', fontpath='dummy.ttf',
                              outputdir=self.tmpdir)
-            text = ".. nwdiag::\n   :alt: hello world\n\n" + \
-                   "   { network { A; B } }"
+            text = (".. nwdiag::\n"
+                    "\n"
+                    "   network {"
+                    "     A"
+                    "     B"
+                    "   }")
             publish_doctree(text)
 
-    def test_caption(self):
+    def test_setup_nodoctype_is_true(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir, nodoctype=True)
+        text = (".. nwdiag::\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[-1]))
+        svg = open(doctree[0]['uri']).read()
+        self.assertNotEqual("<?xml version='1.0' encoding='UTF-8'?>\n"
+                            "<!DOCTYPE ", svg[:49])
+
+    def test_setup_nodoctype_is_false(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir, nodoctype=False)
+        text = (".. nwdiag::\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        svg = open(doctree[0]['uri']).read()
+        self.assertEqual("<?xml version='1.0' encoding='UTF-8'?>\n"
+                         "<!DOCTYPE ", svg[:49])
+
+    def test_setup_noviewbox_is_true(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir, noviewbox=True)
+        text = (".. nwdiag::\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        svg = open(doctree[0]['uri']).read()
+        self.assertRegexpMatches(svg, '<svg height="\d+" width="\d+" ')
+
+    def test_setup_noviewbox_is_false(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir, noviewbox=False)
+        text = (".. nwdiag::\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        svg = open(doctree[0]['uri']).read()
+        self.assertRegexpMatches(svg, '<svg viewBox="0 0 \d+ \d+" ')
+
+    def test_setup_inline_svg_is_true(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir, inline_svg=True)
+        text = (".. nwdiag::\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.raw, type(doctree[0]))
+        self.assertEqual('html', doctree[0]['format'])
+        self.assertEqual(nodes.Text, type(doctree[0][0]))
+        self.assertEqual("<?xml version='1.0' encoding='UTF-8'?>\n"
+                         "<!DOCTYPE ", doctree[0][0][:49])
+        self.assertEqual(0, len(os.listdir(self.tmpdir)))
+
+    def test_setup_inline_svg_is_false(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir, inline_svg=False)
+        text = (".. nwdiag::\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual(1, len(os.listdir(self.tmpdir)))
+
+    @with_pil
+    def test_setup_inline_svg_is_true_but_nonsvg_format(self):
+        directives.setup(format='PNG', outputdir=self.tmpdir, inline_svg=True)
+        text = (".. nwdiag::\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+
+    def test_setup_inline_svg_is_true_with_multibytes(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir, inline_svg=True)
+        text = u(".. nwdiag::\n"
+                 "\n"
+                 "   network {"
+                 "     あ"
+                 "     い"
+                 "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.raw, type(doctree[0]))
+
+    def test_setup_inline_svg_is_true_and_width_option1(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir,
+                         nodoctype=True, noviewbox=True, inline_svg=True)
+        text = (".. nwdiag::\n"
+                "   :width: 100\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.raw, type(doctree[0]))
+        self.assertEqual(nodes.Text, type(doctree[0][0]))
+        self.assertRegexpMatches(doctree[0][0],
+                                 '<svg height="\d+" width="100" ')
+
+    def test_setup_inline_svg_is_true_and_width_option2(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir,
+                         nodoctype=True, noviewbox=True, inline_svg=True)
+        text = (".. nwdiag::\n"
+                "   :width: 10000\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.raw, type(doctree[0]))
+        self.assertEqual(nodes.Text, type(doctree[0][0]))
+        self.assertRegexpMatches(doctree[0][0],
+                                 '<svg height="\d+" width="10000" ')
+
+    def test_setup_inline_svg_is_true_and_height_option1(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir,
+                         nodoctype=True, noviewbox=True, inline_svg=True)
+        text = (".. nwdiag::\n"
+                "   :height: 100\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.raw, type(doctree[0]))
+        self.assertEqual(nodes.Text, type(doctree[0][0]))
+        self.assertRegexpMatches(doctree[0][0],
+                                 '<svg height="100" width="\d+" ')
+
+    def test_setup_inline_svg_is_true_and_height_option2(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir,
+                         nodoctype=True, noviewbox=True, inline_svg=True)
+        text = (".. nwdiag::\n"
+                "   :height: 10000\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.raw, type(doctree[0]))
+        self.assertEqual(nodes.Text, type(doctree[0][0]))
+        self.assertRegexpMatches(doctree[0][0],
+                                 '<svg height="10000" width="\d+" ')
+
+    def test_setup_inline_svg_is_true_and_width_and_height_option(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir,
+                         nodoctype=True, noviewbox=True, inline_svg=True)
+        text = (".. nwdiag::\n"
+                "   :width: 200\n"
+                "   :height: 100\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.raw, type(doctree[0]))
+        self.assertEqual(nodes.Text, type(doctree[0][0]))
+        self.assertRegexpMatches(doctree[0][0],
+                                 '<svg height="100" width="200" ')
+
+    def test_call_with_braces(self):
         directives.setup(format='SVG', outputdir=self.tmpdir)
-        text = ".. nwdiag::\n   :caption: hello world\n\n" + \
-               "   { network { A; B } }"
+        text = (".. nwdiag::\n"
+                "\n"
+                "   {"
+                "     network {"
+                "       A"
+                "       B"
+                "     }"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
+
+    def test_call_without_braces(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
+
+    def test_alt_option(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :alt: hello world\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual('hello world', doctree[0]['alt'])
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
+
+    def test_align_option1(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :align: left\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual('left', doctree[0]['align'])
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
+
+    def test_align_option2(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :align: center\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual('center', doctree[0]['align'])
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
+
+    def test_align_option3(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :align: right\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual('right', doctree[0]['align'])
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
+
+    @capture_stderr
+    def test_align_option4(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :align: unknown\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.system_message, type(doctree[0]))
+
+        # clear stderr outputs (ignore ERROR)
+        from io import StringIO
+        sys.stderr = StringIO()
+
+    def test_caption_option(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :caption: hello world\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
         doctree = publish_doctree(text)
         self.assertEqual(1, len(doctree))
         self.assertEqual(nodes.figure, type(doctree[0]))
@@ -179,110 +406,174 @@ class TestRstDirectives(unittest.TestCase):
         self.assertEqual(nodes.Text, type(doctree[0][1][0]))
         self.assertEqual('hello world', doctree[0][1][0])
 
-    def test_block_maxwidth(self):
+    def test_caption_option_and_align_option(self):
         directives.setup(format='SVG', outputdir=self.tmpdir)
-        text = ".. nwdiag::\n   :maxwidth: 100\n\n   { network { A; B } }"
+        text = (".. nwdiag::\n"
+                "   :align: left\n"
+                "   :caption: hello world\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
         doctree = publish_doctree(text)
         self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.figure, type(doctree[0]))
+        self.assertEqual('left', doctree[0]['align'])
+        self.assertEqual(2, len(doctree[0]))
+        self.assertEqual(nodes.image, type(doctree[0][0]))
+        self.assertNotIn('align', doctree[0][0])
+        self.assertEqual(nodes.caption, type(doctree[0][1]))
+        self.assertEqual(1, len(doctree[0][1]))
+        self.assertEqual(nodes.Text, type(doctree[0][1][0]))
+        self.assertEqual('hello world', doctree[0][1][0])
+
+    @capture_stderr
+    def test_maxwidth_option(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :maxwidth: 100\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(2, len(doctree))
         self.assertEqual(nodes.image, type(doctree[0]))
-        self.assertFalse('alt' in doctree[0])
         self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
-        self.assertFalse(0, doctree[0]['target'].index(self.tmpdir))
+        self.assertEqual('100', doctree[0]['width'])
+        self.assertEqual(nodes.system_message, type(doctree[1]))
 
-    def test_block_nodoctype_false(self):
-        directives.setup(format='SVG', outputdir=self.tmpdir, nodoctype=False)
-        text = ".. nwdiag::\n   :alt: hello world\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.image, type(doctree[0]))
-        svg = open(doctree[0]['uri']).read()
-        self.assertEqual("<?xml version='1.0' encoding='UTF-8'?>\n"
-                         "<!DOCTYPE ", svg[:49])
-
-    def test_block_nodoctype_true(self):
-        directives.setup(format='SVG', outputdir=self.tmpdir, nodoctype=True)
-        text = ".. nwdiag::\n   :alt: hello world\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.image, type(doctree[-1]))
-        svg = open(doctree[0]['uri']).read()
-        self.assertNotEqual("<?xml version='1.0' encoding='UTF-8'?>\n"
-                            "<!DOCTYPE ", svg[:49])
-
-    def test_block_noviewbox_false(self):
-        directives.setup(format='SVG', outputdir=self.tmpdir, noviewbox=False)
-        text = ".. nwdiag::\n   :alt: hello world\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.image, type(doctree[0]))
-        svg = open(doctree[0]['uri']).read()
-        self.assertRegexpMatches(svg, '<svg viewBox="0 0 \d+ \d+" ')
-
-    def test_block_noviewbox_true(self):
-        directives.setup(format='SVG', outputdir=self.tmpdir, noviewbox=True)
-        text = ".. nwdiag::\n   :alt: hello world\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.image, type(doctree[0]))
-        svg = open(doctree[0]['uri']).read()
-        self.assertRegexpMatches(svg, '<svg height="\d+" width="\d+" ')
-
-    def test_block_inline_svg_false(self):
-        directives.setup(format='SVG', outputdir=self.tmpdir, inline_svg=False)
-        text = ".. nwdiag::\n   :alt: hello world\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.image, type(doctree[0]))
-        self.assertEqual(1, len(os.listdir(self.tmpdir)))
-
-    def test_block_inline_svg_true(self):
-        directives.setup(format='SVG', outputdir=self.tmpdir, inline_svg=True)
-        text = ".. nwdiag::\n   :alt: hello world\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.raw, type(doctree[0]))
-        self.assertEqual('html', doctree[0]['format'])
-        self.assertEqual(nodes.Text, type(doctree[0][0]))
-        self.assertEqual("<?xml version='1.0' encoding='UTF-8'?>\n"
-                         "<!DOCTYPE ", doctree[0][0][:49])
-        self.assertEqual(0, len(os.listdir(self.tmpdir)))
-
-    @with_pil
-    def test_block_inline_svg_true_but_nonsvg_format(self):
-        directives.setup(format='PNG', outputdir=self.tmpdir, inline_svg=True)
-        text = ".. nwdiag::\n   :alt: hello world\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.image, type(doctree[0]))
-
-    def test_block_inline_svg_true_with_multibytes(self):
-        directives.setup(format='SVG', outputdir=self.tmpdir, inline_svg=True)
-        text = ".. nwdiag::\n   :alt: hello world\n\n   { network { あ; い } }"
-        publish_parts(text)
-
-    def test_block_max_width_inline_svg(self):
-        directives.setup(format='SVG', outputdir=self.tmpdir,
-                         nodoctype=True, noviewbox=True, inline_svg=True)
-        text = ".. nwdiag::\n   :maxwidth: 100\n\n   { network { A; B } }"
-        doctree = publish_doctree(text)
-        self.assertEqual(1, len(doctree))
-        self.assertEqual(nodes.raw, type(doctree[0]))
-        self.assertEqual(nodes.Text, type(doctree[0][0]))
-        self.assertRegexpMatches(doctree[0][0],
-                                 '<svg height="\d+" width="100" ')
-
-    def test_desctable_without_description(self):
+    def test_width_option(self):
         directives.setup(format='SVG', outputdir=self.tmpdir)
-        text = ".. nwdiag::\n   :desctable:\n\n   { network { A; B } }"
+        text = (".. nwdiag::\n"
+                "   :width: 100\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
         doctree = publish_doctree(text)
         self.assertEqual(1, len(doctree))
         self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual('100', doctree[0]['width'])
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
 
-    def test_desctable(self):
+    def test_height_option(self):
         directives.setup(format='SVG', outputdir=self.tmpdir)
-        text = ".. nwdiag::\n   :desctable:\n\n" + \
-               "   { network { A [description = foo];" + \
-               "     B [description = bar]; } }"
+        text = (".. nwdiag::\n"
+                "   :height: 100\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual('100', doctree[0]['height'])
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
+
+    def test_scale_option(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :scale: 50%\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual(50, doctree[0]['scale'])
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
+
+    def test_name_option(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :name: foo%\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual(['foo%'], doctree[0]['names'])
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
+
+    def test_class_option(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :class: bar%\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+        self.assertEqual(['bar'], doctree[0]['classes'])
+        self.assertEqual(0, doctree[0]['uri'].index(self.tmpdir))
+
+    def test_figwidth_option1(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :caption: hello world\n"
+                "   :figwidth: 100\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.figure, type(doctree[0]))
+        self.assertEqual('100px', doctree[0]['width'])
+
+    def test_figwidth_option2(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :caption: hello world\n"
+                "   :figwidth: image\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.figure, type(doctree[0]))
+        self.assertEqual('456px', doctree[0]['width'])
+
+    def test_figclass_option(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :caption: hello world\n"
+                "   :figclass: baz\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.figure, type(doctree[0]))
+        self.assertEqual(['baz'], doctree[0]['classes'])
+
+    def test_desctable_option(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :desctable:\n"
+                "\n"
+                "   network {"
+                "     A [description = foo]"
+                "     B [description = bar]"
+                "   }")
         doctree = publish_doctree(text)
         self.assertEqual(2, len(doctree))
         self.assertEqual(nodes.image, type(doctree[0]))
@@ -313,12 +604,35 @@ class TestRstDirectives(unittest.TestCase):
         self.assertEqual('B', tbody[1][0][0][0])
         self.assertEqual('bar', tbody[1][1][0][0])
 
-    def test_desctable_using_node_group(self):
+    def test_desctable_option_without_description(self):
         directives.setup(format='SVG', outputdir=self.tmpdir)
-        text = ".. nwdiag::\n   :desctable:\n\n" + \
-               "   { network { A [description = foo];" + \
-               "     B [description = bar]; } " + \
-               "     group { A }; network { A; B }; }"
+        text = (".. nwdiag::\n"
+                "   :desctable:\n"
+                "\n"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
+        doctree = publish_doctree(text)
+        self.assertEqual(1, len(doctree))
+        self.assertEqual(nodes.image, type(doctree[0]))
+
+    def test_desctable_option_using_node_group(self):
+        directives.setup(format='SVG', outputdir=self.tmpdir)
+        text = (".. nwdiag::\n"
+                "   :desctable:\n"
+                "\n"
+                "   network {"
+                "     A [description = foo]"
+                "     B [description = bar]"
+                "   }"
+                "   group {"
+                "     A"
+                "   }"
+                "   network {"
+                "     A"
+                "     B"
+                "   }")
         doctree = publish_doctree(text)
         self.assertEqual(2, len(doctree))
         self.assertEqual(nodes.image, type(doctree[0]))
@@ -372,11 +686,15 @@ class TestRstDirectives(unittest.TestCase):
         self.assertEqual(1, len(tbody[1][1]))
         self.assertEqual('bar', tbody[1][1][0][0])
 
-    def test_desctable_with_rest_markups(self):
+    def test_desctable_option_with_rest_markups(self):
         directives.setup(format='SVG', outputdir=self.tmpdir)
-        text = ".. nwdiag::\n   :desctable:\n\n" + \
-               "   { network { A [description = \"foo *bar* **baz**\"]; " + \
-               "     B [description = \"**foo** *bar* baz\"]; } }"
+        text = (".. nwdiag::\n"
+                "   :desctable:\n"
+                "\n"
+                "   network {"
+                "     A [description = \"foo *bar* **baz**\"]"
+                "     B [description = \"**foo** *bar* baz\"]"
+                "   }")
         doctree = publish_doctree(text)
         self.assertEqual(2, len(doctree))
         self.assertEqual(nodes.image, type(doctree[0]))
@@ -428,10 +746,15 @@ class TestRstDirectives(unittest.TestCase):
         self.assertEqual(nodes.Text, type(tbody[1][1][0][3]))
         self.assertEqual(' baz', str(tbody[1][1][0][3]))
 
-    def test_desctable_with_numbered(self):
+    def test_desctable_option_with_numbered(self):
         directives.setup(format='SVG', outputdir=self.tmpdir)
-        text = ".. nwdiag::\n   :desctable:\n\n" + \
-               "   { network { A [numbered = 2]; B [numbered = 1]; } }"
+        text = (".. nwdiag::\n"
+                "   :desctable:\n"
+                "\n"
+                "   network {"
+                "     A [numbered = 2]"
+                "     B [numbered = 1]"
+                "   }")
         doctree = publish_doctree(text)
         self.assertEqual(2, len(doctree))
         self.assertEqual(nodes.image, type(doctree[0]))
@@ -462,11 +785,15 @@ class TestRstDirectives(unittest.TestCase):
         self.assertEqual('2', tbody[1][0][0][0])
         self.assertEqual('A', tbody[1][1][0][0])
 
-    def test_desctable_with_numbered_and_description(self):
+    def test_desctable_option_with_numbered_and_description(self):
         directives.setup(format='SVG', outputdir=self.tmpdir)
-        text = ".. nwdiag::\n   :desctable:\n\n" + \
-               "   { network { A [description = foo, numbered = 2]; " + \
-               "     B [description = bar, numbered = 1]; } }"
+        text = (".. nwdiag::\n"
+                "   :desctable:\n"
+                "\n"
+                "   network {"
+                "     A [description = foo, numbered = 2]"
+                "     B [description = bar, numbered = 1]"
+                "   }")
         doctree = publish_doctree(text)
         self.assertEqual(2, len(doctree))
         self.assertEqual(nodes.image, type(doctree[0]))
