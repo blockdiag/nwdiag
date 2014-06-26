@@ -1,5 +1,18 @@
 `nwdiag` generate network-diagram image file from spec-text file.
 
+.. image:: https://drone.io/bitbucket.org/blockdiag/nwdiag/status.png
+   :target: https://drone.io/bitbucket.org/blockdiag/nwdiag
+   :alt: drone.io CI build status
+
+.. image:: https://pypip.in/v/nwdiag/badge.png
+   :target: https://pypi.python.org/pypi/nwdiag/
+   :alt: Latest PyPI version
+
+.. image:: https://pypip.in/d/nwdiag/badge.png
+   :target: https://pypi.python.org/pypi/nwdiag/
+   :alt: Number of PyPI downloads
+
+
 Features
 ========
 * Generate network-diagram from dot like text (basic feature).
