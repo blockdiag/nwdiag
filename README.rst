@@ -38,7 +38,7 @@ spec-text setting sample
 
 Few examples are available.
 You can get more examples at
-`blockdiag.com <http://blockdiag.com/nwdiag/build/html/index.html>`_ .
+`blockdiag.com`_ .
 
 simple.diag
 ------------
@@ -200,10 +200,6 @@ History
 * Fix bugs
 
 0.2.7 (2011-07-05)
-------------------
-* Fix bugs
-
-0.2.6 (2011-07-03)
 ------------------
 * Fix bugs
 
