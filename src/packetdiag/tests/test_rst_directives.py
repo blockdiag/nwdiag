@@ -7,7 +7,6 @@ else:
     import unittest
 
 import os
-import tempfile
 from blockdiag.tests.utils import capture_stderr, with_pil, TemporaryDirectory
 from docutils import nodes
 from docutils.core import publish_doctree
@@ -168,10 +167,10 @@ class TestRstDirectives(unittest.TestCase):
 
     def test_setup_inline_svg_is_true_with_multibytes(self):
         directives.setup(format='SVG', outputdir=self.tmpdir, inline_svg=True)
-        text = (".. packetdiag::\n"
-                "\n"
-                "   1: サーバ\n"
-                "   2: データベース\n")
+        text = u(".. packetdiag::\n"
+                 "\n"
+                 "   1: サーバ\n"
+                 "   2: データベース\n")
         doctree = publish_doctree(text)
         self.assertEqual(1, len(doctree))
         self.assertEqual(nodes.raw, type(doctree[0]))
