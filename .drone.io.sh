@@ -5,7 +5,12 @@ sudo apt-get install python2.6 python2.6-dev python3.4 python3.4-dev fonts-ipafo
 
 mkdir src/nwdiag/tests/truetype
 cp /usr/share/fonts/truetype/vlgothic/VL-PGothic-Regular.ttf src/nwdiag/tests/truetype
+mkdir src/rackdiag/tests/truetype
+cp /usr/share/fonts/truetype/vlgothic/VL-PGothic-Regular.ttf src/rackdiag/tests/truetype
+mkdir src/packetdiag/tests/truetype
+cp /usr/share/fonts/truetype/vlgothic/VL-PGothic-Regular.ttf src/packetdiag/tests/truetype
 
-pip install --use-mirrors --upgrade detox misspellings
+pip install --use-mirrors --upgrade detox misspellings check-manifest docutils
 find src/ -name "*.py" | misspellings -f -
 detox
+check-manifest
