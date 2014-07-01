@@ -34,9 +34,7 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
         return self.diagram.groups
 
     def pagesize(self, scaled=False):
-        # FIXME: force int'ize
-        xy = super(DiagramDraw, self).pagesize(scaled)
-        return XY(int(xy.x), int(xy.y))
+        return super(DiagramDraw, self).pagesize(scaled).to_integer_point()
 
     def _draw_background(self):
         super(DiagramDraw, self)._draw_background()
