@@ -13,8 +13,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from docutils import nodes
+import rackdiag.parser
+import rackdiag.builder
+import rackdiag.drawer
+from blockdiag.utils.rst import nodes
 
 
-class rackdiag(nodes.General, nodes.Element):
-    pass
+class rackdiag(nodes.blockdiag):
+    name = 'rackdiag'
+    processor = rackdiag

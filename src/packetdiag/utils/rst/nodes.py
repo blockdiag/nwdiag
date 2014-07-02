@@ -13,8 +13,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from docutils import nodes
+import packetdiag.parser
+import packetdiag.builder
+import packetdiag.drawer
+from blockdiag.utils.rst import nodes
 
 
-class packetdiag(nodes.General, nodes.Element):
-    pass
+class packetdiag(nodes.blockdiag):
+    name = 'packetdiag'
+    processor = packetdiag

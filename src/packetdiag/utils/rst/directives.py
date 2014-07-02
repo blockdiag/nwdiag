@@ -14,9 +14,6 @@
 #  limitations under the License.
 
 from docutils.parsers import rst
-import packetdiag.parser
-import packetdiag.builder
-import packetdiag.drawer
 from packetdiag.elements import FieldItem
 from packetdiag.utils.rst.nodes import packetdiag as packetdiag_node
 from blockdiag.utils.rst import directives
@@ -37,7 +34,6 @@ directive_options = {}
 class PacketdiagDirective(directives.BlockdiagDirective):
     name = "packetdiag"
     node_class = packetdiag_node
-    processor = packetdiag
 
     @property
     def global_options(self):
