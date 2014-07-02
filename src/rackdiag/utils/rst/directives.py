@@ -14,9 +14,6 @@
 #  limitations under the License.
 
 from docutils.parsers import rst
-import rackdiag.parser
-import rackdiag.builder
-import rackdiag.drawer
 from rackdiag.elements import RackItem
 from rackdiag.utils.rst.nodes import rackdiag as rackdiag_node
 from blockdiag.utils.rst import directives
@@ -37,7 +34,6 @@ directive_options = {}
 class RackdiagDirective(directives.BlockdiagDirective):
     name = "rackdiag"
     node_class = rackdiag_node
-    processor = rackdiag
 
     @property
     def global_options(self):

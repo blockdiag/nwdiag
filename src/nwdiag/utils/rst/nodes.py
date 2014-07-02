@@ -13,8 +13,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from docutils import nodes
+import nwdiag.parser
+import nwdiag.builder
+import nwdiag.drawer
+from blockdiag.utils.rst import nodes
 
 
-class nwdiag(nodes.General, nodes.Element):
-    pass
+class nwdiag(nodes.blockdiag):
+    name = 'nwdiag'
+    processor = nwdiag
