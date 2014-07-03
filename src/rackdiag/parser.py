@@ -35,7 +35,6 @@ At the moment, the parser builds only a parse tree, not an abstract syntax tree
   [1]: http://www.graphviz.org/doc/info/lang.html
 '''
 
-import re
 import io
 from re import MULTILINE, DOTALL
 from collections import namedtuple
@@ -89,7 +88,7 @@ def parse(seq):
     op_ = lambda s: skip(op(s))
     _id = some(lambda t: t.type in id_tokens) >> tokval
     keyword = lambda s: a(Token('Name', s)) >> tokval
-    rackheight = some(lambda t: t.type == 'RackHeight').named('rackheight') >> tokval
+    rackheight = some(lambda t: t.type == 'RackHeight') >> tokval
     number = some(lambda t: t.type == 'Number').named('number') >> tokval
     rackitem = some(lambda t: t.type in rackitem_tokens) >> tokval
 
