@@ -84,6 +84,10 @@ Apache License 2.0
 History
 =======
 
+1.0.3 (2014-07-03)
+------------------
+* rackdiag: Fix rackheight syntax (cf. rack { 12U }) was disabled
+
 1.0.2 (2014-07-02)
 ------------------
 * Change interface of docutils node (for sphinxcontrib module)
