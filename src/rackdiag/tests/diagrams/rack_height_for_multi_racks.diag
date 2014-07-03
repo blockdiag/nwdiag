@@ -1,0 +1,19 @@
+{
+  rack {
+    8U;
+
+    * server 1;
+    * server 2;
+    * server 3;
+    * server 4;
+  }
+
+  rack {
+    12U;
+
+    * server 5;
+    * server 6;
+    * server 7;
+    * server 8;
+  }
+}

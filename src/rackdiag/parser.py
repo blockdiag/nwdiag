@@ -66,7 +66,8 @@ def tokenize(string):
         ('QuotedRackItem', (r'(?<=[:*\-])\s*(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),  # NOQA
         ('RackItem',       (r'(?<=[:*\-])[^\r\n\[;}]+',)),                                   # NOQA
         ('Space',          (r'[ \t\r\n]+',)),                                                # NOQA
-        ('Units',          (r'([0-9]+U|[0-9]+(?:\.[0-9]+)?(A|kg))',)),                       # NOQA
+        ('RackHeight',     (r'[0-9]+U',)),                                                   # NOQA
+        ('Units',          (r'[0-9]+(?:\.[0-9]+)?(A|kg)',)),                                 # NOQA
         ('Number',         (r'[0-9]+',)),                                                    # NOQA
         ('Name',           (u('[A-Za-z_0-9\u0080-\uffff]') +                                 # NOQA
                             u('[A-Za-z_\\-.0-9\u0080-\uffff]*'),)),                          # NOQA
@@ -80,7 +81,7 @@ def tokenize(string):
 
 def parse(seq):
     """Sequence(Token) -> object"""
-    id_tokens = ['Name', 'Number', 'String', 'Units']
+    id_tokens = ['Name', 'Number', 'String', 'RackHeight', 'Units']
     rackitem_tokens = ['QuotedRackItem', 'RackItem']
 
     tokval = lambda x: x.value
@@ -88,6 +89,7 @@ def parse(seq):
     op_ = lambda s: skip(op(s))
     _id = some(lambda t: t.type in id_tokens) >> tokval
     keyword = lambda s: a(Token('Name', s)) >> tokval
+    rackheight = some(lambda t: t.type == 'RackHeight').named('rackheight') >> tokval
     number = some(lambda t: t.type == 'Number').named('number') >> tokval
     rackitem = some(lambda t: t.type in rackitem_tokens) >> tokval
 
@@ -96,6 +98,9 @@ def parse(seq):
 
     def make_nonnum_rackitem(text, attr):
         return RackItem(None, text.strip(), attr)
+
+    def make_rackheight(rackheight):
+        return Attr(rackheight, None)
 
     #
     # parts of syntax
@@ -113,10 +118,15 @@ def parse(seq):
     #  attributes statement::
     #     default_shape = box;
     #     default_fontsize = 16;
+    #     12U;
     #
     attribute_stmt = (
         _id + op_('=') + _id
         >> create_mapper(Attr)
+    )
+    rackheight_stmt = (
+        rackheight
+        >> make_rackheight
     )
 
     #  field statement::
@@ -152,6 +162,7 @@ def parse(seq):
     # rack definition
     rack_inline_stmt = (
         attribute_stmt |
+        rackheight_stmt |
         field_item_stmt
     )
     rack_inline_stmt_list = (
@@ -191,7 +202,8 @@ def parse(seq):
         extension_stmt |
         rack_stmt |
         field_item_stmt |
-        attribute_stmt
+        attribute_stmt |
+        rackheight_stmt
     )
     diagram_inline_stmt_list = (
         many(diagram_inline_stmt + skip(maybe(op(';'))))
