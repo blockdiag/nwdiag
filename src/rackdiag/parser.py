@@ -98,7 +98,7 @@ def parse(seq):
     def make_nonnum_rackitem(text, attr):
         return RackItem(None, text.strip(), attr)
 
-    def make_rackheight(rackheight):
+    def make_nonvalued_attr(rackheight):
         return Attr(rackheight, None)
 
     #
@@ -118,6 +118,7 @@ def parse(seq):
     #     default_shape = box;
     #     default_fontsize = 16;
     #     12U;
+    #     ascending;
     #
     attribute_stmt = (
         _id + op_('=') + _id
@@ -125,7 +126,11 @@ def parse(seq):
     )
     rackheight_stmt = (
         rackheight
-        >> make_rackheight
+        >> make_nonvalued_attr
+    )
+    ascending_stmt = (
+        keyword('ascending')
+        >> make_nonvalued_attr
     )
 
     #  field statement::
@@ -198,6 +203,7 @@ def parse(seq):
         >> list
     )
     diagram_inline_stmt = (
+        ascending_stmt |
         extension_stmt |
         rack_stmt |
         field_item_stmt |
