@@ -357,10 +357,8 @@ class TestRstDirectives(unittest.TestCase):
         self.assertEqual(nodes.image, type(doctree[0][0]))
         self.assertEqual(nodes.caption, type(doctree[0][1]))
         self.assertEqual(1, len(doctree[0][1]))
-        self.assertEqual(nodes.paragraph, type(doctree[0][1][0]))
-        self.assertEqual(1, len(doctree[0][1][0]))
-        self.assertEqual(nodes.Text, type(doctree[0][1][0][0]))
-        self.assertEqual('hello world', doctree[0][1][0][0])
+        self.assertEqual(nodes.Text, type(doctree[0][1][0]))
+        self.assertEqual('hello world', doctree[0][1][0])
 
     def test_caption_option_and_align_option(self):
         directives.setup(format='SVG', outputdir=self.tmpdir)
@@ -379,10 +377,8 @@ class TestRstDirectives(unittest.TestCase):
         self.assertNotIn('align', doctree[0][0])
         self.assertEqual(nodes.caption, type(doctree[0][1]))
         self.assertEqual(1, len(doctree[0][1]))
-        self.assertEqual(nodes.paragraph, type(doctree[0][1][0]))
-        self.assertEqual(1, len(doctree[0][1][0]))
-        self.assertEqual(nodes.Text, type(doctree[0][1][0][0]))
-        self.assertEqual('hello world', doctree[0][1][0][0])
+        self.assertEqual(nodes.Text, type(doctree[0][1][0]))
+        self.assertEqual('hello world', doctree[0][1][0])
 
     @capture_stderr
     def test_maxwidth_option(self):
