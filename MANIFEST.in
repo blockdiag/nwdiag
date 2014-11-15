@@ -7,6 +7,9 @@ include nwdiag.1
 include rackdiag.1
 include packetdiag.1
 include tox.ini
+include src/nwdiag/tests/VLGothic/*
+include src/rackdiag/tests/VLGothic/*
+include src/packetdiag/tests/VLGothic/*
 recursive-include examples *.diag *.png *.svg
 recursive-include src *.py *.diag *.gif
 
