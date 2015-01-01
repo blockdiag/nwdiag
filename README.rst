@@ -84,6 +84,14 @@ Apache License 2.0
 History
 =======
 
+1.0.4 (2015-01-01)
+------------------
+* Support blockdiag 1.5.0 core interface
+* Fix bugs
+
+  - Fix ascending syntax was disabled on refactoring parser
+
+
 1.0.3 (2014-07-03)
 ------------------
 * rackdiag: Fix rackheight syntax (cf. rack { 12U }) was disabled
