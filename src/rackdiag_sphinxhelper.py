@@ -13,24 +13,21 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-__all__ = [
-    'core', 'utils'
-]
-
 import rackdiag.parser
 import rackdiag.builder
 import rackdiag.drawer
-core = rackdiag
-
 import rackdiag.utils.rst.nodes
 import rackdiag.utils.rst.directives
-utils = rackdiag.utils
-
 import blockdiag.utils.bootstrap
-utils.bootstrap = blockdiag.utils.bootstrap
-
 import blockdiag.utils.compat
-utils.compat = blockdiag.utils.compat
-
 import blockdiag.utils.fontmap
+
+core = rackdiag
+utils = rackdiag.utils
+utils.bootstrap = blockdiag.utils.bootstrap
+utils.compat = blockdiag.utils.compat
 utils.fontmap = blockdiag.utils.fontmap
+
+__all__ = [
+    'core', 'utils'
+]

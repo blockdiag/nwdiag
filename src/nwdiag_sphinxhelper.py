@@ -13,24 +13,21 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-__all__ = [
-    'core', 'utils'
-]
-
 import nwdiag.parser
 import nwdiag.builder
 import nwdiag.drawer
-core = nwdiag
-
 import nwdiag.utils.rst.nodes
 import nwdiag.utils.rst.directives
-utils = nwdiag.utils
-
 import blockdiag.utils.bootstrap
-utils.bootstrap = blockdiag.utils.bootstrap
-
 import blockdiag.utils.compat
-utils.compat = blockdiag.utils.compat
-
 import blockdiag.utils.fontmap
+
+core = nwdiag
+utils = nwdiag.utils
+utils.bootstrap = blockdiag.utils.bootstrap
+utils.compat = blockdiag.utils.compat
 utils.fontmap = blockdiag.utils.fontmap
+
+__all__ = [
+    'core', 'utils'
+]
