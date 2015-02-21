@@ -74,12 +74,14 @@ class Network(blockdiag.elements.NodeGroup):
 
     @classmethod
     def create_anonymous(cls, nodes, attrs=None):
+        def is_same(nw):
+            return set(nodes) & set(nw.nodes) == set(nodes)
+
         if len(set(nodes)) != len(nodes):
             msg = "Do not connect same node to peer network: %s"
             raise RuntimeError(msg % nodes[0].id)
 
         # search networks including same nodes
-        is_same = lambda nw: set(nodes) & set(nw.nodes) == set(nodes)
         if [nw for nw in nodes[0].networks if nw.hidden and is_same(nw)]:
             return None
 

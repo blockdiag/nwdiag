@@ -44,8 +44,10 @@ class DiagramTreeBuilder:
         # show networks including same nodes
         for nw in self.diagram.networks:
             if nw.hidden and len(nw.nodes) == 2:
+                def is_same(x):
+                    return set(nodes) & set(x.nodes) == set(nodes)
+
                 nodes = nw.nodes
-                is_same = lambda x: set(nodes) & set(x.nodes) == set(nodes)
                 for n in self.diagram.networks:
                     if n != nw and is_same(n):
                         nw.hidden = False
