@@ -9,9 +9,8 @@ rm src/packetdiag/tests/VLGothic/VL-Gothic-Regular.ttf
 cp src/nwdiag/tests/VLGothic/VL-Gothic-Regular.ttf src/rackdiag/tests/VLGothic/
 cp src/nwdiag/tests/VLGothic/VL-Gothic-Regular.ttf src/packetdiag/tests/VLGothic/
 
-pip install --use-mirrors --upgrade wheel
+pip install --use-mirrors --upgrade pip setuptools wheel
 pip install --use-mirrors --upgrade --use-wheel detox misspellings check-manifest docutils
-pip install https://bitbucket.org/hpk42/detox/get/tip.zip
 find src/ -name "*.py" | misspellings -f -
 ALL_TESTS=1 detox
 check-manifest
