@@ -71,21 +71,18 @@ def tokenize(string):
         ('Name',    (u('[A-Za-z_\u0080-\uffff]') +                      # NOQA
                      u('[A-Za-z_\\-.0-9\u0080-\uffff]*'),)),            # NOQA
         ('Op',      (r'([{};,=\[\]]|--|->)',)),                         # NOQA
-        ('IPv4',    (r'[0-9]+(\.[0-9]+){3}',)),                         # NOQA
-        ('IPv6',    (r'[0-9a-fA-F]*(::[:0-9a-fA-F]*)+',)),              # NOQA
+        ('IPAddr',  (r'([0-9]+(\.[0-9]+){3}|[:0-9a-fA-F]+)',)),         # NOQA
         ('Number',  (r'-?(\.[0-9]+)|([0-9]+(\.[0-9]*)?)',)),            # NOQA
         ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),  # NOQA
     ]
     useless = ['Comment', 'NL', 'Space']
     t = make_tokenizer(specs)
-    ret = [x for x in t(string) if x.type not in useless]
-    print ret
-    return ret
+    return [x for x in t(string) if x.type not in useless]
 
 
 def parse(seq):
     """Sequence(Token) -> object"""
-    id_tokens = ['Name', 'IPv4', 'IPv6', 'Number', 'String']
+    id_tokens = ['Name', 'IPAddr', 'Number', 'String']
 
     tokval = lambda x: x.value
     op = lambda s: a(Token('Op', s)) >> tokval
