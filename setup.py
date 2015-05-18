@@ -14,6 +14,8 @@ classifiers = [
     "Topic :: Software Development :: Documentation",
     "Topic :: Text Processing :: Markup",
 ]
+
+requires = ['blockdiag>=1.5.0']
 test_requires = ['nose',
                  'pep8>=1.3',
                  'reportlab',
@@ -22,6 +24,9 @@ test_requires = ['nose',
 # only for Python2.6
 if sys.version_info > (2, 6) and sys.version_info < (2, 7):
     test_requires.append('unittest2')
+
+if (3, 2) < sys.version_info < (3, 3):
+    requires.append('webcolors < 1.5')  # webcolors-1.5 does not support py32
 
 setup(
     name='nwdiag',
@@ -44,11 +49,7 @@ setup(
     package_dir={'': 'src'},
     package_data={'': ['buildout.cfg']},
     include_package_data=True,
-    install_requires=[
-        'setuptools',
-        'blockdiag>=1.5.0',
-        # -*- Extra requirements: -*-
-    ],
+    install_requires=requires,
     extras_require=dict(
         testing=test_requires,
         pdf=[
