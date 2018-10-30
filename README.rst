@@ -19,7 +19,7 @@ Features
 * Multilingualization for node-label (utf-8 only).
 
 You can get some examples and generated images on 
-`blockdiag.com <http://blockdiag.com/nwdiag/build/html/index.html>`_ .
+`blockdiag.com <http://blockdiag.com/en/nwdiag/nwdiag-examples.html>`_ .
 
 Setup
 =====
