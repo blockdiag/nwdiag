@@ -46,7 +46,6 @@ simple.diag
 simple.diag is simply define nodes and transitions by dot-like text format::
 
     diagram {
-      A -> B -> C;
       lane you {
         A; B;
       }
