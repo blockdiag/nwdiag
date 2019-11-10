@@ -21,10 +21,6 @@ test_requires = ['nose',
                  'reportlab',
                  'docutils']
 
-# only for Python2.6
-if sys.version_info > (2, 6) and sys.version_info < (2, 7):
-    test_requires.append('unittest2')
-
 if (3, 2) < sys.version_info < (3, 3):
     requires.append('webcolors < 1.5')  # webcolors-1.5 does not support py32
 
