@@ -18,6 +18,9 @@ classifiers = [
 requires = ['blockdiag>=1.5.0']
 test_requires = ['nose',
                  'pep8>=1.3',
+                 'flake8',
+                 'flake8-coding',
+                 'flake8-copyright',
                  'reportlab',
                  'docutils']
 
