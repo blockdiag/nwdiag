@@ -36,7 +36,7 @@ class DiagramNode(blockdiag.elements.DiagramNode):
 
         for attr in attrs:
             if attr.name == 'address':
-                address = re.sub('\s*,\s*', '\n', unquote(attr.value))
+                address = re.sub(r'\s*,\s*', '\n', unquote(attr.value))
                 self.address[network] = address
             else:
                 self.set_attribute(attr)

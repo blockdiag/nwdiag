@@ -67,11 +67,11 @@ class RackItem(blockdiag.elements.DiagramNode):
         return u("\n").join(labels)
 
     def set_attribute(self, attr):
-        if re.search('^\d+U$', attr.name):
+        if re.search(r'^\d+U$', attr.name):
             self.colheight = int(attr.name[:-1])
-        elif re.search('^\d+(\.[0-9]+)?A$', attr.name):
+        elif re.search(r'^\d+(\.[0-9]+)?A$', attr.name):
             self.ampere = float(attr.name[:-1])
-        elif re.search('^\d+(\.[0-9]+)?kg$', attr.name):
+        elif re.search(r'^\d+(\.[0-9]+)?kg$', attr.name):
             self.weight = float(attr.name[:-2])
         else:
             return super(RackItem, self).set_attribute(attr)
@@ -199,7 +199,7 @@ class Rack(blockdiag.elements.NodeGroup):
         self.descending = False
 
     def set_attribute(self, attr):
-        if re.search('^\d+U$', attr.name):
+        if re.search(r'^\d+U$', attr.name):
             self.colheight = int(attr.name[:-1])
         else:
             return super(Rack, self).set_attribute(attr)
