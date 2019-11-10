@@ -140,7 +140,7 @@ class Rack(blockdiag.elements.NodeGroup):
         def get_max_height(self, y):
             try:
                 return max(n.colheight for n in self.items(y))
-            except:
+            except Exception:
                 return 0
 
         height = get_max_height(self, level)
