@@ -45,13 +45,20 @@ simple.diag
 
 simple.diag is simply define nodes and transitions by dot-like text format::
 
-    diagram {
-      A -> B -> C;
-      lane you {
-        A; B;
+    nwdiag {
+      network dmz {
+          address = "210.x.x.x/24"
+
+          web01 [address = "210.x.x.1"];
+          web02 [address = "210.x.x.2"];
       }
-      lane me {
-        C;
+      network internal {
+          address = "172.x.x.x/24";
+
+          web01 [address = "172.x.x.1"];
+          web02 [address = "172.x.x.2"];
+          db01;
+          db02;
       }
     }
 
