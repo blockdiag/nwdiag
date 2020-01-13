@@ -13,12 +13,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from blockdiag.utils.compat import cmp_to_key
+from blockdiag.utils.rst import directives
 from docutils.parsers import rst
+
 from packetdiag.elements import FieldItem
 from packetdiag.utils.rst.nodes import packetdiag as packetdiag_node
-from blockdiag.utils.rst import directives
-from blockdiag.utils.compat import cmp_to_key
-
 
 directive_options_default = dict(format='PNG',
                                  antialias=False,

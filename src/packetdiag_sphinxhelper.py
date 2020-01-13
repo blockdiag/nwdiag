@@ -13,13 +13,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import packetdiag.parser
-import packetdiag.builder
-import packetdiag.drawer
-import packetdiag.utils.rst.nodes
-import packetdiag.utils.rst.directives
 import blockdiag.utils.bootstrap
 import blockdiag.utils.fontmap
+
+import packetdiag.builder
+import packetdiag.drawer
+import packetdiag.parser
+import packetdiag.utils.rst.directives
+import packetdiag.utils.rst.nodes
 
 core = packetdiag
 utils = packetdiag.utils

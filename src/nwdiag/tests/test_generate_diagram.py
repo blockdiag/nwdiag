@@ -14,10 +14,11 @@
 #  limitations under the License.
 
 import os
+
+from blockdiag.tests.test_generate_diagram import (get_diagram_files,
+                                                   testcase_generator)
+
 import nwdiag.command
-from blockdiag.tests.test_generate_diagram import (
-    get_diagram_files, testcase_generator
-)
 
 
 def test_generate():

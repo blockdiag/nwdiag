@@ -14,10 +14,13 @@
 #  limitations under the License.
 
 from __future__ import division
+
 import re
+
 import blockdiag.elements
-from rackdiag.utils.math import lcm
 from blockdiag.utils import XY
+
+from rackdiag.utils.math import lcm
 
 
 class DiagramNode(blockdiag.elements.DiagramNode):

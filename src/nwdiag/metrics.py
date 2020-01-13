@@ -14,11 +14,14 @@
 #  limitations under the License.
 
 from __future__ import division
+
 import math
 from collections import namedtuple
+
 import blockdiag.metrics
+from blockdiag.utils import XY, Box
+
 from nwdiag import elements
-from blockdiag.utils import Box, XY
 
 cellsize = blockdiag.metrics.DiagramMetrics.cellsize
 

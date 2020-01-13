@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
 
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -58,6 +59,7 @@ setup(
             'flake8',
             'flake8-coding',
             'flake8-copyright',
+            'flake8-isort',
             'reportlab',
             'docutils'
         ],

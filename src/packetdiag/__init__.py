@@ -14,4 +14,5 @@
 #  limitations under the License.
 
 from nwdiag import __version__
+
 __version__

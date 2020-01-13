@@ -14,9 +14,11 @@
 #  limitations under the License.
 
 from __future__ import division
+
 import blockdiag.drawer
+from blockdiag.utils import XY, Box
+
 from nwdiag.metrics import DiagramMetrics
-from blockdiag.utils import Box, XY
 
 
 class DiagramDraw(blockdiag.drawer.DiagramDraw):

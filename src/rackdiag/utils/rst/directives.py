@@ -13,12 +13,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from blockdiag.utils.compat import cmp_to_key
+from blockdiag.utils.rst import directives
 from docutils.parsers import rst
+
 from rackdiag.elements import RackItem
 from rackdiag.utils.rst.nodes import rackdiag as rackdiag_node
-from blockdiag.utils.rst import directives
-from blockdiag.utils.compat import cmp_to_key
-
 
 directive_options_default = dict(format='PNG',
                                  antialias=False,

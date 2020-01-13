@@ -14,8 +14,9 @@
 #  limitations under the License.
 
 import blockdiag.drawer
-from rackdiag.metrics import DiagramMetrics
 from blockdiag.utils import Box
+
+from rackdiag.metrics import DiagramMetrics
 
 
 class DiagramDraw(blockdiag.drawer.DiagramDraw):

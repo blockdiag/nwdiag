@@ -14,11 +14,13 @@
 #  limitations under the License.
 
 import sys
+
+from blockdiag.utils.bootstrap import Application
+
 import rackdiag
 import rackdiag.builder
 import rackdiag.drawer
 import rackdiag.parser
-from blockdiag.utils.bootstrap import Application
 
 
 class RackdiagApp(Application):
