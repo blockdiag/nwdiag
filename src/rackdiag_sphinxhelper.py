@@ -19,13 +19,11 @@ import rackdiag.drawer
 import rackdiag.utils.rst.nodes
 import rackdiag.utils.rst.directives
 import blockdiag.utils.bootstrap
-import blockdiag.utils.compat
 import blockdiag.utils.fontmap
 
 core = rackdiag
 utils = rackdiag.utils
 utils.bootstrap = blockdiag.utils.bootstrap
-utils.compat = blockdiag.utils.compat
 utils.fontmap = blockdiag.utils.fontmap
 
 __all__ = [

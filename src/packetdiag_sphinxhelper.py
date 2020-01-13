@@ -19,13 +19,11 @@ import packetdiag.drawer
 import packetdiag.utils.rst.nodes
 import packetdiag.utils.rst.directives
 import blockdiag.utils.bootstrap
-import blockdiag.utils.compat
 import blockdiag.utils.fontmap
 
 core = packetdiag
 utils = packetdiag.utils
 utils.bootstrap = blockdiag.utils.bootstrap
-utils.compat = blockdiag.utils.compat
 utils.fontmap = blockdiag.utils.fontmap
 
 __all__ = [

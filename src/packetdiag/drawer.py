@@ -15,7 +15,6 @@
 
 import blockdiag.drawer
 from packetdiag.metrics import DiagramMetrics
-from blockdiag.utils.compat import u
 
 
 class DiagramDraw(blockdiag.drawer.DiagramDraw):
@@ -39,9 +38,9 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
                 box = self.metrics.measure_label(i)
 
                 if self.diagram.scale_direction == "left_to_right":
-                    label = u(str(i))
+                    label = str(i)
                 else:
-                    label = u(str(self.diagram.colwidth - i))
+                    label = str(self.diagram.colwidth - i)
 
                 self.drawer.textarea(box, label, font,
                                      fill=self.diagram.textcolor)

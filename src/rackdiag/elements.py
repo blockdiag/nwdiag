@@ -18,7 +18,6 @@ import re
 import blockdiag.elements
 from rackdiag.utils.math import lcm
 from blockdiag.utils import XY
-from blockdiag.utils.compat import u
 
 
 class DiagramNode(blockdiag.elements.DiagramNode):
@@ -52,19 +51,19 @@ class RackItem(blockdiag.elements.DiagramNode):
     def display_label(self):
         attrs = []
         if self.colheight > 1:
-            attrs.append(u("%dU") % self.colheight)
+            attrs.append("%dU" % self.colheight)
         if self.ampere:
-            attrs.append(u("%.1fA") % self.ampere)
+            attrs.append("%.1fA" % self.ampere)
         if self.weight:
-            attrs.append(u("%.1fkg") % self.weight)
+            attrs.append("%.1fkg" % self.weight)
 
         labels = []
         if self.label:
             labels.append(self.label)
         if attrs:
-            labels.append(u("[%s]") % u("/").join(attrs))
+            labels.append("[%s]" % "/".join(attrs))
 
-        return u("\n").join(labels)
+        return "\n".join(labels)
 
     def set_attribute(self, attr):
         if re.search(r'^\d+U$', attr.name):
@@ -83,21 +82,21 @@ class RackItem(blockdiag.elements.DiagramNode):
         attrs = []
         for name in self.desctable:
             if name == 'units':
-                attrs.append(u("%dU") % self.colheight)
+                attrs.append("%dU" % self.colheight)
             elif name == 'ampere':
                 if self.ampere is None:
-                    attrs.append(u(""))
+                    attrs.append("")
                 else:
-                    attrs.append((u("%.1fA") % self.ampere) or u(""))
+                    attrs.append(("%.1fA" % self.ampere) or "")
             elif name == 'weight':
                 if self.weight is None:
-                    attrs.append(u(""))
+                    attrs.append("")
                 else:
-                    attrs.append((u("%.1fkg") % self.weight) or u(""))
+                    attrs.append(("%.1fkg" % self.weight) or "")
             else:
                 value = getattr(self, name)
                 if value is None:
-                    attrs.append(u(""))
+                    attrs.append("")
                 elif isinstance(value, int):
                     attrs.append(str(value))
                 else:
@@ -120,15 +119,15 @@ class Rack(blockdiag.elements.NodeGroup):
     def display_label(self):
         attrs = []
         if self.description or attrs:
-            attrs.insert(0, u("%dU") % self.colheight)
+            attrs.insert(0, "%dU" % self.colheight)
 
         labels = []
         if self.description:
             labels.append(self.description)
         if attrs:
-            labels.append(u("[%s]") % u("/").join(attrs))
+            labels.append("[%s]" % "/".join(attrs))
 
-        return u("\n").join(labels)
+        return "\n".join(labels)
 
     def items(self, levels):
         if isinstance(levels, int):
