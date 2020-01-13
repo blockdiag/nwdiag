@@ -75,8 +75,8 @@ Execute nwdiag command::
 
 Requirements
 ============
-* Python 2.6, 2.7, 3.2, 3.3, 3.4
-* Pillow 2.2.1 or later
+* Python 3.5 or later
+* blockdiag 1.5.0 or later
 * funcparserlib 0.3.6 or later
 * reportlab (optional)
 * wand and imagemagick (optional)
