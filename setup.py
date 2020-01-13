@@ -29,15 +29,6 @@ def get_version():
     return namespace['__version__']
 
 
-requires = ['blockdiag>=1.5.0']
-test_requires = ['nose',
-                 'pep8>=1.3',
-                 'flake8',
-                 'flake8-coding',
-                 'flake8-copyright',
-                 'reportlab',
-                 'docutils']
-
 setup(
     name='nwdiag',
     version=get_version(),
@@ -59,9 +50,17 @@ setup(
     package_dir={'': 'src'},
     package_data={'': ['buildout.cfg']},
     include_package_data=True,
-    install_requires=requires,
+    install_requires=['blockdiag>=1.5.0'],
     extras_require=dict(
-        testing=test_requires,
+        testing=[
+            'nose',
+            'pep8>=1.3',
+            'flake8',
+            'flake8-coding',
+            'flake8-copyright',
+            'reportlab',
+            'docutils'
+        ],
         pdf=[
             'reportlab',
         ],
@@ -70,7 +69,6 @@ setup(
         ],
     ),
     test_suite='nose.collector',
-    tests_require=test_requires,
     entry_points="""
        [console_scripts]
        nwdiag = nwdiag.command:main
