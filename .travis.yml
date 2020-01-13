@@ -5,6 +5,7 @@ cache: pip
 env:
   global:
     - PYTHONFAULTHANDLER=x
+    - ALL_TESTS=1
 
 matrix:
   include:
