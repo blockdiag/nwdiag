@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-import sys
+import os
 from setuptools import setup, find_packages
-
-sys.path.insert(0, 'src')
-import nwdiag
 
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -19,6 +16,19 @@ classifiers = [
     "Topic :: Text Processing :: Markup",
 ]
 
+
+def get_version():
+    """Get version number of the package from version.py without importing core module."""
+    package_dir = os.path.abspath(os.path.dirname(__file__))
+    version_file = os.path.join(package_dir, 'src/nwdiag/__init__.py')
+
+    namespace = {}
+    with open(version_file, 'r') as f:
+        exec(f.read(), namespace)
+
+    return namespace['__version__']
+
+
 requires = ['blockdiag>=1.5.0']
 test_requires = ['nose',
                  'pep8>=1.3',
@@ -30,7 +40,7 @@ test_requires = ['nose',
 
 setup(
     name='nwdiag',
-    version=nwdiag.__version__,
+    version=get_version(),
     description='nwdiag generates network-diagram image from text',
     long_description=open("README.rst").read(),
     classifiers=classifiers,
