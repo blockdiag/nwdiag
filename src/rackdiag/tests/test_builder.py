@@ -16,14 +16,9 @@
 from __future__ import print_function
 
 import os
-import sys
+import unittest
 from rackdiag.builder import ScreenNodeBuilder
 from rackdiag.parser import parse_string
-
-if sys.version_info < (2, 7):
-    import unittest2 as unittest
-else:
-    import unittest
 
 
 def build(filename):

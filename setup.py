@@ -6,10 +6,14 @@ sys.path.insert(0, 'src')
 import nwdiag
 
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: System Administrators",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
     "Topic :: Software Development",
     "Topic :: Software Development :: Documentation",
     "Topic :: Text Processing :: Markup",
@@ -23,9 +27,6 @@ test_requires = ['nose',
                  'flake8-copyright',
                  'reportlab',
                  'docutils']
-
-if (3, 2) < sys.version_info < (3, 3):
-    requires.append('webcolors < 1.5')  # webcolors-1.5 does not support py32
 
 setup(
     name='nwdiag',
