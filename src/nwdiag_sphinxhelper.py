@@ -13,13 +13,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import nwdiag.parser
-import nwdiag.builder
-import nwdiag.drawer
-import nwdiag.utils.rst.nodes
-import nwdiag.utils.rst.directives
 import blockdiag.utils.bootstrap
 import blockdiag.utils.fontmap
+
+import nwdiag.builder
+import nwdiag.drawer
+import nwdiag.parser
+import nwdiag.utils.rst.directives
+import nwdiag.utils.rst.nodes
 
 core = nwdiag
 utils = nwdiag.utils

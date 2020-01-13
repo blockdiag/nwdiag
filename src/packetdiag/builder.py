@@ -14,9 +14,11 @@
 #  limitations under the License.
 
 from __future__ import division
+
+from blockdiag.utils import XY, unquote
+
 from packetdiag import parser
-from packetdiag.elements import Diagram, FieldItem, DiagramNode
-from blockdiag.utils import unquote, XY
+from packetdiag.elements import Diagram, DiagramNode, FieldItem
 
 
 class DiagramTreeBuilder:

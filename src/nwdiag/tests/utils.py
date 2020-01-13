@@ -14,9 +14,11 @@
 #  limitations under the License.
 
 import os
+
+from blockdiag.tests.utils import BuilderTestCase as BlockdiagBuilderTestCase
+
 from nwdiag.builder import ScreenNodeBuilder
 from nwdiag.parser import parse_file
-from blockdiag.tests.utils import BuilderTestCase as BlockdiagBuilderTestCase
 
 
 class BuilderTestCase(BlockdiagBuilderTestCase):

@@ -36,12 +36,12 @@ At the moment, the parser builds only a parse tree, not an abstract syntax tree
 '''
 
 import io
-from re import MULTILINE, DOTALL
 from collections import namedtuple
-from funcparserlib.lexer import make_tokenizer, Token, LexerError
-from funcparserlib.parser import (some, a, maybe, many, finished, skip)
-from blockdiag.parser import create_mapper, oneplus_to_list
+from re import DOTALL, MULTILINE
 
+from blockdiag.parser import create_mapper, oneplus_to_list
+from funcparserlib.lexer import LexerError, Token, make_tokenizer
+from funcparserlib.parser import a, finished, many, maybe, skip, some
 
 Diagram = namedtuple('Diagram', 'id stmts')
 Network = namedtuple('Network', 'id stmts')

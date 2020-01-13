@@ -13,10 +13,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import rackdiag.parser
+from blockdiag.utils.rst import nodes
+
 import rackdiag.builder
 import rackdiag.drawer
-from blockdiag.utils.rst import nodes
+import rackdiag.parser
 
 
 class rackdiag(nodes.blockdiag):

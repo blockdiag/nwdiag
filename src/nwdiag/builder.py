@@ -14,10 +14,12 @@
 #  limitations under the License.
 
 from collections import namedtuple
+
+from blockdiag.utils import XY, unquote
+
 from nwdiag import parser
-from nwdiag.elements import (Diagram, DiagramNode, DiagramEdge,
-                             Network, Route, NodeGroup)
-from blockdiag.utils import unquote, XY
+from nwdiag.elements import (Diagram, DiagramEdge, DiagramNode, Network,
+                             NodeGroup, Route)
 
 
 class DiagramTreeBuilder:

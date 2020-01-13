@@ -14,11 +14,13 @@
 #  limitations under the License.
 
 import sys
+
+from blockdiag.utils.bootstrap import Application
+
 import nwdiag
 import nwdiag.builder
 import nwdiag.drawer
 import nwdiag.parser
-from blockdiag.utils.bootstrap import Application
 
 
 class NwdiagApp(Application):

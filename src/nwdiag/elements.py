@@ -14,6 +14,7 @@
 #  limitations under the License.
 
 import re
+
 import blockdiag.elements
 from blockdiag.utils import images, unquote
 

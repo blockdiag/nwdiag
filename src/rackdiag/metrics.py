@@ -14,9 +14,12 @@
 #  limitations under the License.
 
 from __future__ import division
+
 from collections import defaultdict
+
 import blockdiag.metrics
-from blockdiag.utils import Box, XY
+from blockdiag.utils import XY, Box
+
 from rackdiag import elements
 
 

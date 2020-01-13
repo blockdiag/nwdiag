@@ -13,13 +13,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from blockdiag.utils.rst import directives
 from docutils.parsers import rst
-import nwdiag.parser
+
 import nwdiag.builder
 import nwdiag.drawer
+import nwdiag.parser
 from nwdiag.utils.rst.nodes import nwdiag as nwdiag_node
-from blockdiag.utils.rst import directives
-
 
 directive_options_default = dict(format='PNG',
                                  antialias=False,

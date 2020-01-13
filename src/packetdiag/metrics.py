@@ -13,9 +13,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import blockdiag.metrics
 from collections import defaultdict, namedtuple
-from blockdiag.utils import Box, XY
+
+import blockdiag.metrics
+from blockdiag.utils import XY, Box
 
 
 class DiagramMetrics(blockdiag.metrics.DiagramMetrics):

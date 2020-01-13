@@ -14,9 +14,11 @@
 #  limitations under the License.
 
 from collections import defaultdict
+
+from blockdiag.utils import XY, unquote
+
 from rackdiag import parser
 from rackdiag.elements import Diagram, Rack, RackItem
-from blockdiag.utils import unquote, XY
 
 
 class DiagramTreeBuilder:

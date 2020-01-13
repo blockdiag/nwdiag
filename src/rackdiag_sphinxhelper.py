@@ -13,13 +13,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import rackdiag.parser
-import rackdiag.builder
-import rackdiag.drawer
-import rackdiag.utils.rst.nodes
-import rackdiag.utils.rst.directives
 import blockdiag.utils.bootstrap
 import blockdiag.utils.fontmap
+
+import rackdiag.builder
+import rackdiag.drawer
+import rackdiag.parser
+import rackdiag.utils.rst.directives
+import rackdiag.utils.rst.nodes
 
 core = rackdiag
 utils = rackdiag.utils

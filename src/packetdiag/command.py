@@ -14,11 +14,13 @@
 #  limitations under the License.
 
 import sys
+
+from blockdiag.utils.bootstrap import Application
+
 import packetdiag
 import packetdiag.builder
 import packetdiag.drawer
 import packetdiag.parser
-from blockdiag.utils.bootstrap import Application
 
 
 class PacketdiagApp(Application):

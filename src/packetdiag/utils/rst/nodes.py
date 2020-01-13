@@ -13,10 +13,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import packetdiag.parser
+from blockdiag.utils.rst import nodes
+
 import packetdiag.builder
 import packetdiag.drawer
-from blockdiag.utils.rst import nodes
+import packetdiag.parser
 
 
 class packetdiag(nodes.blockdiag):
