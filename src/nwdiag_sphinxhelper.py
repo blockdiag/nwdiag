@@ -19,13 +19,11 @@ import nwdiag.drawer
 import nwdiag.utils.rst.nodes
 import nwdiag.utils.rst.directives
 import blockdiag.utils.bootstrap
-import blockdiag.utils.compat
 import blockdiag.utils.fontmap
 
 core = nwdiag
 utils = nwdiag.utils
 utils.bootstrap = blockdiag.utils.bootstrap
-utils.compat = blockdiag.utils.compat
 utils.fontmap = blockdiag.utils.fontmap
 
 __all__ = [

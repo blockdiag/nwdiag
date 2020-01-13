@@ -41,7 +41,6 @@ from collections import namedtuple
 from funcparserlib.lexer import make_tokenizer, Token, LexerError
 from funcparserlib.parser import (some, a, maybe, many, finished, skip)
 from blockdiag.parser import create_mapper, oneplus_to_list
-from blockdiag.utils.compat import u
 
 
 Diagram = namedtuple('Diagram', 'id stmts')
@@ -68,8 +67,8 @@ def tokenize(string):
         ('Comment', (r'(//|#).*',)),                                    # NOQA
         ('NL',      (r'[\r\n]+',)),                                     # NOQA
         ('Space',   (r'[ \t\r\n]+',)),                                  # NOQA
-        ('Name',    (u('[A-Za-z_\u0080-\uffff]') +                      # NOQA
-                     u('[A-Za-z_\\-.0-9\u0080-\uffff]*'),)),            # NOQA
+        ('Name',    ('[A-Za-z_\u0080-\uffff]' +                         # NOQA
+                     '[A-Za-z_\\-.0-9\u0080-\uffff]*',)),               # NOQA
         ('Op',      (r'([{};,=\[\]]|--|->)',)),                         # NOQA
         ('IPAddr',  (r'([0-9]+(\.[0-9]+){3}|[:0-9a-fA-F]+)',)),         # NOQA
         ('Number',  (r'-?(\.[0-9]+)|([0-9]+(\.[0-9]*)?)',)),            # NOQA

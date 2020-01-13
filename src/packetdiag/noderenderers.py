@@ -13,8 +13,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from blockdiag.noderenderer import NodeShape
 from blockdiag.noderenderer import install_renderer
+
+try:
+    from blockdiag.noderenderer.base import NodeShape
+except ImportError:
+    from blockdiag.noderenderer import NodeShape
 
 
 class PacketNode(NodeShape):
