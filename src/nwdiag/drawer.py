@@ -162,8 +162,11 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
         super(DiagramDraw, self).node(node, **kwargs)
 
     def draw_connector(self, connector):
-        self.drawer.line(connector.line,
-                         fill=connector.network.linecolor, jump=True)
+        if hasattr(connector, 'subject'):
+            linecolor = connector.subject.network.linecolor
+        else:
+            linecolor = connector.network.linecolor
+        self.drawer.line(connector.line, fill=linecolor, jump=True)
 
     def group_label(self, group):
         if group.label:
