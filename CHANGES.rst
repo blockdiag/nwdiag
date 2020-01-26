@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0.0 (2020-01-26)
+------------------
+* Drop python2 and python3.4 support
+* Fix a bug
+  - #23: Crash in antialias mode
+
 1.0.4 (2015-01-01)
 ------------------
 * Support blockdiag 1.5.0 core interface
