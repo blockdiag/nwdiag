@@ -41,6 +41,10 @@ setup(
     author_email='i.tkomiya at gmail.com',
     url='http://blockdiag.com/',
     download_url='http://pypi.python.org/pypi/nwdiag',
+    project_urls={
+        "Code": "https://github.com/blockdiag/nwdiag",
+        "Issue tracker": "https://github.com/blockdiag/nwdiag/issues",
+    },
     license='Apache License 2.0',
     py_modules=[
         'nwdiag_sphinxhelper',
