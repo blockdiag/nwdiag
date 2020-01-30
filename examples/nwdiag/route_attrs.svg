@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg viewBox="0 0 608 588" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs id="defs_block">
+    <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
+      <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
+    </filter>
+  </defs>
+  <title>blockdiag</title>
+  <desc>diagram {
+    inet [shape = cloud];
+    inet -- router;
+
+    network {
+        router;
+        client01;
+        client02;
+    }
+
+    route {
+        client02 -&gt; client01 [path = "rb", pad = 4,        color = "green"];
+        client01 -&gt; router   [path = "lb",          thick, color = "blue"];
+        router -&gt; client01   [path = "ra",                 color = "maroon"];
+        client01 -&gt; client02 [path = "la", pad = 4,        style = "dotted"];
+        inet -&gt; router       [             pad = 1];
+    }
+}
+</desc>
+  <path d="M 171 178 A16,8 0 0 1 187 170 A16,6 0 0 1 227 170 A16,8 0 0 1 243 178 A16,8 0 0 1 243 194 A16,20 0 0 1 219 194 A16,20 0 0 1 195 194 A16,20 0 0 1 171 194 A16,8 0 0 1 171 178" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="104" x="155" y="306" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="104" x="307" y="450" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="104" x="459" y="450" />
+  <path d="M 131 391 L 587 391 A2,4 0 0 1 587 399 L 131 399 A2,4 0 0 1 131 391" fill="rgb(0,0,0)" style="filter:url(#filter_blur)" />
+  <path d="M 128 388 L 584 388 A2,4 0 0 1 584 396 L 128 396 A2,4 0 0 1 128 388" fill="rgb(185,203,228)" stroke="rgb(0,0,0)" />
+  <path d="M 584 396 A2,4 0 0 1 584 388" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 128 388 L 584 388" fill="none" stroke="none" />
+  <path d="M 204 104 L 204 156" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 204 196 L 204 248" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 168 172 A16,8 0 0 1 184 164 A16,6 0 0 1 224 164 A16,8 0 0 1 240 172 A16,8 0 0 1 240 188 A16,20 0 0 1 216 188 A16,20 0 0 1 192 188 A16,20 0 0 1 168 188 A16,8 0 0 1 168 172" fill="rgb(255,255,255)" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="20" x="204.0" y="181">inet</text>
+  <path d="M 204 248 L 204 300" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 204 340 L 204 388" fill="none" stroke="rgb(0,0,0)" />
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="152" y="300" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="32" x="204.0" y="325">router</text>
+  <path d="M 356 396 L 356 444" fill="none" stroke="rgb(0,0,0)" />
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="304" y="444" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="43" x="356.5" y="469">client01</text>
+  <path d="M 508 396 L 508 444" fill="none" stroke="rgb(0,0,0)" />
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="104" x="456" y="444" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="43" x="508.5" y="469">client02</text>
+  <path d="M 524 444 L 524 412" fill="none" stroke="rgb(0,128,0)" />
+  <path d="M 524 412 L 372 412" fill="none" stroke="rgb(0,128,0)" />
+  <path d="M 372 412 L 372 444" fill="none" stroke="rgb(0,128,0)" />
+  <polygon fill="rgb(0,128,0)" points="372,443 368,436 376,436 372,443" stroke="rgb(0,128,0)" />
+  <path d="M 348 444 L 348 404" fill="none" stroke="rgb(0,0,255)" stroke-width="3" />
+  <path d="M 348 404 L 196 404" fill="none" stroke="rgb(0,0,255)" stroke-width="3" />
+  <path d="M 196 404 L 196 340" fill="none" stroke="rgb(0,0,255)" stroke-width="3" />
+  <polygon fill="rgb(0,0,255)" points="196,341 192,348 200,348 196,341" stroke="rgb(0,0,255)" />
+  <path d="M 212 340 L 212 380" fill="none" stroke="rgb(128,0,0)" />
+  <path d="M 212 380 L 364 380" fill="none" stroke="rgb(128,0,0)" />
+  <path d="M 364 380 L 364 444" fill="none" stroke="rgb(128,0,0)" />
+  <polygon fill="rgb(128,0,0)" points="364,443 360,436 368,436 364,443" stroke="rgb(128,0,0)" />
+  <path d="M 340 444 L 340 372" fill="none" stroke="rgb(255,0,0)" stroke-dasharray="2" />
+  <path d="M 340 372 L 492 372" fill="none" stroke="rgb(255,0,0)" stroke-dasharray="2" />
+  <path d="M 492 372 L 492 444" fill="none" stroke="rgb(255,0,0)" stroke-dasharray="2" />
+  <polygon fill="rgb(255,0,0)" points="492,443 488,436 496,436 492,443" stroke="rgb(255,0,0)" />
+  <path d="M 200 196 L 200 244" fill="none" stroke="rgb(255,0,0)" />
+  <path d="M 200 244 L 200 236" fill="none" stroke="rgb(255,0,0)" />
+  <path d="M 200 236 L 200 300" fill="none" stroke="rgb(255,0,0)" />
+  <polygon fill="rgb(255,0,0)" points="200,299 196,292 204,292 200,299" stroke="rgb(255,0,0)" />
+</svg>
