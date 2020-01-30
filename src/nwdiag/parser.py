@@ -224,6 +224,9 @@ def parse(seq):
         option_list
         >> create_mapper(make_route)
     )
+    route_inline_stmt_list = (
+        many(route_inline_stmt + skip(maybe(op(';'))))
+    )
     route_stmt = (
         skip(keyword('route')) +
         maybe(_id) +
