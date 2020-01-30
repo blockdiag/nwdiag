@@ -1,0 +1,9 @@
+{
+  network {
+    A; B;
+  }
+  route {
+    A -> B [color = "blue"];
+    B -> A [style = "dotted", thick];
+  }
+}
