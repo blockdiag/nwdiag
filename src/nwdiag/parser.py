@@ -218,9 +218,9 @@ def parse(seq):
     #
     route_inline_stmt = (
         _id +
-        op_('->') +
+        op('->') +
         _id +
-        many(op_('->') + _id) +
+        many(op('->') + _id) +
         option_list
         >> create_mapper(make_route)
     )
