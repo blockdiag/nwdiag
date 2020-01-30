@@ -111,7 +111,31 @@ class Network(blockdiag.elements.NodeGroup):
 
 
 class Route(blockdiag.elements.DiagramEdge):
-    pass
+    basecolor = (255, 0, 0)
+
+    @classmethod
+    def clear(cls):
+        super(Route, cls).clear()
+        cls.basecolor = (255, 0, 0)
+
+    def __init__(self, node1, node2):
+        super(Route, self).__init__(node1, node2)
+        self.path = 'la'  # as Left-Above
+        self.pad = 2
+
+    def set_path(self, value):
+        value = value.lower()
+        if value not in ('la', 'lb', 'ra', 'rb'):
+            msg = "unknown route path: %s" % value
+            raise AttributeError(msg)
+        self.path = value
+
+    def set_pad(self, value):
+        value = int(value)
+        if value <= 0:
+            msg = "route pad should be positive: %s" % value
+            raise AttributeError(msg)
+        self.pad = value
 
 
 class Diagram(blockdiag.elements.Diagram):

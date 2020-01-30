@@ -1,0 +1,17 @@
+diagram {
+    inet [shape = cloud];
+    inet -- router;
+
+    network internal {
+        address = "192.168.0.0/24";
+
+        router [address = "192.168.0.1"];
+        client01 [address = "192.168.0.101"];
+        client02 [address = "192.168.0.102"];
+    }
+
+    route {
+        client02 -> router -> inet;
+        inet -> router -> client01 [path = "rb", color = "blue"];
+    }
+}

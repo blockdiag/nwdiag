@@ -1,0 +1,11 @@
+{
+  A -- B;
+
+  network foobar {
+    B; C;
+  }
+  route {
+    A -> B;
+    C -> B -> A;
+  }
+}

@@ -150,10 +150,20 @@ class DiagramTreeBuilder:
                         self.diagram.networks.append(nw)
 
             elif isinstance(stmt, parser.Route):
-                nodes = [DiagramNode.get(n) for n in stmt.nodes]
-                for node1, node2 in zip(nodes[:-1], nodes[1:]):
-                    route = Route(node1, node2)
-                    route.set_attributes(stmt.attrs)
+                for edge in stmt.edges:
+                    from_node = DiagramNode.get(edge.from_node)
+                    to_node = DiagramNode.get(edge.to_node)
+
+                    networks = set(from_node.networks) & set(to_node.networks)
+                    if not networks:
+                        msg = "%s and %s shares no network for routing"
+                        raise RuntimeError(msg % (from_node.id, to_node.id))
+                    if len(networks) > 1:
+                        msg = "%s and %s shares multiple networks for routing"
+                        raise RuntimeError(msg % (from_node.id, to_node.id))
+
+                    route = Route(from_node, to_node)
+                    route.set_attributes(edge.attrs)
                     self.diagram.routes.append(route)
 
             elif isinstance(stmt, parser.Attr):
