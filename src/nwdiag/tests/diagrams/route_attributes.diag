@@ -3,7 +3,7 @@
     A; B;
   }
   route {
-    A -> B [color = "blue"];
-    B -> A [style = "dotted", thick];
+    A -> B [color = "blue", path = "rb"];
+    B -> A [style = "dotted", thick, pad = 4];
   }
 }

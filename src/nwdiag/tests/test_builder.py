@@ -189,7 +189,11 @@ class TestBuilder(BuilderTestCase):
         diagram = self.build('route_attributes.diag')
         self.assertRoutes(diagram, [(('A', 'B'), {'color': (0, 0, 255),
                                                   'style': None,
-                                                  'thick': None}),
+                                                  'thick': None,
+                                                  'path': 'rb',
+                                                  'pad': 2}),
                                     (('B', 'A'), {'color': Route.basecolor,
                                                   'style': 'dotted',
-                                                  'thick': 3})])
+                                                  'thick': 3,
+                                                  'path': 'la',
+                                                  'pad': 4})])
