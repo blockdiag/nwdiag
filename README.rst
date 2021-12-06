@@ -75,7 +75,7 @@ Execute nwdiag command::
 
 Requirements
 ============
-* Python 3.5 or later
+* Python 3.7 or later
 * blockdiag 1.5.0 or later
 * funcparserlib 0.3.6 or later
 * reportlab (optional)
