@@ -72,7 +72,7 @@ def tokenize(string):
         ('Op',      (r'([{};,=\[\]]|--|->)',)),                         # NOQA
         ('IPAddr',  (r'([0-9]+(\.[0-9]+){3}|[:0-9a-fA-F]+)',)),         # NOQA
         ('Number',  (r'-?(\.[0-9]+)|([0-9]+(\.[0-9]*)?)',)),            # NOQA
-        ('String',  (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),  # NOQA
+        ('String',  (r'(?P<quote>(""")|(\'\'\')|"|\').*?(?<!\\)(?P=quote)', DOTALL)),  # NOQA
     ]
     useless = ['Comment', 'NL', 'Space']
     t = make_tokenizer(specs)

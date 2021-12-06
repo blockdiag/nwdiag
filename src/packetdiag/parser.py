@@ -68,7 +68,7 @@ def tokenize(string):
         ('Name',            ('[A-Za-z_0-9\u0080-\uffff]' +                             # NOQA
                              '[A-Za-z_\\-.0-9\u0080-\uffff]*',)),                      # NOQA
         ('Op',              (r'[{}:;,*\-=\[\]]',)),                                    # NOQA
-        ('String',          (r'(?P<quote>"|\').*?(?<!\\)(?P=quote)', DOTALL)),         # NOQA
+        ('String',          (r'(?P<quote>(""")|(\'\'\')|"|\').*?(?<!\\)(?P=quote)', DOTALL)),  # NOQA
     ]
     useless = ['Comment', 'NL', 'Space']
     t = make_tokenizer(specs)
