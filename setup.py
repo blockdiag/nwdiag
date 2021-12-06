@@ -51,7 +51,7 @@ setup(
     package_data={'': ['buildout.cfg']},
     include_package_data=True,
     python_requires=">=3.7",
-    install_requires=['blockdiag>=1.5.0'],
+    install_requires=['blockdiag>=3.0.0'],
     extras_require=dict(
         testing=[
             'nose',
