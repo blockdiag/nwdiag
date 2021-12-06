@@ -46,11 +46,6 @@ setup(
         "Issue tracker": "https://github.com/blockdiag/nwdiag/issues",
     },
     license='Apache License 2.0',
-    py_modules=[
-        'nwdiag_sphinxhelper',
-        'rackdiag_sphinxhelper',
-        'packetdiag_sphinxhelper',
-    ],
     packages=find_packages('src'),
     package_dir={'': 'src'},
     package_data={'': ['buildout.cfg']},
