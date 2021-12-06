@@ -1,6 +1,12 @@
 Changelog
 =========
 
+3.0.0 (2021-12-06)
+------------------
+* Drop python3.6 support
+* Use funcparserlib-1.0.0a0 or newer to support new python versions
+* Allow to write multiline string via triple quotes (""" ... """)
+
 2.0.0 (2020-01-26)
 ------------------
 * Drop python2 and python3.4 support
