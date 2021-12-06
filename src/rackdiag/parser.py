@@ -94,7 +94,14 @@ def parse(seq):
     def make_num_rackitem(num, text, attr):
         return RackItem(num, text.strip(), attr)
 
-    def make_nonnum_rackitem(text, attr):
+    def make_nonnum_rackitem(*args):
+        if len(args) == 2:
+            # funcparserlib-0.x
+            text, attr = args
+        else:
+            # funcparserlib-1.0
+            _, text, attr = args
+
         return RackItem(None, text.strip(), attr)
 
     def make_nonvalued_attr(rackheight):
