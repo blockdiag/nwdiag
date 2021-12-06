@@ -13,15 +13,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - python-version: '3.5'
-            toxenv: py35
-          - python-version: '3.6'
-            toxenv: py36
           - python-version: '3.7'
             toxenv: py37
           - python-version: '3.8'
             toxenv: py38
-          - python-version: '3.8'
+          - python-version: '3.9'
+            toxenv: py39
+          - python-version: '3.9'
             toxenv: blockdiag_dev
     steps:
       - uses: actions/checkout@v2
