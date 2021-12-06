@@ -90,7 +90,14 @@ def parse(seq):
     def make_num_field_item(_from, to, text, attr):
         return FieldItem(_from, to, text.strip(), attr)
 
-    def make_nonnum_field_item(text, attr):
+    def make_nonnum_field_item(*args):
+        if len(args) == 2:
+            # funcparserlib-0.x
+            text, attr = args
+        else:
+            # funcparserlib-1.0
+            _, text, attr = args
+
         return FieldItem(None, None, text.strip(), attr)
 
     #
