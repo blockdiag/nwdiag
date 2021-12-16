@@ -40,12 +40,15 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
 
     def _draw_background(self):
         super(DiagramDraw, self)._draw_background()
-        self.trunklines_shadow()
+        if self.diagram.shadow_style != 'none':
+            self.trunklines_shadow(True)
+        else:
+            self.trunklines_shadow(False)
 
-    def trunklines_shadow(self):
+    def trunklines_shadow(self, shadow=True):
         for network in self.diagram.networks:
             if network.hidden is False and network.color != 'none':
-                self.trunkline(network, shadow=True)
+                self.trunkline(network, shadow=shadow)
 
     def trunklines(self):
         metrics = self.metrics
