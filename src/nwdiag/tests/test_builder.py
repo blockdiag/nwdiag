@@ -14,6 +14,7 @@
 #  limitations under the License.
 from __future__ import print_function
 
+from nwdiag.elements import Route
 from nwdiag.tests.utils import BuilderTestCase
 
 
@@ -167,3 +168,32 @@ class TestBuilder(BuilderTestCase):
     def test_peer_network_in_same_node_diagram(self):
         with self.assertRaises(RuntimeError):
             self.build('errors/peer_network_in_same_node.diag')
+
+    def assertRoutes(self, diagram, expecteds):
+        self.assertEqual(len(diagram.routes), len(expecteds))
+        for route, expected in zip(diagram.routes, expecteds):
+            (id1, id2), attributes = expected
+            self.assertEqual(route.node1.id, id1)
+            self.assertEqual(route.node2.id, id2)
+
+            for key, val in attributes.items():
+                self.assertEqual(getattr(route, key), val)
+
+    def test_routes(self):
+        diagram = self.build('route_basic.diag')
+        self.assertRoutes(diagram, [(('A', 'B'), {}),
+                                    (('C', 'B'), {}),
+                                    (('B', 'A'), {})])
+
+    def test_route_attributes(self):
+        diagram = self.build('route_attributes.diag')
+        self.assertRoutes(diagram, [(('A', 'B'), {'color': (0, 0, 255),
+                                                  'style': None,
+                                                  'thick': None,
+                                                  'path': 'rb',
+                                                  'pad': 2}),
+                                    (('B', 'A'), {'color': Route.basecolor,
+                                                  'style': 'dotted',
+                                                  'thick': 3,
+                                                  'path': 'la',
+                                                  'pad': 4})])

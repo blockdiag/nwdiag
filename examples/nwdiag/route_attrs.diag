@@ -1,0 +1,18 @@
+diagram {
+    inet [shape = cloud];
+    inet -- router;
+
+    network {
+        router;
+        client01;
+        client02;
+    }
+
+    route {
+        client02 -> client01 [path = "rb", pad = 4,        color = "green"];
+        client01 -> router   [path = "lb",          thick, color = "blue"];
+        router -> client01   [path = "ra",                 color = "maroon"];
+        client01 -> client02 [path = "la", pad = 4,        style = "dotted"];
+        inet -> router       [             pad = 1];
+    }
+}

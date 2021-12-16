@@ -99,7 +99,7 @@ def parse(seq):
 
         return Peer(edges)
 
-    def make_route(first, edge_type, second, followers, attrs):
+    def make_route_edges(first, edge_type, second, followers, attrs):
         edges = [Edge(first, edge_type, second, attrs)]
 
         from_node = second
@@ -107,6 +107,14 @@ def parse(seq):
             edges.append(Edge(from_node, edge_type, to_node, attrs))
             from_node = to_node
 
+        return edges
+
+    def make_route(*args):
+        # flatten nested "edges" list
+        edges = []
+        for arg in args:
+            for edge in arg:
+                edges.append(edge)
         return Route(edges)
 
     #
@@ -218,19 +226,22 @@ def parse(seq):
     #
     route_inline_stmt = (
         _id +
-        op_('->') +
+        op('->') +
         _id +
-        many(op_('->') + _id) +
+        many(op('->') + _id) +
         option_list
-        >> create_mapper(make_route)
+        >> create_mapper(make_route_edges)
+    )
+    route_inline_stmt_list = (
+        many(route_inline_stmt + skip(maybe(op(';'))))
     )
     route_stmt = (
         skip(keyword('route')) +
-        maybe(_id) +
+        skip(maybe(_id)) +
         op_('{') +
-        network_inline_stmt_list +
+        route_inline_stmt_list +
         op_('}')
-        >> create_mapper(Network)
+        >> create_mapper(make_route)
     )
 
     #
