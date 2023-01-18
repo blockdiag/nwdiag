@@ -149,11 +149,19 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
         m = self.metrics
 
         for connector in m.node(node).connectors:
-            self.draw_connector(connector)
             if hasattr(connector, 'subject'):
                 network = connector.subject.network
             else:
                 network = connector.network
+
+            linestyle=None
+            if network in node.linestyles:
+                linestyle=node.linestyles[network]
+            linecolor=None
+            if network in node.linecolors:
+                linecolor=node.linecolors[network]
+
+            self.draw_connector(connector,linestyle,linecolor)
 
             if network in node.address:
                 label = node.address[network]
@@ -163,12 +171,17 @@ class DiagramDraw(blockdiag.drawer.DiagramDraw):
 
         super(DiagramDraw, self).node(node, **kwargs)
 
-    def draw_connector(self, connector):
+    def draw_connector(self, connector, linestyle, linecolor):
         if hasattr(connector, 'subject'):
-            linecolor = connector.subject.network.linecolor
+            lc = connector.subject.network.linecolor
+            ls = connector.subject.network.linestyle
         else:
-            linecolor = connector.network.linecolor
-        self.drawer.line(connector.line, fill=linecolor, jump=True)
+            lc = connector.network.linecolor
+            ls = connector.network.linestyle
+        if linestyle is None: linestyle=ls
+        if linecolor is None: linecolor=lc
+
+        self.drawer.line(connector.line, fill=linecolor, style=linestyle, jump=True)
 
     def group_label(self, group):
         if group.label:

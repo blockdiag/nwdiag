@@ -28,6 +28,8 @@ class DiagramNode(blockdiag.elements.DiagramNode):
         super(DiagramNode, self).__init__(_id)
 
         self.address = {}
+        self.linestyles = {}
+        self.linecolors = {}
         self.networks = []
         self.layouted = False
 
@@ -39,6 +41,12 @@ class DiagramNode(blockdiag.elements.DiagramNode):
             if attr.name == 'address':
                 address = re.sub(r'\s*,\s*', '\n', unquote(attr.value))
                 self.address[network] = address
+            elif attr.name == 'linestyle':
+                style = re.sub(r'\s*,\s*', '\n', unquote(attr.value))
+                self.linestyles[network] = style
+            elif attr.name == 'linecolor':
+                color = re.sub(r'\s*,\s*', '\n', unquote(attr.value))
+                self.linecolors[network] = color
             else:
                 self.set_attribute(attr)
 
@@ -50,6 +58,7 @@ class DiagramEdge(blockdiag.elements.DiagramEdge):
 class Network(blockdiag.elements.NodeGroup):
     basecolor = (185, 203, 228)
     linecolor = (0, 0, 0)
+    linestyle = "solid"
 
     @classmethod
     def set_default_linecolor(cls, color):
