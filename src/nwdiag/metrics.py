@@ -159,7 +159,7 @@ class GroupMetrics(blockdiag.metrics.NodeMetrics):
         if group.nodes:
             networks = group.nodes[0].networks[:]
             networks.sort(key=lambda a: a.xy.y)
-            network = min(networks)
+            network = networks[0]
             if self.top.x == metrics.network(network).top.x:
                 self.is_root_group = True
 
